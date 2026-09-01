@@ -53,26 +53,35 @@ function Welcome() {
       {/* =========================
           TOP LOGO
       ========================= */}
-      <div className="absolute top-[103px] left-1/2 -translate-x-1/2 w-[225px] h-[63px] flex items-center gap-[2px]">
+      <div
+  className="
+    absolute
+    top-[50%]
+    left-[50%]
+    -translate-x-1/2
+    -translate-y-1/2
+    w-[225px]
+    h-[63px]
+    flex
+    items-center
+    justify-center
+    gap-[2px]
+  "
+>
+  {/* Logo mark */}
+  <div className="relative w-[42px] h-[50px] rotate-[25deg]">
+    <img
+      src="/EasyReach.png"
+      alt="EasyReach"
+      className="w-[77px] h-[37px] mt-17 ml-42 object-contain"
+    />
+  </div>
 
-        {/* Logo mark */}
-        <div className="relative w-[42px] h-[50px] rotate-[25deg]">
-
-          <img
-            src="/EasyReach.png"
-            alt="EasyReach"
-            className="w-[77px] h-[37px] mt-1 ml-2 object-contain"
-          />
-
-
-        </div>
-
-        {/* EasyReach text */}
-        <span className="font-bold text-[23px] leading-[45px] text-[#1F2937]">
-          Easy<span className="text-[#008000]">Reach</span>
-        </span>
-
-      </div>
+  {/* EasyReach text */}
+  <span className="font-bold text-[23px] leading-[45px] text-[#1F2937] whitespace-nowrap">
+    Easy<span className="text-[#008000]">each</span>
+  </span>
+</div>
 
 
       {/* =========================
