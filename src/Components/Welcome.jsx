@@ -7,46 +7,7 @@ function Welcome() {
   return (
     <div className="relative w-[428px] h-[926px] mx-auto bg-white rounded-[35px] overflow-hidden">
 
-      {/* =========================
-          STATUS BAR
-      ========================= */}
-      <div className="absolute top-0 left-0 w-full h-[62px] flex items-center justify-between px-4">
-
-        {/* Time */}
-        <div className="w-[121px] h-[22px] flex items-center justify-center pt-[2px]">
-          <span className="text-[17px] font-semibold text-black text-center">
-            9:41
-          </span>
-        </div>
-
-        {/* Phone status icons */}
-        <div className="w-[121px] h-[22px] flex items-center justify-end gap-[7px] pt-[1px]">
-
-          {/* Cellular */}
-          <div className="flex items-end gap-[2px] w-[19px] h-[13px]">
-            <span className="w-[3px] h-[5px] bg-black rounded-sm"></span>
-            <span className="w-[3px] h-[7px] bg-black rounded-sm"></span>
-            <span className="w-[3px] h-[9px] bg-black rounded-sm"></span>
-            <span className="w-[3px] h-[12px] bg-black rounded-sm"></span>
-          </div>
-
-          {/* WiFi */}
-          <div className="relative w-[17px] h-[13px]">
-            <div className="absolute top-0 left-0 w-[17px] h-[8px] border-t-[3px] border-black rounded-full"></div>
-            <div className="absolute top-[4px] left-[4px] w-[9px] h-[5px] border-t-[3px] border-black rounded-full"></div>
-            <div className="absolute bottom-0 left-[7px] w-[3px] h-[3px] bg-black rounded-full"></div>
-          </div>
-
-          {/* Battery */}
-          <div className="relative w-[27px] h-[13px]">
-            <div className="absolute left-0 top-[2px] w-[25px] h-[10px] border border-black/40 rounded-[4px]">
-              <div className="absolute left-[2px] top-[2px] w-[21px] h-[6px] bg-black rounded-[2px]"></div>
-            </div>
-
-            <div className="absolute right-0 top-[5px] w-[2px] h-[4px] bg-black/40 rounded-r"></div>
-          </div>
-
-        </div>
+      
       </div>
 
 
