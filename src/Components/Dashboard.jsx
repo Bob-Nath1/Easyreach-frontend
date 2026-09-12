@@ -21,15 +21,15 @@ const navigate = useNavigate();
   const categories = [
     {
       name: "Auto Repair",
-      icon: <Wrench size={24} className="text-white" />,
+      icon: <Wrench size={14} className="text-white" />,
     },
     {
       name: "Food Delivery",
-      icon: <Utensils size={24} className="text-white" />,
+      icon: <Utensils size={14} className="text-white" />,
     },
     {
       name: "Plumbing",
-      icon: <Droplets size={24} className="text-white" />,
+      icon: <Droplets size={14} className="text-white" />,
     },
   ];
 
@@ -82,7 +82,7 @@ const navigate = useNavigate();
   ];
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center overflow-hidden">
+    <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center overflow-hidden -mt-8">
 
       {/* =====================================================
           DEVICE FRAME
@@ -106,37 +106,10 @@ const navigate = useNavigate();
         ================================================== */}
         <div className="absolute left-0 top-0 z-50 flex h-[62px] w-full items-center justify-between px-4">
 
-          {/* Time */}
-          <div className="flex h-[22px] w-[121px] items-center justify-center">
-            <span className="text-[17px] font-semibold text-black">
-              9:41
-            </span>
-          </div>
+         
 
           {/* Network */}
           <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-
-            {/* Cellular */}
-            <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-              <span className="h-[5px] w-[2px] bg-black" />
-              <span className="h-[7px] w-[2px] bg-black" />
-              <span className="h-[10px] w-[2px] bg-black" />
-              <span className="h-[13px] w-[2px] bg-black" />
-            </div>
-
-            {/* WiFi */}
-            <div className="relative h-[13px] w-[18px]">
-              <div className="absolute left-0 top-0 h-[8px] w-[18px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute left-[4px] top-[4px] h-[6px] w-[10px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute bottom-0 left-[7px] h-[3px] w-[3px] rounded-full bg-black" />
-            </div>
-
-            {/* Battery */}
-            <div className="relative h-[13px] w-[27px]">
-              <div className="h-[13px] w-[25px] rounded-[4px] border border-black opacity-40" />
-              <div className="absolute left-[3px] top-[3px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-              <div className="absolute right-[-2px] top-[4px] h-[5px] w-[2px] bg-black opacity-40" />
-            </div>
 
           </div>
         </div>
@@ -171,18 +144,18 @@ const navigate = useNavigate();
 
                 <div className="flex flex-col gap-1">
 
-                  <h1 className="text-[24px] font-bold italic leading-[29px] text-[#1F2937]">
+                  <h1 className="text-md font-bold italic leading-[29px] text-[#1F2937]">
                     Hello, Timi 👋
                   </h1>
 
                   <div className="flex items-center gap-1">
                     <MapPin
-                      size={16}
+                      size={7}
                       strokeWidth={2.5}
                       className="text-[#008000]"
                     />
 
-                    <span className="text-[14px] leading-[17px] text-[#6B7280]">
+                    <span className="text-xs leading-[17px] text-[#6B7280]">
                       Ikeja, Lagos
                     </span>
                   </div>
@@ -191,47 +164,48 @@ const navigate = useNavigate();
 
 
                 {/* Notification */}
-                <button
-                onClick={() => navigate("/homenotification")}
-                  type="button"
-                  className="
-                    relative
-                    flex
-                    h-[44px]
-                    w-[44px]
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-[#F3F4F6]
-                  "
-                >
-                 <img
-                  src="/Home-notification.png"
-                  alt="Nearby service providers"
-                  
-                  />
+<button
+  onClick={() => navigate("/homenotification")}
+  type="button"
+  className="
+    relative
+    flex
+    items-center
+    justify-center
+    h-[24px]http://localhost:5173/
+    w-[24px]
+    ml-[28px]
+    rounded-full
+    bg-[#F3F4F6]
+  "
+>
+  <img
+    src="/Home-notification.png"
+    alt="Notification"
+    className="w-3 h-4"
+  />
 
-                  <span
-                    className="
-                      absolute
-                      right-[7px]
-                      top-[7px]
-                      flex
-                      h-[16px]
-                      w-[16px]
-                      items-center
-                      justify-center
-                      rounded-full
-                      bg-[#EF4444]
-                      text-[10px]
-                      font-bold
-                      italic
-                      text-white
-                    "
-                  >
-                    2
-                  </span>
-                </button>
+  <span
+    className="
+      absolute
+      -right-[3px]
+      -top-[3px]
+      flex
+      h-[8px]
+      w-[8px]
+      items-center
+      justify-center
+      rounded-full
+      bg-[#EF4444]
+      text-[7px]
+      font-bold
+      italic
+      text-white
+    "
+  >
+    2
+  </span>
+</button>
 
               </div>
 
@@ -243,7 +217,7 @@ const navigate = useNavigate();
                 className="
                   flex
                   h-[50px]
-                  w-full
+                  w-67
                   items-center
                   justify-between
                   rounded-[15px]
@@ -255,18 +229,18 @@ const navigate = useNavigate();
 
                   <Search
                   onClick={() => navigate("/search")}
-                    size={18}
+                    size={10}
                     className="text-[#008000]"
                   />
 
-                  <span className="text-[12px] text-black">
+                  <span className="text-xs text-black">
                     Search
                   </span>
 
                 </div>
 
                 <MapPin
-                  size={18}
+                  size={10}
                   className="text-[#008000]"
                 />
 
@@ -276,11 +250,11 @@ const navigate = useNavigate();
               {/* =================================================
                   CATEGORIES
               ================================================== */}
-              <div className="flex w-full flex-col gap-4">
+              <div className="flex w-67 flex-col gap-4">
 
                 <div className="flex items-center justify-between">
 
-                  <h2 className="text-[16px] font-bold leading-[19px] text-[#1F2937]">
+                  <h2 className="text-sm font-bold leading-[19px] text-[#1F2937]">
                     Categories
                   </h2>
 
@@ -307,12 +281,12 @@ const navigate = useNavigate();
                       }
                       className={`
                         flex
-                        h-[115px]
-                        min-w-[120px]
+                        h-[110px]
+                        min-w-[80px]
                         flex-col
                         items-center
                         justify-center
-                        gap-4
+                        gap-2
                         rounded-[15px]
                         bg-white
                         transition
@@ -324,7 +298,7 @@ const navigate = useNavigate();
                       `}
                     >
 
-                      <div className="flex h-[56px] w-[56px] items-center justify-center rounded-full bg-[#008000]">
+                      <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#008000]">
                         {category.icon}
                       </div>
 
@@ -343,7 +317,7 @@ const navigate = useNavigate();
               {/* =================================================
                   MAP
               ================================================== */}
-              <div className="relative h-[200px] w-full overflow-hidden rounded-[15px] bg-white">
+              <div className="relative h-[200px] w-68 overflow-hidden rounded-[15px] bg-white">
 
                 <img
                   src="/basemap.png"
@@ -456,7 +430,7 @@ const navigate = useNavigate();
                         className={`
                           rounded-full
                           border
-                          px-[15px]
+                          px-[14px]
                           py-[7px]
                           text-[12px]
                           font-bold
@@ -498,7 +472,7 @@ const navigate = useNavigate();
                   >
 
                     {/* Provider header */}
-                    <div className="absolute left-4 top-4 flex w-[343px] items-start justify-between">
+                    <div className="absolute left-4 top-4 flex w-[250px] items-start justify-between">
 
                       <div className="flex items-center gap-4">
 
@@ -517,11 +491,11 @@ const navigate = useNavigate();
                         {/* Provider information */}
                         <div className="flex flex-col gap-1">
 
-                          <h3 className="text-[16px] font-bold text-[#1F2937]">
+                          <h3 className="text-xs font-bold text-[#1F2937]">
                             {provider.name}
                           </h3>
 
-                          <p className="text-[12px] font-normal italic text-[#6B7280]">
+                          <p className="text-[10px] font-normal italic text-[#6B7280]">
                             {provider.service}
                           </p>
 
@@ -529,17 +503,17 @@ const navigate = useNavigate();
 
                             <div className="flex items-center gap-1">
                               <Star
-                                size={12}
+                                size={9}
                                 fill="#FBBF24"
                                 stroke="#FBBF24"
                               />
 
-                              <span className="text-[12px] font-bold italic text-[#1F2937]">
+                              <span className="text-[10px] font-bold italic text-[#1F2937]">
                                 {provider.rating}
                               </span>
                             </div>
 
-                            <span className="text-[12px] text-[#6B7280]">
+                            <span className="text-[10px] text-[#6B7280]">
                               ({provider.reviews})
                             </span>
 
@@ -551,7 +525,7 @@ const navigate = useNavigate();
 
 
                       {/* Verification icon */}
-                      <div className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] text-[10px] font-bold text-white">
+                      <div className="flex h-[12px] w-[12px] items-center justify-center rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] text-[9px] font-bold text-white">
                         ✓
                       </div>
 
@@ -562,11 +536,11 @@ const navigate = useNavigate();
                     <div className="absolute left-4 top-[93px] flex items-center gap-[5px]">
 
                       <MapPin
-                        size={12}
+                        size={9}
                         className="text-[#008000]"
                       />
 
-                      <span className="text-[12px] font-bold italic text-[#008000]">
+                      <span className="text-xs font-bold italic text-[#008000]">
                         {provider.distance}
                       </span>
 
@@ -574,27 +548,27 @@ const navigate = useNavigate();
 
 
                     {/* Price */}
-                    <p className="absolute left-4 top-[116px] text-[16px] font-bold text-[#008000]">
+                    <p className="absolute left-4 top-[116px] text-xs font-bold text-[#008000]">
                       {provider.price}
                     </p>
 
 
                     {/* Actions */}
-                    <div className="absolute left-4 top-[151px] flex h-[48px] items-center gap-2">
+                    <div className="absolute top-[151px] flex h-[48px] items-center gap-2">
 
                       <button
                         type="button"
                         className="
                           flex
-                          h-[48px]
-                          w-[126px]
+                          h-[40px]
+                          w-[100px]
                           items-center
                           justify-center
                           rounded-[8px]
                           border-[1.5px]
                           border-[#008000]
                           bg-white
-                          text-[12px]
+                          text-[10px]
                           font-bold
                           italic
                           text-[#008000]
@@ -607,15 +581,15 @@ const navigate = useNavigate();
                         type="button"
                         className="
                           flex
-                          h-[48px]
-                          w-[153px]
+                          h-[40px]
+                          w-[100px]
                           items-center
                           justify-center
                           rounded-[8px]
                           border-[1.5px]
                           border-[#008000]
                           bg-[#008000]
-                          text-[12px]
+                          text-[10px]
                           font-bold
                           italic
                           text-white
@@ -693,12 +667,12 @@ const navigate = useNavigate();
               className="flex w-[32px] flex-col items-center gap-3"
             >
               <Home
-                size={24}
+                size={20}
                 fill="#008000"
                 className="text-[#008000]"
               />
 
-              <span className="text-[11px] font-bold text-[#008000]">
+              <span className="text-[9px] font-bold text-[#008000]">
                 Home
               </span>
             </button>
@@ -713,11 +687,11 @@ const navigate = useNavigate();
             >
                      <img
             src="/request.png"
-            alt="EasyReach"
-            className="w-[27px] h-[32px] object-contain"
+            alt="Request"
+            className="w-[17px] h-[22px] object-contain"
           />
 
-              <span className="text-[11px] font-bold text-[#9CA3AF]">
+              <span className="text-[9px] font-bold text-[#9CA3AF]">
                 Request
               </span>
             </button>
@@ -731,7 +705,7 @@ const navigate = useNavigate();
               className="relative flex w-[56px] flex-col items-center gap-[7px]"
             >
               <MessageCircle
-                size={24}
+                size={18}
                 className="text-[#9CA3AF]"
               />
 
@@ -747,7 +721,7 @@ const navigate = useNavigate();
                   justify-center
                   rounded-full
                   bg-[#EF4444]
-                  text-[10px]
+                  text-[7px]
                   font-bold
                   text-white
                 "
@@ -755,7 +729,7 @@ const navigate = useNavigate();
                 2
               </span>
 
-              <span className="text-[11px] font-bold text-[#9CA3AF]">
+              <span className="text-[9px] font-bold text-[#9CA3AF]">
                 Messages
               </span>
             </button>
@@ -768,11 +742,11 @@ const navigate = useNavigate();
               className="flex w-[35px] flex-col items-center gap-[9px]"
             >
               <User
-                size={24}
+                size={18}
                 className="text-[#9CA3AF]"
               />
 
-              <span className="text-[11px] font-bold text-[#9CA3AF]">
+              <span className="text-[9px] font-bold text-[#9CA3AF]">
                 Profile
               </span>
             </button>

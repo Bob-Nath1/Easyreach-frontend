@@ -16,47 +16,26 @@ const Signingin = () => {
   }, [navigate]);
 
   return (
-    <div className="relative mx-auto h-[926px] w-[428px] overflow-hidden rounded-[35px] bg-gradient-to-br from-[#00C48C] via-[#00A878] to-[#008000]">
+    <div className="relative mx-auto h-[926px] w-[280px] overflow-hidden rounded-[35px] bg-gradient-to-br from-[#00C48C] via-[#00A878] to-[#008000]">
 
       {/* ================= STATUS BAR ================= */}
       <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-4 pt-[21px] pb-[19px]">
-
-        {/* Time */}
-        <div className="flex h-[22px] w-[121px] items-center">
-          <span className="w-[37px] text-center font-sans text-[17px] font-semibold leading-[22px] text-white">
-            9:41
-          </span>
-        </div>
 
         {/* Status icons */}
         <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
 
           {/* Cellular signal */}
           <div className="flex h-[13px] items-end gap-[2px]">
-            <span className="h-[5px] w-[3px] rounded-sm bg-white" />
-            <span className="h-[8px] w-[3px] rounded-sm bg-white" />
-            <span className="h-[10px] w-[3px] rounded-sm bg-white" />
-            <span className="h-[12px] w-[3px] rounded-sm bg-white" />
+
           </div>
 
           {/* WiFi */}
           <div className="relative h-[13px] w-[18px]">
-            <div className="absolute left-1/2 top-[1px] h-[11px] w-[16px] -translate-x-1/2 rounded-t-full border-[2px] border-white border-b-0" />
-
-            <div className="absolute bottom-0 left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-white" />
           </div>
 
           {/* Battery */}
           <div className="relative h-[13px] w-[27px]">
 
-            {/* Battery border */}
-            <div className="absolute left-0 top-0 h-[13px] w-[25px] rounded-[4.3px] border border-white opacity-35" />
-
-            {/* Battery cap */}
-            <div className="absolute right-0 top-[4px] h-[5px] w-[2px] rounded-r bg-white opacity-40" />
-
-            {/* Battery capacity */}
-            <div className="absolute left-[2px] top-[3px] h-[7px] w-[21px] rounded-[2.5px] bg-white" />
           </div>
         </div>
       </div>
@@ -68,7 +47,7 @@ const Signingin = () => {
         <div className="flex h-[128px] w-[187px] flex-col items-center gap-8">
 
           {/* Title */}
-          <h1 className="w-full text-center font-sans text-[24px] font-bold leading-[29px] text-white">
+          <h1 className="w-full text-center font-sans text-md font-bold leading-[29px] text-white">
             Signing you in...
           </h1>
 
@@ -81,7 +60,7 @@ const Signingin = () => {
         </div>
 
         {/* Please wait */}
-        <p className="w-full text-center font-sans text-[17px] font-semibold leading-[22px] text-white">
+        <p className="w-full text-center font-sans text-sm font-semibold leading-[22px] text-white">
           Please wait.
         </p>
       </div>
