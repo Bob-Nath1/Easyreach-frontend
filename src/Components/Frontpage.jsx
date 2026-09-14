@@ -16,71 +16,65 @@ function FrontPage() {
     md:h-[1026px] lg:h-[1226px] mx-auto bg-white rounded-[35px] overflow-hidden">
 
       {/* Top Navigation */}
-      <div className="absolute top-[62px]  right-[24px] flex items-center justify-between xl:ml-40 2xl:ml-90">
 
-        {/* Logo */}
-        <div className="flex items-center gap-[2px] mr-44 sm:ml-52 md:ml-68 lg:ml-99">
+{/* Logo - centered */}
+<div className="absolute mt-15 left-1/2 -translate-x-1/2 flex items-center gap-[2px]">
 
-          {/* Logo image */}
-          <img
-            src="/EasyReach.png"
-            alt="EasyReach"
-            className="w-[27px] md:w-[39px] h-[32px] md:h-[42px] lg:h-[72px]  lg:w-[49px] object-contain "
-          />
+  <img
+    src="/EasyReach.png"
+    alt="EasyReach"
+    className="w-[27px] h-[32px] md:w-[39px] md:h-[42px] lg:w-[49px] lg:h-[72px] object-contain"
+  />
 
-          {/* Logo name */}
-          <span className="text-lg font-bold text-[#1F2937] md:text-2xl lg:text-3xl">
-            EasyReach
-          </span>
+  <span className="text-lg font-bold text-[#1F2937] md:text-2xl lg:text-3xl">
+    EasyReach
+  </span>
 
-        </div>
+</div>
 
-        {/* Skip */}
-           <button
-          onClick={goToChat}
-          className="flex items-center gap-[3px] text-sm md:text-lg md:-ml-4 font-bold text-[#008000]"
-        >
-          <span>Skip</span>
-
-          <span className="text-[16px] leading-none">
-            ›
-          </span>
-        </button>
-
-      </div>
-
+{/* Skip - right */}
+<button
+  onClick={goToChat}
+  className="absolute top-[67px] right-[24px] flex items-center gap-[3px] text-xs sm:text-base md:text-lg font-bold text-[#008000]"
+>
+  <span>Skip</span>
+  <span className="text-[16px] leading-none">
+    ›
+  </span>
+</button>
 
       {/* Progress Indicators */}
-      <div className="absolute top-19 left-[24px] flex items-center gap-[4px] ">
+      <div className="absolute top-19 left-[24px] flex items-center gap-[2px] sm:gap-[4px]">
 
-        <div className="w-[40px] h-[4px] bg-[#008000] rounded-full"></div>
+        <div className="w-[20px] sm:w-[40px] h-[2px] sm:h-[4px] bg-[#008000] rounded-full"></div>
 
-        <div className="w-[20px] h-[4px] bg-[#A1A1A1] rounded-full"></div>
+        <div className="w-[10px] sm:w-[20px] h-[4px] sm:h-[2px] bg-[#A1A1A1] rounded-full"></div>
 
-        <div className="w-[20px] h-[4px] bg-[#A1A1A1] rounded-full"></div>
+        <div className="w-[10px] sm:w-[20px] h-[4px] sm:h-[2px] bg-[#A1A1A1] rounded-full"></div>
 
       </div>
 
 
       {/* Heading */}
-      <h1 className="absolute mt-23 ml-69 font-medium sm:left-[224px] sm:-mt-11 sm:font-medium text-sm md:text-xl md:ml-14 lg:ml-50 lg:text-2xl lg:-mt-4  xl:ml-90 2xl:ml-133 2xl:font-normal 2xl:text-3xl leading-[29px] font-bold text-[#1F2937]">
+      <h1 className="absolute left-1/2
+  -translate-x-1/2 mt-23 font-medium text-sm md:text-xl lg:text-2xl md:mt-25 lg:mt-30 2xl:font-normal 2xl:text-3xl leading-[29px] font-bold text-[#1F2937]">
         Find Services Near You
       </h1>
 
 
       {/* Description */}
-     <p className="absolute mt-30 font-normal ml-40 text-center sm:ml-19 w-[380px] text-sm sm:text-sm sm:-mt-14 leading-[18px]
-     md:ml-40 md:text-base
-     font-medium text-[#1F2937] lg:ml-79 lg:text-xl lg:-mt-1 xl:ml-123 2xl:ml-170"> Discover skilled professionals <br className="sm:hidden" /> closest to your location in seconds. </p>
+     <p className="absolute left-1/2
+  -translate-x-1/2 mt-30 font-normal text-center w-[90%] text-sm leading-[18px] md:text-base md:mt-35 lg:mt-40
+     font-medium text-[#1F2937] lg:text-xl"> Discover skilled professionals <br className="sm:hidden" /> closest to your location in seconds. </p>
 
 
       {/* Main Image */}
-      <div className="absolute ml-52 mt-49 sm:left-[164px] w-[280px] md:w-99 lg:w-149 lg:h-149 lg:ml-13 h-[380px] md:h-119 md:left-[180px] xl:ml-54 overflow-hidden rounded-[24px] 2xl:ml-97">
+      <div className="absolute left-1/2 -translate-x-1/2 mt-49  w-[280px] md:w-99 lg:w-149 lg:h-149 h-[380px] md:h-119 overflow-hidden rounded-[24px] 2xl:mt-74">
 
         <img
           src="/Nearby.png"
           alt="Services near you"
-          className="w-full md:w-99  lg:w-149  h-full  object-cover"
+          className="block w-full mx-auto md:w-99  lg:w-149  h-auto  object-contain"
         />
 
       </div>
@@ -89,7 +83,7 @@ function FrontPage() {
       {/* Next Button */}
           <button
         onClick={goToChat}
-        className="absolute top-[754px] ml-52 sm:left-[164px] w-[280px] h-[52px] md:mt-34 md:ml-17 lg:mt-74 lg:ml-52  xl:ml-103 flex items-center  justify-center bg-[#008000] rounded-full 2xl:ml-144"
+        className="absolute top-[754px] left-1/2 -translate-x-1/2 w-[280px] h-[52px] md:mt-34 lg:mt-74  flex items-center  justify-center bg-[#008000] rounded-full"
       >
         <span className="text-sm lg:text-lg leading-[28px] font-semibold text-white">
           Next
@@ -99,7 +93,8 @@ function FrontPage() {
 
 
       {/* Bottom Navigation / iPhone Handle */}
-      <div className="absolute bottom-0 ml-9 w-full h-[24px] flex items-center justify-center xl:ml-30">
+      <div className="absolute left-1/2
+    -translate-x-1/2 bottom-0 w-full h-[24px] flex items-center justify-center">
 
         <div className="w-[108px] h-[4px] bg-[#1D1B20] rounded-[12px]"></div>
 

@@ -1,18 +1,18 @@
 @keyframes logoAnimation {
   0% {
-    transform: scale(1.4) translateX(0);
+    transform: scale(1.4) translateX(24px);
   }
 
   60% {
-    transform: scale(0.4) translateX(0);
+    transform: scale(0.4) translateX(444px);
   }
 
   80% {
-    transform: scale(0.4) translateX(0);
+    transform: scale(0.4) translateX(444px);
   }
 
   100% {
-    transform: scale(0.4) translateX(-250px);
+    transform: scale(0.4) translateX(14px);
   }
 }
 
@@ -24,7 +24,7 @@
 
   to {
     opacity: 1;
-    transform: translateX(-120px);
+    transform: translateX(-17px);
   }
 }
 

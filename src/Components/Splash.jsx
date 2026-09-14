@@ -7,7 +7,7 @@ function Splash() {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate("/frontpage");
-}, 7000); // 7 seconds
+}, 20000); // 7 seconds
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -18,7 +18,7 @@ function Splash() {
         <img
           src="/EasyReach.png"
           alt="Easy Reach Logo"
-          className="w-16 ml-47 animate-logo"
+          className="w-16 animate-logo"
         />
         <h1 className="font-bold text-[20.93px] text-black opacity-0 animate-text">
           Easy<span className="text-green-600">Reach</span>
