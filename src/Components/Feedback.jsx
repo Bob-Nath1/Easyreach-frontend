@@ -52,38 +52,29 @@ function Feedback() {
   };
 
   return (
-    <div className="relative mx-auto h-[926px] w-[428px] overflow-hidden rounded-[35px] bg-[#F9FAFB] font-['Inter',sans-serif]">
+    <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+    font-['Inter',sans-serif]
+  "
+>
 
-      {/* ================= STATUS BAR ================= */}
-      <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-4">
-        {/* Time */}
-        <span className="pt-[2px] text-[17px] font-semibold text-black">
-          9:41
-        </span>
-
-        {/* Status Icons */}
-        <div className="flex items-center gap-[7px]">
-
-          {/* Cellular */}
-          <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-            <span className="h-[5px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[7px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[10px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[13px] w-[3px] rounded-sm bg-black" />
-          </div>
-
-          {/* WiFi */}
-          <div className="text-[15px] font-bold text-black">
-            ◔
-          </div>
-
-          {/* Battery */}
-          <div className="relative h-[13px] w-[27px] rounded-[4px] border border-black/40">
-            <div className="absolute inset-[2px] rounded-[2px] bg-black" />
-            <div className="absolute -right-[3px] top-[4px] h-[5px] w-[2px] rounded-r bg-black/50" />
-          </div>
-        </div>
-      </div>
+      
 
       {/* ================= BACK BUTTON ================= */}
       <button
@@ -98,7 +89,22 @@ function Feedback() {
       </button>
 
       {/* ================= MAIN CONTENT ================= */}
-      <div className="absolute left-6 top-[74px] flex h-[606px] w-[380px] flex-col items-center gap-[33px] overflow-y-auto pb-4 scrollbar-hide">
+      <div
+  className="
+    absolute
+    left-6
+    right-6
+    top-[74px]
+    bottom-[132px]
+    flex
+    flex-col
+    items-center
+    gap-[33px]
+    overflow-y-auto
+    pb-4
+    scrollbar-hide
+  "
+>
 
         {/* ================= PROVIDER INFORMATION ================= */}
         <div className="flex w-[336.69px] flex-col items-center gap-6">
@@ -225,15 +231,37 @@ function Feedback() {
       </div>
 
       {/* ================= DONE BUTTON ================= */}
-      <button
-        onClick={() => navigate("/dashboard")}
-        className="absolute bottom-16 left-6 flex h-[52px] w-[380px] items-center justify-center rounded-full border-2 border-[#008000] bg-[#008000] px-[10px] py-3 text-[14px] font-semibold leading-7 text-white transition active:scale-[0.98]"
-      >
+     <button
+  onClick={() => navigate("/dashboard")}
+  className="
+    absolute
+    bottom-[64px]
+    left-6
+    right-6
+    flex
+    h-[52px]
+    w-auto
+    items-center
+    justify-center
+    rounded-full
+    border-2
+    border-[#008000]
+    bg-[#008000]
+    px-[10px]
+    py-3
+    text-[14px]
+    font-semibold
+    leading-7
+    text-white
+    transition
+    active:scale-[0.98]
+  "
+>
         Done
       </button>
 
       {/* ================= IPHONE HOME INDICATOR ================= */}
-      <div className="absolute bottom-0 left-1/2 h-6 w-[412px] -translate-x-1/2">
+      <div className="absolute bottom-0 left-0 z-50 h-6 w-full">
         <div className="absolute left-1/2 top-1/2 h-1 w-[108px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#1F2937]" />
       </div>
 

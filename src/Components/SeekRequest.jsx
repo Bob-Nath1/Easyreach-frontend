@@ -91,74 +91,44 @@ function SeekRequest() {
     <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center overflow-hidden">
       
       {/* ================= DEVICE FRAME ================= */}
-      <div
-        className="
-          relative
-          h-[1000px]
-          w-[428px]
-          max-h-screen
-          max-w-full
-          overflow-hidden
-          rounded-[35px]
-          bg-[#F9FAFB]
-        "
-      >
-    
-
-        {/* ================= STATUS BAR ================= */}
-        <div className="absolute left-0 top-0 z-50 flex h-[62px] w-full items-center justify-between bg-white px-4">
-
-          <div className="flex h-[22px] w-[121px] items-center justify-center">
-            <span className="text-[17px] font-semibold leading-[22px] text-black">
-              9:41
-            </span>
-          </div>
-
-          <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-
-            {/* Cellular */}
-            <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-              <span className="h-[5px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[7px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[10px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[13px] w-[2px] rounded-sm bg-black" />
-            </div>
-
-            {/* WiFi */}
-            <div className="relative h-[13px] w-[18px]">
-              <div className="absolute left-0 top-0 h-[8px] w-[18px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute left-[4px] top-[4px] h-[6px] w-[10px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute bottom-0 left-[7px] h-[3px] w-[3px] rounded-full bg-black" />
-            </div>
-
-            {/* Battery */}
-            <div className="relative h-[13px] w-[27px]">
-              <div className="h-[13px] w-[25px] rounded-[4px] border border-black opacity-40" />
-              <div className="absolute left-[3px] top-[3px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-              <div className="absolute right-[-2px] top-[4px] h-[5px] w-[2px] rounded-r bg-black opacity-40" />
-            </div>
-
-          </div>
-        </div>
+    <div
+  className="
+    relative
+    h-[1000px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1100px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+  "
+>
 
 
         {/* ================= TOP HEADER ================= */}
         <div
           className="
-            absolute
-            left-0
-            top-[62px]
-            z-40
-            flex
-            h-[56px]
-            w-full
-            items-center
-            justify-between
-            border-b
-            border-[#E5E7EB]
-            bg-white
-0            px-6
-          "
+  absolute
+  left-0
+  top-[62px]
+  z-40
+  flex
+  h-[56px]
+  w-full
+  items-center
+  justify-between
+  border-b
+  border-[#E5E7EB]
+  bg-white
+  px-6
+"
         >
 
           <div className="flex items-center gap-6">
@@ -202,7 +172,7 @@ function SeekRequest() {
     absolute
     left-0
     top-[118px]
-    bottom-0
+    bottom-[24px]
     w-full
     overflow-y-auto
     overflow-x-hidden
@@ -235,7 +205,21 @@ function SeekRequest() {
 
 
           {/* ================= REQUEST SUMMARY ================= */}
-          <div className="mx-auto mt-4 w-[380px] rounded-[24px] bg-white p-6">
+         <div
+  className="
+    mx-auto
+    mt-4
+    w-[calc(100%-48px)]
+    sm:w-[592px]
+    md:w-[720px]
+    lg:w-[976px]
+    xl:w-[1232px]
+    2xl:w-[1488px]
+    rounded-[24px]
+    bg-white
+    p-6
+  "
+>
 
             <div className="flex flex-col gap-4">
 
@@ -326,7 +310,18 @@ function SeekRequest() {
 
 
           {/* ================= PROVIDER RESPONSES ================= */}
-          <div className="mx-auto mt-6 w-[380px]">
+         <div
+  className="
+    mx-auto
+    mt-6
+    w-[calc(100%-48px)]
+    sm:w-[592px]
+    md:w-[720px]
+    lg:w-[976px]
+    xl:w-[1232px]
+    2xl:w-[1488px]
+  "
+>
 
             <h2 className="mb-4 text-[16px] font-bold leading-[19px] text-black">
               Provider Responses (3)
@@ -487,9 +482,8 @@ function SeekRequest() {
                   <div className="mt-4 flex gap-2">
 
                     <button
-                    onClick 
-                      type="button"
-                      onClick={() => handleProfile(provider)}
+  type="button"
+  onClick={() => handleProfile(provider)}
                       className="
                         flex
                         h-[49px]
@@ -575,12 +569,9 @@ function SeekRequest() {
 
 
         {/* ================= HOME INDICATOR ================= */}
-        <div className="absolute left-1/2 z-50 h-[24px] w-[412px] -translate-x-1/2 mt-">
-
-          
-
-
-        </div>
+<div className="absolute bottom-0 left-0 z-50 flex h-[24px] w-full items-center justify-center bg-transparent">
+  <div className="h-1 w-[108px] rounded-full bg-black" />
+</div>
 
       </div>
 

@@ -143,32 +143,29 @@ function NotificSet() {
   };
 
   return (
-    <div className="relative mx-auto h-[926px] w-[428px] overflow-hidden rounded-[35px] bg-[#F9FAFB] font-[Inter,Arial,sans-serif]">
+    <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+    font-[Inter,Arial,sans-serif]
+  "
+>
 
-      {/* ================= STATUS BAR ================= */}
-      <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between bg-[#F9FAFB] px-4 pt-2">
-        <div className="text-[17px] font-semibold text-black">
-          9:41
-        </div>
-
-        <div className="flex items-center gap-[7px] text-black">
-          <div className="h-3 w-5">
-            <div className="flex h-full items-end gap-[2px]">
-              <span className="h-[4px] w-[3px] rounded-sm bg-black" />
-              <span className="h-[7px] w-[3px] rounded-sm bg-black" />
-              <span className="h-[10px] w-[3px] rounded-sm bg-black" />
-              <span className="h-[12px] w-[3px] rounded-sm bg-black" />
-            </div>
-          </div>
-
-          <Wifi size={17} fill="black" />
-
-          <div className="relative h-[13px] w-[27px] rounded-[4px] border border-black/40">
-            <div className="absolute left-[2px] top-[2px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-            <div className="absolute -right-[3px] top-[4px] h-[5px] w-[2px] rounded-r bg-black/40" />
-          </div>
-        </div>
-      </div>
+    
 
       {/* ================= HEADER ================= */}
       <div className="absolute left-0 top-[62px] flex h-[56px] w-full items-center justify-between border border-[#E5E7EB] bg-white px-6">
@@ -192,13 +189,13 @@ function NotificSet() {
       </div>
 
       {/* ================= MAIN TABS ================= */}
-      <div className="absolute left-1/2 top-[117px] flex h-[49px] w-[430px] -translate-x-1/2 border border-[#E5E7EB] bg-white">
+    <div className="absolute left-0 right-0 top-[117px] flex h-[49px] w-full border border-[#E5E7EB] bg-white">
 
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className="relative flex h-[49px] w-[143px] flex-col items-center justify-center"
+           className="relative flex h-[49px] w-1/3 flex-col items-center justify-center"
           >
             <span
               className={`text-center text-[14px] font-semibold ${
@@ -211,20 +208,20 @@ function NotificSet() {
             </span>
 
             {tab === "Unread" && (
-              <span className="absolute right-[28px] top-[8px] flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#008000] text-[11px] font-bold italic text-white">
+              <span className="absolute right-[12px] top-[8px] flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#008000] text-[11px] font-bold italic text-white">
                 5
               </span>
             )}
 
             {activeTab === tab && (
-              <span className="absolute bottom-[-1px] left-1/2 h-[1.5px] w-[126px] -translate-x-1/2 bg-[#008000]" />
+              <span className="absolute bottom-[-1px] left-1/2 h-[1.5px] w-[80%] -translate-x-1/2 bg-[#008000]" />
             )}
           </button>
         ))}
       </div>
 
       {/* ================= FILTERS ================= */}
-      <div className="absolute left-1/2 top-[165px] flex h-[69px] w-[430px] -translate-x-1/2 items-center border border-[#E5E7EB] bg-white px-6">
+      <div className="absolute left-0 right-0 top-[165px] flex h-[69px] w-full items-center border border-[#E5E7EB] bg-white px-6">
 
         <div className="flex w-full items-center gap-2 overflow-x-auto scrollbar-hide">
           {filters.map((filter) => (
@@ -244,14 +241,26 @@ function NotificSet() {
       </div>
 
       {/* ================= TODAY ================= */}
-      <div className="absolute left-1/2 top-[233px] flex h-[35px] w-[430px] -translate-x-1/2 items-center border border-[#E5E7EB] bg-white px-6">
+     <div className="absolute left-0 right-0 top-[233px] flex h-[35px] w-full items-center border border-[#E5E7EB] bg-white px-6">
         <span className="text-[12px] font-bold italic text-[#6B7280]">
           TODAY
         </span>
       </div>
 
       {/* ================= NOTIFICATION LIST ================= */}
-      <div className="absolute left-6 top-[284px] h-[600px] w-[380px] overflow-y-auto pr-0 scrollbar-thin">
+     <div
+  className="
+    absolute
+    left-6
+    right-6
+    top-[284px]
+    bottom-[24px]
+    overflow-y-auto
+    pr-0
+    pb-4
+    scrollbar-thin
+  "
+>
 
         {notifications.map((notification, index) => {
           if (notification.section) {
@@ -268,7 +277,7 @@ function NotificSet() {
           return (
             <div
               key={index}
-              className={`relative mb-3 flex w-[380px] gap-3 rounded-lg ${
+              className={`relative mb-3 flex w-full gap-3 rounded-lg ${
                 notification.unread
                   ? "bg-white px-2 py-2"
                   : "bg-[#FCFDFD] px-[14px] py-2"
@@ -351,9 +360,9 @@ function NotificSet() {
       </div>
 
       {/* ================= BOTTOM HOME INDICATOR ================= */}
-      <div className="absolute bottom-0 left-1/2 h-6 w-[412px] -translate-x-1/2">
-        <div className="absolute left-1/2 top-1/2 h-1 w-[108px] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-black" />
-      </div>
+      <div className="absolute bottom-0 left-0 z-50 flex h-6 w-full items-center justify-center bg-[#F9FAFB]">
+  <div className="h-1 w-[108px] rounded-full bg-black" />
+</div>
     </div>
   );
 }

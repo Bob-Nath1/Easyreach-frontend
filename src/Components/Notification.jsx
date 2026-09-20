@@ -27,63 +27,30 @@ function Notification() {
           DEVICE FRAME
           Figma size: 428 × 926
       ====================================================== */}
-      <div
-        className="
-          relative
-          w-[428px]
-          h-[926px]
-          max-w-full
-          max-h-screen
-          overflow-hidden
-          rounded-[35px]
-          bg-white
-        "
-      >
-         <div className="absolute inset-0 overflow-y-auto">
+   <div
+  className="
+    relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    h-[926px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-white
+    mx-auto
+  "
+>
+         <div className="absolute inset-0 overflow-hidden">
 
-        {/* =====================================================
-            STATUS BAR
-        ====================================================== */}
-        <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-4">
-
-          {/* Time */}
-          <div className="flex h-[22px] w-[121px] items-center justify-center pt-[2px]">
-            <span className="text-[17px] font-semibold leading-[22px] text-black">
-              9:41
-            </span>
-          </div>
-
-          {/* Network / WiFi / Battery */}
-          <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-
-            {/* Cellular */}
-            <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-              <span className="h-[5px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[7px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[10px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[13px] w-[2px] rounded-sm bg-black" />
-            </div>
-
-            {/* WiFi */}
-            <div className="relative h-[13px] w-[18px]">
-              <div className="absolute left-0 top-0 h-[8px] w-[18px] rounded-t-full border-t-[3px] border-black" />
-
-              <div className="absolute left-[4px] top-[4px] h-[6px] w-[10px] rounded-t-full border-t-[3px] border-black" />
-
-              <div className="absolute bottom-0 left-[7px] h-[3px] w-[3px] rounded-full bg-black" />
-            </div>
-
-            {/* Battery */}
-            <div className="relative h-[13px] w-[27px]">
-              <div className="h-[13px] w-[25px] rounded-[4px] border border-black opacity-40" />
-
-              <div className="absolute left-[3px] top-[3px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-
-              <div className="absolute right-[-2px] top-[4px] h-[5px] w-[2px] rounded-r bg-black opacity-40" />
-            </div>
-
-          </div>
-        </div>
+       
+  <div className="relative h-full w-full -translate-y-[123px]">
 
 
         {/* =====================================================
@@ -93,7 +60,7 @@ function Notification() {
           className="
             absolute
             left-1/2
-            top-[122px]
+            top-[200px]
             flex
             h-[60px]
             w-[60px]
@@ -105,7 +72,7 @@ function Notification() {
           <img
           src="/bell.png"
           alt="Easy Reach Logo"
-          className="w-8 ml-5"
+          className="w-8"
         />
         </div>
 
@@ -113,18 +80,20 @@ function Notification() {
         {/* =====================================================
             TITLE + DESCRIPTION
         ====================================================== */}
-        <div
-          className="
-            absolute
-            left-[28px]
-            top-[273px]
-            flex
-            w-[380px]
-            flex-col
-            items-center
-            gap-[16px]
-          "
-        >
+      <div
+  className="
+    absolute
+    left-1/2
+    -translate-x-1/2
+    top-[273px]
+    flex
+    w-[calc(100%-48px)]
+    max-w-[380px]
+    flex-col
+    items-center
+    gap-[16px]
+  "
+>
 
           <h1
             className="
@@ -159,24 +128,26 @@ function Notification() {
         {/* =====================================================
             NOTIFICATION BENEFITS
         ====================================================== */}
-        <div
-          className="
-            absolute
-            left-[32px]
-            top-[431px]
-            flex
-            w-[380px]
-            flex-col
-            gap-[16px]
-          "
-        >
+      <div
+  className="
+    absolute
+    left-1/2
+    -translate-x-1/2
+    top-[431px]
+    flex
+    w-[calc(100%-48px)]
+    max-w-[380px]
+    flex-col
+    gap-[16px]
+  "
+>
 
           {/* ================= ITEM 1 ================= */}
           <div
             className="
               flex
               h-[56px]
-              w-[380px]
+              w-full
               items-center
               gap-[16px]
               rounded-[10px]
@@ -223,7 +194,7 @@ function Notification() {
             className="
               flex
               h-[56px]
-              w-[380px]
+              w-full
               items-center
               gap-[16px]
               rounded-[10px]
@@ -270,7 +241,7 @@ function Notification() {
             className="
               flex
               h-[56px]
-              w-[380px]
+              w-full
               items-center
               gap-[16px]
               rounded-[10px]
@@ -317,19 +288,21 @@ function Notification() {
         {/* =====================================================
             BOTTOM BUTTON SECTION
         ====================================================== */}
-        <div
-          className="
-            absolute
-            left-[24px]
-            top-[787px]
-            flex
-            h-[96px]
-            w-[380px]
-            flex-col
-            items-center
-            gap-[16px]
-          "
-        >
+       <div
+  className="
+    absolute
+    left-1/2
+    -translate-x-1/2
+    top-[787px]
+    flex
+    h-[96px]
+    w-[calc(100%-48px)]
+    max-w-[380px]
+    flex-col
+    items-center
+    gap-[16px]
+  "
+>
 
           {/* Enable Notification */}
           <button
@@ -339,7 +312,7 @@ function Notification() {
               box-border
               flex
               h-[52px]
-              w-[380px]
+              w-full
               items-center
               justify-center
               gap-[10px]
@@ -395,21 +368,20 @@ function Notification() {
           </button>
 
         </div>
-
+</div>
 
         {/* =====================================================
             HOME INDICATOR
         ====================================================== */}
         <div
-          className="
-            absolute
-            bottom-0
-            left-1/2
-            h-[24px]
-            w-[412px]
-            -translate-x-1/2
-          "
-        >
+  className="
+    absolute
+    bottom-0
+    left-0
+    h-[24px]
+    w-full
+  "
+>
           <div
             className="
               absolute

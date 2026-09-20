@@ -229,46 +229,30 @@ function Categories() {
   };
 
   return (
-    <div className="relative mx-auto h-[926px] w-[428px] overflow-hidden rounded-[35px] bg-white font-[Inter,sans-serif] text-gray-800">
+   <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-white
+    font-[Inter,sans-serif]
+    text-gray-800
+  "
+>
 
-      {/* ================= STATUS BAR ================= */}
-      <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-4 pt-[21px]">
-
-        {/* Time */}
-        <div className="flex h-[22px] items-center pt-[2px]">
-          <span className="text-center text-[17px] font-semibold leading-[22px] text-black">
-            9:41
-          </span>
-        </div>
-
-        {/* Status Icons */}
-        <div className="flex items-center gap-[7px] pt-[1px]">
-
-          {/* Cellular */}
-          <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-            <span className="h-[4px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[7px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[10px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[13px] w-[3px] rounded-sm bg-black" />
-          </div>
-
-          {/* Wifi */}
-          <div className="relative h-[13px] w-[18px]">
-            <div className="absolute left-0 top-0 h-[10px] w-[18px] rounded-t-full border-t-[3px] border-black" />
-            <div className="absolute left-[4px] top-[4px] h-[7px] w-[10px] rounded-t-full border-t-[3px] border-black" />
-            <div className="absolute bottom-0 left-[7px] h-[3px] w-[3px] rounded-full bg-black" />
-          </div>
-
-          {/* Battery */}
-          <div className="relative h-[13px] w-[27px]">
-            <div className="absolute left-0 top-0 h-[13px] w-[25px] rounded-[4px] border border-black/40 p-[2px]">
-              <div className="h-full w-full rounded-[2px] bg-black" />
-            </div>
-
-            <div className="absolute right-0 top-[4px] h-[5px] w-[2px] rounded-r-sm bg-black/40" />
-          </div>
-        </div>
-      </div>
+     
 
       {/* ================= HEADER ================= */}
       <div className="absolute left-6 top-[62px] flex h-10 items-center gap-6">
@@ -330,7 +314,20 @@ function Categories() {
       </div>
 
       {/* ================= SEARCH ================= */}
-      <div className="absolute left-6 top-[122px] flex h-[50px] w-[380px] items-center rounded-[15px] bg-[#F3F4F6] px-4">
+      <div
+  className="
+    absolute
+    left-6
+    right-6
+    top-[122px]
+    flex
+    h-[50px]
+    items-center
+    rounded-[15px]
+    bg-[#F3F4F6]
+    px-4
+  "
+>
 
         <Search
           size={18}
@@ -349,8 +346,18 @@ function Categories() {
 
       {/* ================= CATEGORY AREA ================= */}
       <div
-        className="absolute left-6 top-[188px] h-[698px] w-[380px] overflow-y-auto pb-8 pr-1 scrollbar-hide"
-      >
+  className="
+    absolute
+    left-6
+    right-6
+    top-[188px]
+    bottom-[40px]
+    overflow-y-auto
+    pb-8
+    pr-1
+    scrollbar-hide
+  "
+>
         {view === "grid" ? (
           <div className="grid grid-cols-2 gap-4">
 
@@ -358,7 +365,16 @@ function Categories() {
               <button
                 key={category.name}
                 onClick={() => handleCategoryClick(category)}
-                className="relative h-[168px] w-[182px] overflow-hidden rounded-[15px] text-center transition-transform active:scale-[0.98]"
+                className="
+  relative
+  h-[168px]
+  w-full
+  overflow-hidden
+  rounded-[15px]
+  text-center
+  transition-transform
+  active:scale-[0.98]
+"
                 style={{
                   background: `linear-gradient(
                     135deg,
@@ -502,7 +518,7 @@ function Categories() {
       </div>
 
       {/* ================= HOME INDICATOR ================= */}
-      <div className="absolute bottom-0 left-1/2 flex h-6 w-[412px] -translate-x-1/2 items-center justify-center">
+      <div className="absolute bottom-0 left-0 flex h-6 w-full items-center justify-center">
         <div className="h-1 w-[108px] rounded-xl bg-gray-800" />
       </div>
     </div>

@@ -45,10 +45,41 @@ function Edit() {
   };
 
   return (
-    <div className="relative mx-auto h-[926px] w-[428px] overflow-hidden rounded-[35px] bg-[#F9FAFB]">
+    <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+  "
+>
       
       {/* ================= SCROLLABLE CONTENT ================= */}
-      <div className="absolute left-6 top-[70px] h-[816px] w-[380px] overflow-y-auto pb-10 scrollbar-hide">
+    <div
+  className="
+    absolute
+    left-6
+    right-6
+    top-[70px]
+    bottom-[24px]
+    overflow-y-auto
+    overflow-x-hidden
+    pb-10
+    scrollbar-hide
+  "
+>
 
         <div className="flex w-full flex-col gap-6">
 
@@ -180,7 +211,7 @@ function Edit() {
               <div className="flex h-[49px] w-full items-center gap-3">
 
                 {/* Country code */}
-                <div className="flex h-[49px] w-20 items-center justify-center rounded-[15px] border border-[#D1D5DB] bg-white">
+                <div className="relative flex h-[49px] min-w-0 flex-1 items-center rounded-[15px] border border-[#D1D5DB] bg-white px-4">
                   <div className="flex items-center gap-2">
                     <span className="text-[20px]">🇳🇬</span>
 
@@ -271,7 +302,7 @@ function Edit() {
       </div>
 
       {/* ================= IPHONE HOME INDICATOR ================= */}
-      <div className="absolute bottom-0 left-1/2 flex h-6 w-[412px] -translate-x-1/2 items-center justify-center">
+    <div className="absolute bottom-0 left-0 z-50 flex h-6 w-full items-center justify-center bg-[#F9FAFB]">
         <div className="h-1 w-[108px] rounded-xl bg-black" />
       </div>
     </div>

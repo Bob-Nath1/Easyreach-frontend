@@ -99,40 +99,27 @@ function Search() {
   };
 
   return (
-    <div className="relative mx-auto h-[926px] w-[428px] overflow-hidden rounded-[35px] bg-white font-['Inter']">
-      {/* ================= STATUS BAR ================= */}
-      <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-4 pt-[21px]">
-        {/* Time */}
-        <div className="flex h-[22px] w-[121px] items-center justify-center">
-          <span className="text-[17px] font-semibold leading-[22px] text-black">
-            9:41
-          </span>
-        </div>
-
-        {/* Status icons */}
-        <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-          {/* Cellular */}
-          <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-            <span className="h-[5px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[7px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[10px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[13px] w-[3px] rounded-sm bg-black" />
-          </div>
-
-          {/* Wifi */}
-          <div className="relative h-[13px] w-[18px]">
-            <div className="absolute left-1/2 top-0 h-[12px] w-[18px] -translate-x-1/2 rounded-t-full border-t-[3px] border-black" />
-            <div className="absolute left-1/2 top-[5px] h-[7px] w-[11px] -translate-x-1/2 rounded-t-full border-t-[3px] border-black" />
-            <div className="absolute bottom-0 left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-black" />
-          </div>
-
-          {/* Battery */}
-          <div className="relative h-[13px] w-[27px] rounded-[4px] border border-black/35 p-[2px]">
-            <div className="h-full w-[21px] rounded-[2px] bg-black" />
-            <div className="absolute -right-[3px] top-[4px] h-[5px] w-[2px] rounded-r bg-black/40" />
-          </div>
-        </div>
-      </div>
+    <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-white
+    font-['Inter']
+  "
+>
 
       {/* ================= BACK BUTTON ================= */}
       <button
@@ -150,14 +137,25 @@ function Search() {
       {/* ================= SEARCH BUTTON ================= */}
       <button
         onClick={() => handleSearch()}
-        className="absolute left-[364px] top-[67px] flex h-10 w-10 items-center justify-center rounded-lg bg-[#008000]"
+        className="
+  absolute
+  right-6
+  top-[67px]
+  flex
+  h-10
+  w-10
+  items-center
+  justify-center
+  rounded-lg
+  bg-[#008000]
+"
         aria-label="Search"
       >
         <SearchIcon size={20} strokeWidth={2.5} color="white" />
       </button>
 
       {/* ================= SEARCH INPUT ================= */}
-      <div className="absolute left-[62px] top-[62px] flex h-[50px] w-[293px] items-center rounded-[15px] bg-[#F3F4F6] px-4">
+       <div className="absolute left-[62px] top-[62px] flex h-[50px] w-[293px] items-center rounded-[15px] bg-[#F3F4F6] px-4">
         <SearchIcon
           size={18}
           strokeWidth={2}
@@ -188,7 +186,7 @@ function Search() {
       </div>
 
       {/* ================= FILTER TABS ================= */}
-      <div className="absolute left-6 top-[120px] flex h-[35px] items-center gap-4">
+      <div className="absolute left-6 right-6 top-[120px] flex h-[35px] items-center gap-4">
         {["Near me", "Popular", "Recommended"].map((tab) => (
           <button
             key={tab}
@@ -208,7 +206,15 @@ function Search() {
       <div className="absolute left-0 top-[161px] h-px w-full bg-[#E5E7EB]" />
 
       {/* ================= RECENT SEARCHES ================= */}
-      <section className="absolute left-6 top-[187px] w-[380px]">
+     <section
+  className="
+    absolute
+    left-6
+    right-6
+    top-[187px]
+    w-auto
+  "
+>
         <div className="flex h-[19px] items-center justify-between">
           <h2 className="text-[16px] font-bold leading-[19px] text-[#1F2937]">
             Recent Searches
@@ -275,7 +281,15 @@ function Search() {
       </section>
 
       {/* ================= TRENDING ================= */}
-      <section className="absolute left-6 top-[488px] w-[328px]">
+   <section
+  className="
+    absolute
+    left-6
+    right-6
+    top-[488px]
+    w-auto
+  "
+>
         <h2 className="text-[16px] font-bold leading-[19px] text-[#1F2937]">
           Trending Now 🔥
         </h2>
@@ -347,12 +361,20 @@ function Search() {
       </section>
 
       {/* ================= POPULAR CATEGORIES ================= */}
-      <section className="absolute left-6 top-[673px] w-[380px]">
+      <section
+  className="
+    absolute
+    left-6
+    right-6
+    top-[673px]
+    w-auto
+  "
+>
         <h2 className="text-[16px] font-bold leading-[19px] text-[#1F2937]">
           Popular Categories
         </h2>
 
-        <div className="mt-4 flex h-[115px] gap-2 overflow-hidden">
+       <div className="mt-4 flex h-[115px] w-full gap-2 overflow-hidden">
           {categories.map((category) => {
             const Icon = category.icon;
 
@@ -383,7 +405,7 @@ function Search() {
       </section>
 
       {/* ================= HOME INDICATOR ================= */}
-      <div className="absolute bottom-0 left-1/2 h-6 w-[412px] -translate-x-1/2">
+     <div className="absolute bottom-0 left-0 h-6 w-full">
         <div className="absolute left-1/2 top-1/2 h-1 w-[108px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-black" />
       </div>
     </div>

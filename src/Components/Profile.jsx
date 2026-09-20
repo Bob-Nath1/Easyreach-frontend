@@ -45,99 +45,79 @@ function Profile() {
           DEVICE FRAME
           Figma size: 428 × 926
       ====================================================== */}
-      <div
-        className="
-          relative
-          h-[926px]
-          w-[428px]
-          max-w-full
-          overflow-hidden
-          rounded-[35px]
-          bg-white
-        "
-      >
+     <div
+  className="
+    relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    h-[926px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-white
+    mx-auto
+  "
+>
 
-        {/* =====================================================
-            STATUS BAR
-        ====================================================== */}
-        <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-4">
+{/* =====================================================
+    HEADER
+===================================================== */}
+<div
+  className="
+    absolute
+    left-0
+    top-[70px]
+    h-[24px]
+    w-full
+  "
+>
+  {/* Back Button */}
+  <button
+    type="button"
+    onClick={() => navigate(-1)}
+    className="
+      absolute
+      left-[24px]
+      top-0
+      flex
+      h-[24px]
+      w-[24px]
+      items-center
+      justify-center
+    "
+  >
+    <ArrowLeft
+      size={24}
+      strokeWidth={2}
+      className="text-[#1F2937]"
+    />
+  </button>
 
-          {/* Time */}
-          <div className="flex h-[22px] w-[121px] items-center justify-center pt-[2px]">
-            <span className="text-[17px] font-semibold leading-[22px] text-black">
-              9:41
-            </span>
-          </div>
-
-          {/* Network / WiFi / Battery */}
-          <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-
-            {/* Cellular */}
-            <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-              <span className="h-[5px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[7px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[10px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[13px] w-[2px] rounded-sm bg-black" />
-            </div>
-
-            {/* WiFi */}
-            <div className="relative h-[13px] w-[18px]">
-              <div className="absolute left-0 top-0 h-[8px] w-[18px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute left-[4px] top-[4px] h-[6px] w-[10px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute bottom-0 left-[7px] h-[3px] w-[3px] rounded-full bg-black" />
-            </div>
-
-            {/* Battery */}
-            <div className="relative h-[13px] w-[27px]">
-              <div className="h-[13px] w-[25px] rounded-[4px] border border-black opacity-40" />
-
-              <div className="absolute left-[3px] top-[3px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-
-              <div className="absolute right-[-2px] top-[4px] h-[5px] w-[2px] rounded-r bg-black opacity-40" />
-            </div>
-
-          </div>
-        </div>
-
-
-        {/* =====================================================
-            HEADER
-        ====================================================== */}
-        <div
-          className="
-            absolute
-            left-[24px]
-            top-[70px]
-            flex
-            h-[24px]
-            w-[257px]
-            items-start
-            gap-[24px]
-          "
-        >
-
-          {/* Back Button */}
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="flex h-[24px] w-[24px] shrink-0 items-center justify-center"
-          >
-            <ArrowLeft
-              size={24}
-              strokeWidth={2}
-              className="text-[#1F2937]"
-            />
-          </button>
-
-          {/* Title */}
-          <div className="flex h-[24px] w-[209px] flex-col gap-2">
-
-            <h1 className="text-[20px] font-bold leading-[24px] text-[#1F2937]">
-              Complete Profile
-            </h1>
-
-          </div>
-        </div>
+  {/* Centered Title */}
+  <h1
+    className="
+      absolute
+      left-1/2
+      top-0
+      -translate-x-1/2
+      whitespace-nowrap
+      text-[20px]
+      font-bold
+      leading-[24px]
+      text-[#1F2937]
+    "
+  >
+    Complete Profile
+  </h1>
+</div>
+        
 
 
         {/* =====================================================
@@ -259,61 +239,64 @@ function Profile() {
         </p>
 
 
-        {/* =====================================================
-            ABOUT YOU LABEL
-        ====================================================== */}
-        <div
-          className="
-            absolute
-            left-[24px]
-            top-[357px]
-            flex
-            h-[17px]
-            w-[133px]
-            items-center
-            gap-[4px]
-          "
-        >
+  {/* =====================================================
+    ABOUT YOU LABEL
+===================================================== */}
+<div
+  className="
+    absolute
+    left-[24px]
+    top-[357px]
+    flex
+    h-[17px]
+    w-[133px]
+    items-center
+    gap-[4px]
+  "
+>
+  <span
+    className="
+      text-[14px]
+      font-bold
+      italic
+      leading-[17px]
+      text-[#374151]
+    "
+  >
+    About You
+  </span>
 
-          <span
-            className="
-              text-[14px]
-              font-bold
-              italic
-              leading-[17px]
-              text-[#374151]
-            "
-          >
-            About You
-          </span>
-
-          <span
-            className="
-              text-[12px]
-              font-normal
-              leading-[15px]
-              text-[#9CA3AF]
-            "
-          >
-            (Optional)
-          </span>
-
-        </div>
+  <span
+    className="
+      text-[12px]
+      font-normal
+      leading-[15px]
+      text-[#9CA3AF]
+    "
+  >
+    (Optional)
+  </span>
+</div>
 
 
         {/* =====================================================
             ABOUT YOU INPUT
         ====================================================== */}
-        <div
-          className="
-            absolute
-            left-1/2
-            top-[378px]
-            h-[160px]
-            w-[380px]
-            -translate-x-1/2
-          "
-        >
+      <div
+  className="
+    absolute
+    left-1/2
+    top-[378px]
+    h-[160px]
+    w-[calc(100%-48px)]
+    sm:w-[592px]
+    md:w-[720px]
+    lg:w-[976px]
+    xl:w-[1232px]
+    2xl:w-[1488px]
+    -translate-x-1/2
+  "
+>
 
           <textarea
             value={about}
@@ -362,43 +345,49 @@ function Profile() {
         {/* =====================================================
             DONE BUTTON
         ====================================================== */}
-        <div
-          className="
-            absolute
-            bottom-[65px]
-            left-[24px]
-            h-[52px]
-            w-[380px]
-          "
-        >
+       <div
+  className="
+    absolute
+    bottom-[65px]
+    left-1/2
+    h-[52px]
+    w-[calc(100%-48px)]
+    sm:w-[592px]
+    md:w-[720px]
+    lg:w-[976px]
+    xl:w-[1232px]
+    2xl:w-[1488px]
+    -translate-x-1/2
+  "
+>
 
           <button
-            type="button"
-            onClick={handleDone}
-            className="
-              box-border
-              flex
-              h-[52px]
-              w-[380px]
-              items-center
-              justify-center
-              rounded-[99px]
-              border-2
-              border-[#008000]
-              bg-[#008000]
-              px-[10px]
-              py-[12px]
-              text-[14px]
-              font-semibold
-              leading-[28px]
-              text-white
-              transition
-              hover:bg-[#006B00]
-              active:scale-[0.98]
-            "
-          >
-            Done
-          </button>
+  type="button"
+  onClick={handleDone}
+  className="
+    box-border
+    flex
+    h-[52px]
+    w-full
+    items-center
+    justify-center
+    rounded-[99px]
+    border-2
+    border-[#008000]
+    bg-[#008000]
+    px-[10px]
+    py-[12px]
+    text-[14px]
+    font-semibold
+    leading-[28px]
+    text-white
+    transition
+    hover:bg-[#006B00]
+    active:scale-[0.98]
+  "
+>
+  Done
+</button>
 
         </div>
 

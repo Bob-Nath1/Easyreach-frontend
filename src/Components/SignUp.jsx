@@ -63,47 +63,25 @@ function SignUp() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-      <div
-        className="
-          relative
-          w-[428px]
-          min-h-[926px]
-          overflow-hidden
-          rounded-[35px]
-          bg-gradient-to-br
-          from-[#008000]
-          to-[#00C48C]
-        "
-      >
-        {/* =========================
-            TOP STATUS BAR
-        ========================== */}
-        <div className="absolute top-0 left-0 w-full h-[62px] px-4 flex items-center justify-between text-white">
-          {/* Time */}
-          <div className="text-[17px] font-semibold">
-            9:41
-          </div>
-
-          {/* Network indicators */}
-          <div className="flex items-center gap-2">
-            {/* Cellular */}
-            <div className="flex items-end gap-[2px]">
-              <span className="w-[3px] h-[5px] bg-white rounded-sm" />
-              <span className="w-[3px] h-[8px] bg-white rounded-sm" />
-              <span className="w-[3px] h-[11px] bg-white rounded-sm" />
-              <span className="w-[3px] h-[13px] bg-white rounded-sm" />
-            </div>
-
-            {/* WiFi */}
-            <span className="text-[15px]">◉</span>
-
-            {/* Battery */}
-            <div className="relative w-[27px] h-[13px] border border-white/40 rounded-[4px]">
-              <div className="absolute left-[3px] top-[3px] bottom-[3px] right-[4px] bg-white rounded-[2px]" />
-              <div className="absolute -right-[3px] top-[4px] w-[2px] h-[5px] bg-white/50 rounded-r" />
-            </div>
-          </div>
-        </div>
+     <div
+  className="
+    relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    min-h-[926px]
+    lg:min-h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-gradient-to-br
+    from-[#008000]
+    to-[#00C48C]
+    mx-auto
+  "
+>
 
         {/* =========================
             HEADER
@@ -128,21 +106,25 @@ function SignUp() {
             WHITE FORM CONTAINER
         ========================== */}
         <div
-          className="
-            absolute
-            left-0
-            bottom-0
-            w-full
-            h-[812px]
-            bg-white
-            rounded-t-[45px]
-            overflow-y-auto
-          "
-        >
+  className="
+    absolute
+    left-0
+    bottom-0
+    w-full
+    h-[812px]
+    md:h-[900px]
+    lg:h-[1000px]
+    xl:h-[1000px]
+    2xl:h-[1000px]
+    bg-white
+    rounded-t-[45px]
+    overflow-y-auto
+  "
+>
           <form
-            onSubmit={handleSubmit}
-            className="px-6 pt-[75px] pb-10"
-          >
+  onSubmit={handleSubmit}
+  className="px-6 pt-[75px] pb-10"
+>
             {/* =========================
                 SIGNING UP AS
             ========================== */}
@@ -606,9 +588,9 @@ function SignUp() {
         {/* =========================
             BOTTOM IPHONE HANDLE
         ========================== */}
-        <div className="absolute bottom-0 left-0 w-full h-[24px] bg-white flex items-center justify-center">
-          <div className="w-[108px] h-[4px] bg-[#1F2937] rounded-full" />
-        </div>
+       <div className="absolute bottom-0 left-0 w-full h-[24px] bg-white flex items-center justify-center">
+  <div className="w-[108px] h-[4px] bg-[#1F2937] rounded-full" />
+</div>
       </div>
     </div>
   );

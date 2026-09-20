@@ -67,46 +67,31 @@ const NotifA = () => {
   );
 
   return (
-    <div className="relative mx-auto h-[926px] w-[428px] overflow-hidden rounded-[35px] bg-[#F9FAFB] font-['Inter']">
+    <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+    font-['Inter']
+  "
+>
 
-      {/* ================= STATUS BAR ================= */}
-      <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-[16px]">
-
-        {/* Time */}
-        <div className="flex h-[22px] w-[121px] items-center justify-start pt-[2px]">
-          <span className="text-center font-['SF_Pro'] text-[17px] font-semibold leading-[22px] text-black">
-            9:41
-          </span>
-        </div>
-
-        {/* Network / Battery */}
-        <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-
-          {/* Cellular */}
-          <div className="flex h-[13px] items-end gap-[2px]">
-            <span className="h-[5px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[7px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[10px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[13px] w-[3px] rounded-sm bg-black" />
-          </div>
-
-          {/* Wifi */}
-          <div className="relative h-[13px] w-[18px]">
-            <div className="absolute left-[2px] top-[1px] h-[10px] w-[14px] rounded-t-full border-t-[3px] border-black" />
-            <div className="absolute left-[5px] top-[5px] h-[7px] w-[8px] rounded-t-full border-t-[3px] border-black" />
-            <div className="absolute bottom-0 left-[8px] h-[3px] w-[3px] rounded-full bg-black" />
-          </div>
-
-          {/* Battery */}
-          <div className="relative h-[13px] w-[27px] rounded-[4px] border border-black/35">
-            <div className="absolute left-[2px] top-[2px] h-[7px] w-[21px] rounded-[2px] bg-black" />
-            <div className="absolute right-[-3px] top-[4px] h-[5px] w-[2px] rounded-r bg-black/40" />
-          </div>
-        </div>
-      </div>
 
       {/* ================= HEADER ================= */}
-      <div className="absolute left-1/2 top-[62px] flex h-[56px] w-[430px] -translate-x-1/2 items-center justify-between border border-[#E5E7EB] bg-white px-[24px]">
+     <div className="absolute left-0 right-0 top-[62px] flex h-[56px] w-full items-center justify-between border border-[#E5E7EB] bg-white px-[24px]">
 
         <div className="flex items-center gap-[24px]">
 
@@ -138,7 +123,7 @@ const NotifA = () => {
       </div>
 
       {/* ================= PUSH NOTIFICATIONS ================= */}
-      <div className="absolute left-1/2 top-[134px] flex h-[90px] w-[380px] -translate-x-1/2 items-center rounded-[15px] bg-[#F0FDF4] px-[16px] py-[10px]">
+   <div className="absolute left-6 right-6 top-[134px] flex h-[90px] w-auto items-center rounded-[15px] bg-[#F0FDF4] px-[16px] py-[10px]">
 
         <div className="flex w-full flex-col gap-[15px] pr-[65px]">
           <h2 className="font-['Inter'] text-[16px] font-bold italic leading-[19px] text-[#1F2937]">
@@ -167,7 +152,7 @@ const NotifA = () => {
       </div>
 
       {/* ================= NEW MESSAGES ================= */}
-      <div className="absolute left-1/2 top-[279px] w-[380px] -translate-x-1/2">
+      <div className="absolute left-6 right-6 top-[279px] w-auto">
         <NotificationRow
           label="New Messages"
           settingKey="messages"
@@ -175,7 +160,7 @@ const NotifA = () => {
       </div>
 
       {/* Divider */}
-      <div className="absolute left-1/2 top-[351px] w-[380px] -translate-x-1/2 border-t border-[#E5E7EB]" />
+      <div className="absolute left-6 right-6 top-[351px] border-t border-[#E5E7EB]" />
 
       {/* ================= REQUESTS ================= */}
 
@@ -186,7 +171,7 @@ const NotifA = () => {
       </div>
 
       {/* Provider Responses */}
-      <div className="absolute left-1/2 top-[398px] w-[380px] -translate-x-1/2">
+     <div className="absolute left-6 right-6 top-[398px] w-auto">
         <NotificationRow
           label="Provider Responses"
           settingKey="responses"
@@ -194,7 +179,7 @@ const NotifA = () => {
       </div>
 
       {/* Booking Confirmations */}
-      <div className="absolute left-1/2 top-[462px] w-[380px] -translate-x-1/2">
+      <div className="absolute left-6 right-6 top-[462px] w-auto">
         <NotificationRow
           label="Booking Confirmations"
           settingKey="confirmations"
@@ -202,7 +187,7 @@ const NotifA = () => {
       </div>
 
       {/* Booking Reminders */}
-      <div className="absolute left-1/2 top-[526px] w-[380px] -translate-x-1/2">
+      <div className="absolute left-6 right-6 top-[526px] w-auto">
         <NotificationRow
           label="Booking Reminders"
           settingKey="reminders"
@@ -210,7 +195,7 @@ const NotifA = () => {
       </div>
 
       {/* Divider */}
-      <div className="absolute left-1/2 top-[598px] w-[380px] -translate-x-1/2 border-t border-[#E5E7EB]" />
+      <div className="absolute left-6 right-6 top-[598px] border-t border-[#E5E7EB]" />
 
       {/* ================= PROMOTIONS ================= */}
 
@@ -221,7 +206,7 @@ const NotifA = () => {
       </div>
 
       {/* Special Offers */}
-      <div className="absolute left-1/2 top-[645px] w-[380px] -translate-x-1/2">
+      <div className="absolute left-6 right-6 top-[645px] w-auto">
         <NotificationRow
           label="Special Offers & Deals"
           settingKey="offers"
@@ -229,7 +214,7 @@ const NotifA = () => {
       </div>
 
       {/* App Updates */}
-      <div className="absolute left-1/2 top-[709px] w-[380px] -translate-x-1/2">
+      <div className="absolute left-6 right-6 top-[709px] w-auto">
         <NotificationRow
           label="App Updates & Tips"
           settingKey="updates"
@@ -237,7 +222,9 @@ const NotifA = () => {
       </div>
 
       {/* ================= HOME INDICATOR ================= */}
-      <div className="absolute bottom-[7px] left-1/2 h-[4px] w-[108px] -translate-x-1/2 rounded-[12px] bg-[#1F2937]" />
+     <div className="absolute bottom-0 left-0 z-50 flex h-6 w-full items-center justify-center bg-[#F9FAFB]">
+  <div className="h-1 w-[108px] rounded-full bg-[#1F2937]" />
+</div>
 
     </div>
   );

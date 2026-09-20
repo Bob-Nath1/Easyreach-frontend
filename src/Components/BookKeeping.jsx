@@ -26,63 +26,26 @@ function BookKeeping() {
     <div className="min-h-screen w-full bg-gray-100 flex justify-center">
       {/* ================= MOBILE SCREEN ================= */}
       <div
-        className="
-          relative
-          w-[428px]
-          h-[926px]
-          max-w-full
-          bg-[#F9FAFB]
-          rounded-[35px]
-          overflow-hidden
-          font-[Inter,sans-serif]
-        "
-      >
-        {/* ================= STATUS BAR ================= */}
-        <div
-          className="
-            absolute
-            top-0
-            left-0
-            z-20
-            w-full
-            h-[62px]
-            px-4
-            flex
-            items-center
-            justify-between
-            bg-[#F9FAFB]
-          "
-        >
-          {/* Time */}
-          <div className="w-[121px] flex items-center justify-start pt-[2px]">
-            <span className="text-[17px] font-semibold text-black">
-              9:41
-            </span>
-          </div>
-
-          {/* Status icons */}
-          <div className="w-[121px] flex items-center justify-end gap-[7px]">
-            {/* Cellular */}
-            <div className="flex items-end gap-[2px] h-[13px]">
-              <span className="w-[3px] h-[5px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[7px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[10px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[12px] bg-black rounded-sm" />
-            </div>
-
-            {/* Wifi */}
-            <div className="text-black text-[16px] font-bold">
-              ◔
-            </div>
-
-            {/* Battery */}
-            <div className="relative w-[27px] h-[13px] border border-black/40 rounded-[4px]">
-              <div className="absolute left-[2px] top-[2px] bottom-[2px] w-[20px] bg-black rounded-[2px]" />
-
-              <div className="absolute right-[-3px] top-[4px] w-[2px] h-[5px] bg-black/40 rounded-r" />
-            </div>
-          </div>
-        </div>
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+    font-[Inter,sans-serif]
+  "
+>
 
         {/* ================= HEADER ================= */}
         <div className="absolute top-[62px] left-0 w-full h-[36px] px-6 flex items-center justify-between">
@@ -126,19 +89,19 @@ function BookKeeping() {
         </div>
 
         {/* ================= SCROLLABLE CONTENT ================= */}
-        <div
-          className="
-            absolute
-            left-[24px]
-            top-[98px]
-            w-[380px]
-            h-[788px]
-            overflow-y-auto
-            overflow-x-hidden
-            scrollbar-hide
-            pb-[40px]
-          "
-        >
+      <div
+  className="
+    absolute
+    left-6
+    right-6
+    top-[98px]
+    bottom-[24px]
+    overflow-y-auto
+    overflow-x-hidden
+    scrollbar-hide
+    pb-[40px]
+  "
+>
           <div className="flex flex-col items-start gap-[32px] w-full">
             {/* ================= CONFIRMATION SECTION ================= */}
             <div className="w-full flex flex-col gap-[24px]">
@@ -347,24 +310,23 @@ function BookKeeping() {
             {/* ================= ACTION BUTTONS ================= */}
             <div className="w-full flex flex-col gap-[12px]">
               {/* Row 1 */}
-              <div className="w-full h-[120px] flex items-center gap-[12px]">
-                {/* View Details */}
-                <button
-                  type="button"
-                  className="
-                    w-[184px]
-                    h-[120px]
-                    bg-white
-                    rounded-[15px]
-                    p-4
-                    flex
-                    flex-col
-                    items-center
-                    gap-4
-                    active:scale-[0.98]
-                    transition
-                  "
-                >
+              <div className="w-full h-[120px] grid grid-cols-2 gap-[12px]">
+  <button
+    type="button"
+    className="
+      w-full
+      h-[120px]
+      bg-white
+      rounded-[15px]
+      p-4
+      flex
+      flex-col
+      items-center
+      gap-4
+      active:scale-[0.98]
+      transition
+    "
+  >
                   <div className="w-[48px] h-[48px] rounded-full bg-[#D1FAE5] flex items-center justify-center">
                     <ClipboardList
                       size={23}
@@ -410,24 +372,23 @@ function BookKeeping() {
               </div>
 
               {/* Row 2 */}
-              <div className="w-full h-[120px] flex items-center gap-[12px]">
-                {/* Call Provider */}
-                <button
-                  type="button"
-                  className="
-                    w-[184px]
-                    h-[120px]
-                    bg-white
-                    rounded-[15px]
-                    p-4
-                    flex
-                    flex-col
-                    items-center
-                    gap-4
-                    active:scale-[0.98]
-                    transition
-                  "
-                >
+              <div className="w-full h-[120px] grid grid-cols-2 gap-[12px]">
+  <button
+    type="button"
+    className="
+      w-full
+      h-[120px]
+      bg-white
+      rounded-[15px]
+      p-4
+      flex
+      flex-col
+      items-center
+      gap-4
+      active:scale-[0.98]
+      transition
+    "
+  >
                   <div className="w-[48px] h-[48px] rounded-full bg-[#D1FAE5] flex items-center justify-center">
                     <Phone
                       size={23}
@@ -542,7 +503,7 @@ function BookKeeping() {
               </div>
 
               {/* Text */}
-              <div className="w-[296px] flex items-center gap-[12px]">
+              <div className="flex-1 min-w-0 flex items-center gap-[12px]">
                 <span className="text-[12px] leading-[15px] text-[#6B7280]">
                   We'll notify you when the provider is on the way
                 </span>
@@ -559,20 +520,20 @@ function BookKeeping() {
         </div>
 
         {/* ================= IPHONE HOME INDICATOR ================= */}
-        <div
-          className="
-            absolute
-            bottom-0
-            left-1/2
-            -translate-x-1/2
-            w-[412px]
-            h-[24px]
-            flex
-            items-center
-            justify-center
-            bg-[#F9FAFB]
-          "
-        >
+      <div
+  className="
+    absolute
+    bottom-0
+    left-0
+    z-50
+    h-[24px]
+    w-full
+    flex
+    items-center
+    justify-center
+    bg-[#F9FAFB]
+  "
+>
           <div className="w-[108px] h-[4px] rounded-[12px] bg-[#1F2937]" />
         </div>
       </div>

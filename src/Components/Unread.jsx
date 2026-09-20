@@ -60,47 +60,28 @@ const navigate = useNavigate();
   return (
     <div className="min-h-screen w-full bg-gray-100 flex justify-center">
       {/* Mobile screen */}
-      <div
-        className="
-          relative
-          w-full
-          max-w-[428px]
-          min-h-screen
-          bg-white
-          rounded-[35px]
-          overflow-x-hidden
-          text-gray-900
-        "
-      >
-        {/* ================= STATUS BAR ================= */}
-        <div className="absolute top-0 left-0 w-full h-[62px] px-4 flex items-center justify-between">
-          {/* Time */}
-          <div className="w-[121px] flex items-center justify-start pt-0.5">
-            <span className="text-[17px] font-semibold leading-[22px]">
-              9:41
-            </span>
-          </div>
-
-          {/* Status icons */}
-          <div className="w-[121px] flex items-center justify-end gap-[7px]">
-            {/* Cellular */}
-            <div className="flex items-end gap-[2px] h-[13px]">
-              <span className="w-[3px] h-[5px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[7px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[10px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[12px] bg-black rounded-sm" />
-            </div>
-
-            {/* Wifi */}
-            <div className="text-black text-[15px]">⌁</div>
-
-            {/* Battery */}
-            <div className="relative w-[27px] h-[13px] border border-black/40 rounded-[4px]">
-              <div className="absolute left-[2px] top-[2px] bottom-[2px] w-[20px] bg-black rounded-[2px]" />
-              <div className="absolute right-[-3px] top-[4px] w-[2px] h-[5px] bg-black/40 rounded-r" />
-            </div>
-          </div>
-        </div>
+     <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-white
+    text-gray-900
+  "
+>
+        
 
         {/* ================= HEADER ================= */}
         <div className="absolute top-[64px] left-6 right-6 h-10 flex items-center justify-between">
@@ -135,7 +116,7 @@ const navigate = useNavigate();
         </div>
 
         {/* ================= TOP TABS ================= */}
-        <div className="absolute top-[117px] left-1/2 -translate-x-1/2 w-[430px] max-w-[100vw] h-[49px] bg-white border border-gray-200 flex">
+        <div className="absolute left-6 right-6 top-[117px] flex h-[49px] border border-gray-200 bg-white">
           {/* All */}
           <button
             type="button"
@@ -157,25 +138,25 @@ const navigate = useNavigate();
             </span>
 
             <span
-              className="
-                absolute
-                w-[18px]
-                h-[18px]
-                rounded-full
-                bg-[#008000]
-                text-white
-                text-[11px]
-                font-bold
-                italic
-                flex
-                items-center
-                justify-center
-                top-[12px]
-                left-[calc(50%+45px)]
-              "
-            >
-              5
-            </span>
+  className="
+    absolute
+    right-[12px]
+    top-[12px]
+    flex
+    h-[18px]
+    w-[18px]
+    items-center
+    justify-center
+    rounded-full
+    bg-[#008000]
+    text-[11px]
+    font-bold
+    italic
+    text-white
+  "
+>
+  5
+</span>
           </button>
 
           {/* Archived */}
@@ -191,7 +172,7 @@ const navigate = useNavigate();
         </div>
 
         {/* ================= FILTERS ================= */}
-        <div className="absolute top-[165px] left-1/2 -translate-x-1/2 w-[430px] max-w-[100vw] h-[69px] bg-white border border-gray-200">
+        <div className="absolute left-6 right-6 top-[165px] h-[69px] border border-gray-200 bg-white">
           <div className="h-full px-6 flex items-center gap-2 overflow-x-auto scrollbar-hide">
             {/* All */}
             <button
@@ -288,7 +269,19 @@ const navigate = useNavigate();
           become taller than 926px and the browser can scroll
           all the way to the bottom.
         */}
-        <div className="pt-[258px] px-6 pb-[60px]">
+       <div
+  className="
+    absolute
+    left-0
+    right-0
+    top-[258px]
+    bottom-[24px]
+    overflow-y-auto
+    px-6
+    pb-[60px]
+    scrollbar-hide
+  "
+>
           <div className="flex flex-col gap-1">
             {messages.map((message, index) => (
               <button
@@ -389,18 +382,22 @@ const navigate = useNavigate();
         </div>
 
         {/* ================= BOTTOM HOME INDICATOR ================= */}
-        <div
-          className="
-            w-full
-            h-6
-            flex
-            items-center
-            justify-center
-            pb-2
-          "
-        >
-          <div className="w-[108px] h-1 bg-gray-800 rounded-full" />
-        </div>
+     <div
+  className="
+    absolute
+    bottom-0
+    left-0
+    z-50
+    flex
+    h-6
+    w-full
+    items-center
+    justify-center
+    bg-white
+  "
+>
+  <div className="h-1 w-[108px] rounded-full bg-gray-800" />
+</div>
       </div>
     </div>
   );

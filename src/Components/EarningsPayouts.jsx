@@ -105,11 +105,29 @@ export default function EarningsPayouts() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 font-sans">
-      {/* Mobile Container */}
-      <div className="mx-auto min-h-screen w-full max-w-[428px] bg-[#F8FAFC]">
+    <div className="min-h-screen w-full bg-slate-100 font-sans">
+  <div
+    className="
+      relative
+      mx-auto
+      h-[926px]
+      w-full
+      sm:w-[640px]
+      md:w-[768px]
+      lg:w-[1024px]
+      xl:w-[1280px]
+      2xl:w-[1536px]
+      md:h-[1026px]
+      lg:h-[1200px]
+      xl:h-[1200px]
+      2xl:h-[1200px]
+      overflow-hidden
+      rounded-[35px]
+      bg-[#F8FAFC]
+    "
+  >
         {/* Header */}
-        <header className="sticky top-0 z-20 bg-white">
+       <header className="absolute left-0 right-0 top-0 z-20 bg-white">
           <div className="flex h-[60px] items-center justify-between px-6">
             <div className="flex items-center gap-6">
               <button
@@ -141,7 +159,21 @@ export default function EarningsPayouts() {
           </div>
         </header>
 
-        <main className="px-6 pb-10 pt-4">
+       <main
+  className="
+    absolute
+    left-0
+    right-0
+    top-[60px]
+    bottom-0
+    overflow-y-auto
+    overflow-x-hidden
+    px-6
+    pb-10
+    pt-4
+    scrollbar-hide
+  "
+>
           {/* Balance Card */}
           <section className="rounded-[15px] bg-[#008000] p-4 text-white">
             <div>

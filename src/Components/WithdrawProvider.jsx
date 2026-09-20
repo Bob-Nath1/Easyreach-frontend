@@ -37,12 +37,43 @@ const WithdrawProvider = () => {
     );
   };
 
+  const handleBack = () => {
+    window.history.back();
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Main Mobile Container */}
-      <div className="relative mx-auto min-h-screen w-full max-w-[428px] bg-[#F9FAFB]">
+  <div className="min-h-screen w-full bg-gray-50 font-sans">
+  <div
+    className="
+      relative
+      mx-auto
+      h-[926px]
+      w-full
+      sm:w-[640px]
+      md:w-[768px]
+      lg:w-[1024px]
+      xl:w-[1280px]
+      2xl:w-[1536px]
+      md:h-[1026px]
+      lg:h-[1200px]
+      xl:h-[1200px]
+      2xl:h-[1200px]
+      overflow-hidden
+      rounded-[35px]
+      bg-[#F9FAFB]
+    "
+  >
         {/* Header */}
-        <header className="sticky top-0 z-30 flex h-[56px] items-center bg-white px-6">
+       <header className="absolute left-0 right-0 top-0 z-30 flex h-[56px] items-center bg-white px-6">
+
+  <button
+                onClick={handleBack}
+                className="flex h-10 w-10 items-center justify-center rounded-lg transition hover:bg-slate-100"
+                aria-label="Go back"
+              >
+                <ArrowLeft size={24} className="text-[#1F2937]" />
+              </button>
+
   <h1 className="text-[20px] font-bold leading-6 text-[#1F2937]">
     Withdraw Funds
   </h1>
@@ -50,7 +81,20 @@ const WithdrawProvider = () => {
     
 
         {/* Scrollable Content */}
-        <main className="space-y-4 pb-28">
+       <main
+  className="
+    absolute
+    left-0
+    right-0
+    top-[56px]
+    bottom-[82px]
+    overflow-y-auto
+    overflow-x-hidden
+    space-y-4
+    pb-6
+    scrollbar-hide
+  "
+>
           {/* Balance Card Section */}
           <section className="bg-white px-6 py-6">
             <div className="rounded-[15px] bg-[#008000] p-4">
@@ -283,7 +327,7 @@ const WithdrawProvider = () => {
                 <span
                   className={`absolute top-1 h-5 w-5 rounded-full bg-white transition-transform ${
                     instantWithdrawal
-                      ? "translate-x-6"
+                      ? "-translate-x-6"
                       : "translate-x-1"
                   }`}
                 />
@@ -293,7 +337,7 @@ const WithdrawProvider = () => {
         </main>
 
         {/* Bottom Button */}
-        <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[428px] -translate-x-1/2 bg-white px-[10px] py-4">
+      <div className="absolute bottom-0 left-0 z-40 w-full bg-white px-[10px] py-4">
           <button
             type="button"
             onClick={handleConfirmWithdrawal}

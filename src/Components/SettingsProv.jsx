@@ -66,10 +66,30 @@ const navigate = useNavigate();
   ];
 
   return (
-    <div className="relative min-h-screen w-full max-w-[428px] overflow-hidden rounded-[35px] bg-[#F9FAFB] font-sans">
+    <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+    font-sans
+  "
+>
       
       {/* Header */}
-      <div className="absolute left-0 top-0 z-10 h-[110px] w-full bg-[#F9FAFB]">
+      <div className="absolute left-0 top-0 z-20 h-[110px] w-full bg-[#F9FAFB]">
         
         {/* Header content */}
         <div className="flex items-center gap-6 px-6 pt-[70px]">
@@ -88,7 +108,19 @@ const navigate = useNavigate();
       </div>
 
       {/* Scrollable Content */}
-      <main className="mt-[110px] h-[calc(100vh-110px)] overflow-y-auto pb-10">
+     <main
+  className="
+    absolute
+    left-0
+    right-0
+    top-[110px]
+    bottom-0
+    overflow-y-auto
+    overflow-x-hidden
+    scrollbar-hide
+    pb-10
+  "
+>
         
         {/* ACCOUNT */}
         <section className="mb-4">

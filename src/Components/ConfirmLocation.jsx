@@ -24,61 +24,29 @@ navigate("/enter-location");
           Figma design: 428 × 926
       ====================================================== */}
       <div
-        className="
-          relative
-          w-[428px]
-          h-[926px]
-          max-w-[100vw]
-          max-h-[100vh]
-          overflow-hidden
-          rounded-[35px]
-          bg-white
-        "
-      >
+  className="
+    relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    h-[926px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-white
+    mx-auto
+  "
+>
         <div className="absolute inset-0 overflow-y-auto">
 
 
-        {/* =================================================
-            STATUS BAR
-        ================================================== */}
-        <div className="absolute left-0 top-0 z-30 flex h-[62px] w-full items-center justify-between px-4">
-
-          {/* Time */}
-          <div className="flex h-[22px] w-[121px] items-center justify-center pt-[2px]">
-            <span className="text-center text-[17px] font-semibold leading-[22px] text-black">
-              9:41
-            </span>
-          </div>
-
-          {/* Network / WiFi / Battery */}
-          <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-
-            {/* Cellular */}
-            <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-              <span className="h-[5px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[7px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[10px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[13px] w-[2px] rounded-sm bg-black" />
-            </div>
-
-            {/* WiFi */}
-            <div className="relative h-[13px] w-[18px]">
-              <div className="absolute left-0 top-0 h-[8px] w-[18px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute left-[4px] top-[4px] h-[6px] w-[10px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute bottom-0 left-[7px] h-[3px] w-[3px] rounded-full bg-black" />
-            </div>
-
-            {/* Battery */}
-            <div className="relative h-[13px] w-[27px]">
-              <div className="h-[13px] w-[25px] rounded-[4px] border border-black opacity-40" />
-
-              <div className="absolute left-[3px] top-[3px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-
-              <div className="absolute right-[-2px] top-[4px] h-[5px] w-[2px] rounded-r bg-black opacity-40" />
-            </div>
-
-          </div>
-        </div>
+  
 
 
         {/* =================================================
@@ -122,12 +90,15 @@ navigate("/enter-location");
         ================================================== */}
         <div
           className="
-            absolute
-            left-[24px]
-            top-[143px]
-            h-[380px]
-            w-[380px]
-            overflow-hidden
+           absolute
+    left-1/2
+    top-[143px]
+    -translate-x-1/2
+    h-[380px]
+    w-[calc(100%-48px)]
+    max-w-[380px]
+    overflow-hidden
+
           "
         >
 
@@ -162,7 +133,7 @@ navigate("/enter-location");
         {/* {/* =================================================
     YOUR LOCATION
 ================================================== */}
-<div className="absolute left-[24px] top-[547px] z-10">
+<div className="absolute left-1/2 top-[547px] z-10 w-[calc(100%-48px)] max-w-[380px] -translate-x-1/2">
   <p className="text-[14px] font-bold leading-[17px] text-[#374151]">
     Your Location
   </p>
@@ -175,13 +146,15 @@ navigate("/enter-location");
 <div
   className="
     absolute
-    left-[24px]
+    left-1/2
     top-[572px]
     z-10
     box-border
     flex
     h-[44px]
-    w-[380px]
+    w-[calc(100%-48px)]
+    max-w-[380px]
+    -translate-x-1/2
     items-center
     gap-4
     rounded-[15px]
@@ -206,7 +179,7 @@ navigate("/enter-location");
 {/* =================================================
     SEARCH RADIUS
 ================================================== */}
-<div className="absolute left-[24px] top-[640px] z-10">
+<div className="absolute left-1/2 top-[640px] z-10 w-[calc(100%-48px)] max-w-[380px] -translate-x-1/2">
   <p className="text-[14px] font-bold leading-[17px] text-[#374151]">
     Search Radius
   </p>
@@ -219,12 +192,14 @@ navigate("/enter-location");
 <div
   className="
     absolute
-    left-[24px]
+    left-1/2
     top-[669px]
     z-10
     flex
     h-[44px]
-    w-[379px]
+    w-[calc(100%-48px)]
+    max-w-[379px]
+    -translate-x-1/2
     gap-[13px]
   "
 >
@@ -277,63 +252,64 @@ navigate("/enter-location");
 
           {/* Save Location */}
           <button
-            type="button"
-            onClick={handleSaveLocation}
-            className="
-              absolute
-              left-[24px]
-              top-[31px]
-              flex
-              h-[52px]
-              w-[380px]
-              items-center
-              justify-center
-              rounded-[99px]
-              border-2
-              border-[#008000]
-              bg-[#008000]
-              px-[10px]
-              py-3
-              text-[14px]
-              font-semibold
-              leading-[28px]
-              text-white
-              transition
-              hover:bg-[#006B00]
-              active:scale-[0.98]
-            "
-          >
-            Save Location
-          </button>
+  type="button"
+  onClick={handleSaveLocation}
+  className="
+    absolute
+    left-1/2
+    top-[31px]
+    flex
+    h-[52px]
+    w-[calc(100%-48px)]
+    -translate-x-1/2
+    items-center
+    justify-center
+    rounded-[99px]
+    border-2
+    border-[#008000]
+    bg-[#008000]
+    px-[10px]
+    py-3
+    text-[14px]
+    font-semibold
+    leading-[28px]
+    text-white
+    transition
+    hover:bg-[#006B00]
+    active:scale-[0.98]
+  "
+>
+  Save Location
+</button>
 
 
           {/* Change Location */}
-          <button
-            type="button"
-            onClick={handleChangeLocation}
-            className="
-              absolute
-              left-[24px]
-              top-[97px]
-              h-[28px]
-              w-[380px]
-              text-center
-              text-[14px]
-              font-semibold
-              leading-[28px]
-              text-[#1F2937]
-              transition
-              hover:text-[#008000]
-            "
-          >
-            Change Location
-          </button>
-
+         <button
+  type="button"
+  onClick={handleChangeLocation}
+  className="
+    absolute
+    left-1/2
+    top-[97px]
+    h-[28px]
+    w-[calc(100%-48px)]
+    -translate-x-1/2
+    text-center
+    text-[14px]
+    font-semibold
+    leading-[28px]
+    text-[#1F2937]
+    transition
+    hover:text-[#008000]
+  "
+>
+  Change Location
+</button>
 
           {/* =================================================
               HOME INDICATOR
           ================================================== */}
-          <div className="absolute bottom-0 left-1/2 h-[24px] w-[412px] -translate-x-1/2">
+          <div className="absolute bottom-0 left-0 h-[24px] w-full">
 
             <div
               className="

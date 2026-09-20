@@ -72,31 +72,6 @@ const EnterCode = () => {
         {/* Scrollable page */}
         <div className="relative min-h-screen overflow-y-auto px-6 pb-10">
 
-          {/* Status Bar */}
-          <div className="flex h-[62px] items-center justify-between pt-3 text-black">
-            <span className="w-[121px] text-center text-[17px] font-semibold">
-              9:41
-            </span>
-
-            <div className="flex w-[121px] items-center justify-end gap-[7px]">
-              {/* Cellular */}
-              <div className="flex h-[13px] items-end gap-[2px]">
-                <span className="h-[5px] w-[3px] rounded-sm bg-black" />
-                <span className="h-[7px] w-[3px] rounded-sm bg-black" />
-                <span className="h-[9px] w-[3px] rounded-sm bg-black" />
-                <span className="h-[12px] w-[3px] rounded-sm bg-black" />
-              </div>
-
-              {/* Wifi */}
-              <div className="text-[15px]">◔</div>
-
-              {/* Battery */}
-              <div className="relative h-[13px] w-[27px] rounded-[4px] border border-black/40">
-                <div className="absolute left-[2px] top-[2px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-                <div className="absolute right-[-3px] top-[4px] h-[5px] w-[2px] rounded-r bg-black/40" />
-              </div>
-            </div>
-          </div>
 
           {/* Back + title */}
           <div className="mt-2 flex items-center gap-6">

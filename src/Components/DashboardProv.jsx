@@ -72,52 +72,46 @@ function DashboardProv() {
   };
 
   return (
-   <div className="relative mx-auto min-h-screen w-full max-w-[428px] bg-[#F9FAFB] font-['Inter',sans-serif]">
-
-      {/* =====================================================
-          STATUS BAR
-      ====================================================== */}
-      <div className="absolute left-0 top-0 z-50 flex h-[62px] w-full items-center justify-between px-4 pt-[21px]">
-
-        {/* Time */}
-        <span className="w-[121px] text-center text-[17px] font-semibold leading-[22px] text-black">
-          9:41
-        </span>
-
-        {/* Status icons */}
-        <div className="flex w-[121px] items-center justify-end gap-[7px]">
-
-          {/* Cellular */}
-          <div className="flex h-[13px] items-end gap-[2px]">
-            <span className="h-[4px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[7px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[10px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[13px] w-[3px] rounded-sm bg-black" />
-          </div>
-
-          {/* Wifi */}
-          <div className="relative h-[13px] w-[18px]">
-            <div className="absolute left-0 top-0 h-[9px] w-[18px] rounded-t-full border-t-[3px] border-black" />
-            <div className="absolute left-[4px] top-[4px] h-[6px] w-[10px] rounded-t-full border-t-[3px] border-black" />
-            <div className="absolute bottom-0 left-[7px] h-[3px] w-[3px] rounded-full bg-black" />
-          </div>
-
-          {/* Battery */}
-          <div className="relative h-[13px] w-[27px]">
-            <div className="absolute left-0 top-0 h-[13px] w-[25px] rounded-[4px] border border-black/40 p-[2px]">
-              <div className="h-full w-full rounded-[2px] bg-black" />
-            </div>
-
-            <div className="absolute right-0 top-[4px] h-[5px] w-[2px] rounded-r bg-black/40" />
-          </div>
-        </div>
-      </div>
-
+<div
+  className="
+    relative
+    mx-auto
+   h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+    font-['Inter',sans-serif]
+  "
+>
+      
 
       {/* =====================================================
           MAIN CONTENT
       ====================================================== */}
-      <div className="flex w-full flex-col items-center gap-6 pt-[62px] pb-[150px]">
+      <div
+  className="
+    absolute
+    left-0
+    right-0
+    top-0
+    bottom-[99px]
+    w-full
+    overflow-y-auto
+    overflow-x-hidden
+    scrollbar-hide
+  "
+>
+  <div className="flex w-full flex-col items-center gap-6 pt-[62px] pb-[120px]">
 
 
         {/* =====================================================
@@ -222,7 +216,7 @@ function DashboardProv() {
         {/* =====================================================
             EARNINGS CARD
         ====================================================== */}
-        <div className="w-[380px] rounded-[24px] bg-[#008000] p-6">
+        <div className="mx-6 w-auto self-stretch rounded-[24px] bg-[#008000] p-6">
 
           <div className="flex flex-col gap-6">
 
@@ -276,10 +270,10 @@ function DashboardProv() {
         {/* =====================================================
             STAT CARDS
         ====================================================== */}
-        <div className="flex w-[380px] gap-[13px]">
+        <div className="mx-6 grid w-auto self-stretch grid-cols-3 gap-[13px]">
 
           {/* Active */}
-          <div className="flex h-[144px] w-[118px] flex-col items-center rounded-[15px] bg-gradient-to-br from-[#F59E0B] to-[#D97706] px-6 py-4">
+          <div className="flex h-[144px] w-full flex-col items-center rounded-[15px] bg-gradient-to-br from-[#F59E0B] to-[#D97706] px-6 py-4">
 
             <Zap size={32} className="text-white" />
 
@@ -295,7 +289,7 @@ function DashboardProv() {
 
 
           {/* Completed */}
-          <div className="flex h-[144px] w-[118px] flex-col items-center rounded-[15px] bg-gradient-to-br from-[#10B981] to-[#059669] px-6 py-4">
+          <div className="flex h-[144px] w-full flex-col items-center rounded-[15px] bg-gradient-to-br from-[#10B981] to-[#059669] px-6 py-4">
 
             <Check size={32} className="text-white" />
 
@@ -311,7 +305,7 @@ function DashboardProv() {
 
 
           {/* Rating */}
-          <div className="flex h-[144px] w-[118px] flex-col items-center rounded-[15px] bg-gradient-to-br from-[#3B82F6] to-[#1E40AF] px-6 py-4">
+          <div className="flex h-[144px] w-full flex-col items-center rounded-[15px] bg-gradient-to-br from-[#3B82F6] to-[#1E40AF] px-6 py-4">
 
             <Star size={32} className="fill-white text-white" />
 
@@ -331,7 +325,7 @@ function DashboardProv() {
         {/* =====================================================
             URGENT ALERT
         ====================================================== */}
-        <div className="flex h-[56px] w-[380px] items-center justify-between rounded-lg bg-[#EF4444] px-4">
+        <div className="mx-6 flex h-[56px] w-auto self-stretch items-center justify-between rounded-lg bg-[#EF4444] px-4">
 
           <div className="flex items-center gap-3">
 
@@ -357,7 +351,7 @@ function DashboardProv() {
         {/* =====================================================
             NEW REQUESTS
         ====================================================== */}
-        <section className="flex w-[380px] flex-col gap-4">
+       <section className="mx-6 flex w-auto self-stretch flex-col gap-4">
 
           <div className="flex items-center justify-between">
 
@@ -484,7 +478,7 @@ function DashboardProv() {
         {/* =====================================================
             QUICK ACTIONS
         ====================================================== */}
-        <section className="flex w-[380px] flex-col gap-4">
+       <section className="mx-6 flex w-auto self-stretch flex-col gap-4">
 
           <h2 className="text-[16px] font-bold text-[#1F2937]">
             Quick Actions
@@ -524,7 +518,7 @@ function DashboardProv() {
         {/* =====================================================
             THIS WEEK'S PERFORMANCE
         ====================================================== */}
-        <section className="flex w-[380px] flex-col gap-4">
+     <section className="mx-6 flex w-auto self-stretch flex-col gap-4">
 
           <h2 className="text-[16px] font-bold text-[#1F2937]">
             This Week’s Performance
@@ -565,7 +559,7 @@ function DashboardProv() {
         {/* =====================================================
             RECENT ACTIVITY
         ====================================================== */}
-        <section className="flex w-[380px] flex-col gap-4">
+      <section className="mx-6 flex w-auto self-stretch flex-col gap-4">
 
           <div className="flex items-center justify-between">
 
@@ -639,7 +633,7 @@ function DashboardProv() {
         {/* =====================================================
             PRO TIP
         ====================================================== */}
-        <div className="flex min-h-[130px] w-[380px] flex-col gap-2 rounded-[15px] bg-[#DBEAFE] p-4">
+        <div className="mx-6 flex min-h-[130px] w-auto self-stretch flex-col gap-2 rounded-[15px] bg-[#DBEAFE] p-4">
 
           <div className="flex flex-col gap-1">
 
@@ -665,12 +659,32 @@ function DashboardProv() {
 
       </div>
 
-      {/* =====================================================
+     
+      </div>
+
+       
+       
+       
+       {/* =====================================================
     BOTTOM NAVIGATION
 ===================================================== */}
-<div className="fixed bottom-0 left-1/2 z-40 flex h-[70px] w-full max-w-[428px] -translate-x-1/2 items-center justify-center bg-white">
+ <div
+    className="
+      absolute
+      bottom-[28px]
+      left-0
+      flex
+      h-[70px]
+      w-full
+      items-center
+      justify-center
+      bg-white
+      px-4
+      gap-7
+    "
+  >
 
-  <div className="flex w-full items-center justify-center gap-[36px] px-4 py-3">
+  <div className="flex w-full items-center justify-around px-4 py-3">
 
     {/* HOME */}
     <button
@@ -758,12 +772,7 @@ function DashboardProv() {
 </div>
 
 
-      {/* =====================================================
-          HOME INDICATOR
-      ====================================================== */}
-      <div className="fixed bottom-0 left-1/2 z-50 flex h-6 w-[412px] -translate-x-1/2 items-center justify-center pointer-events-none">
-        <div className="h-1 w-[108px] rounded-xl bg-[#1F2937]" />
-      </div>
+      
 
     </div>
   );

@@ -93,46 +93,27 @@ const handleVerify = (e) => {
 
 
   return (
-    <div className="relative w-[428px] h-[926px] bg-white rounded-[35px] overflow-hidden mx-auto">
+    <div
+  className="
+    relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    h-[926px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    bg-white
+    rounded-[35px]
+    overflow-hidden
+    mx-auto
+  "
+>
 
-      {/* =========================
-          STATUS BAR
-      ========================== */}
-      <div className="absolute top-0 left-0 w-full h-[62px] px-4 flex items-center justify-between">
-
-        {/* Time */}
-        <span className="w-[37px] text-center text-[17px] leading-[22px] font-semibold text-black">
-          9:41
-        </span>
-
-        {/* Status icons */}
-        <div className="flex items-center justify-end gap-[7px]">
-
-          {/* Cellular */}
-          <div className="flex items-end gap-[2px] h-[14px]">
-            <span className="w-[3px] h-[5px] bg-black rounded-sm" />
-            <span className="w-[3px] h-[8px] bg-black rounded-sm" />
-            <span className="w-[3px] h-[11px] bg-black rounded-sm" />
-            <span className="w-[3px] h-[14px] bg-black rounded-sm" />
-          </div>
-
-          {/* WiFi */}
-          <div className="text-black text-[15px] leading-none">
-            ◔
-          </div>
-
-          {/* Battery */}
-          <div className="relative w-[27px] h-[13px]">
-
-            <div className="absolute left-0 top-[1px] w-[25px] h-[12px] border border-black/40 rounded-[4px]" />
-
-            <div className="absolute left-[2px] top-[3px] w-[21px] h-[8px] bg-black rounded-[2px]" />
-
-            <div className="absolute right-[-2px] top-[4px] w-[2px] h-[5px] bg-black/40 rounded-r" />
-
-          </div>
-        </div>
-      </div>
 
       {/* =========================
           HEADER
@@ -148,10 +129,10 @@ const handleVerify = (e) => {
           <ArrowLeft size={24} strokeWidth={2} />
         </button>
 
-        <h1 className="absolute left-[calc(50%-142px)] text-[20px] leading-[24px] font-bold text-[#1F2937]">
-          Verify Phone
-        </h1>
-      </div>
+<h1 className="absolute left-1/2 -translate-x-1/2 text-[20px] leading-[24px] font-bold text-[#1F2937]">
+  Verify Phone
+</h1>      
+</div>
 
       {/* =========================
           OTP CONTENT
@@ -210,21 +191,22 @@ const handleVerify = (e) => {
             onChange={(e) => handleChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(index, e)}
             className="
-              w-[56.6px]
-              h-[64px]
-              border-[1.6px]
-              border-[#E5E7EB]
-              rounded-none
-              bg-white
-              text-center
-              text-[24px]
-              font-bold
-              text-[#1F2937]
-              outline-none
-              focus:border-[#10B981]
-              focus:ring-1
-              focus:ring-[#10B981]
-            "
+  flex-1
+  min-w-0
+  h-[64px]
+  border-[1.6px]
+  border-[#E5E7EB]
+  rounded-none
+  bg-white
+  text-center
+  text-[24px]
+  font-bold
+  text-[#1F2937]
+  outline-none
+  focus:border-[#10B981]
+  focus:ring-1
+  focus:ring-[#10B981]
+"
             aria-label={`OTP digit ${index + 1}`}
           />
         ))}
@@ -260,31 +242,35 @@ const handleVerify = (e) => {
           VERIFY BUTTON
       ========================== */}
       <button
-        type="button"
-        onClick={handleVerify}
-        className="
-          absolute
-          top-[800px]
-          left-1/2
-          -translate-x-1/2
-          w-[380px]
-          h-[52px]
-          bg-[#008000]
-          hover:bg-[#006b00]
-          transition-colors
-          rounded-full
-          flex
-          items-center
-          justify-center
-          text-white
-          text-[14px]
-          leading-[28px]
-          font-semibold
-        "
-      >
-        Verify
-      </button>
-
+  type="button"
+  onClick={handleVerify}
+  className="
+    absolute
+    top-[800px]
+    left-1/2
+    -translate-x-1/2
+    w-[calc(100%-48px)]
+    sm:w-[592px]
+    md:w-[720px]
+    lg:w-[976px]
+    xl:w-[1232px]
+    2xl:w-[1488px]
+    h-[52px]
+    bg-[#008000]
+    hover:bg-[#006b00]
+    transition-colors
+    rounded-full
+    flex
+    items-center
+    justify-center
+    text-white
+    text-[14px]
+    leading-[28px]
+    font-semibold
+  "
+>
+  Verify
+</button>
       {/* =========================
           SUPPORT
       ========================== */}

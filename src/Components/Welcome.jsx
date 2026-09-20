@@ -32,27 +32,25 @@ function Welcome() {
     left-1/2
     -translate-x-1/2
     -translate-y-1/2
+    -mt-78
     w-[225px]
     h-[63px]
     flex
     items-center
     justify-center
     gap-[2px]
-    -mt-78 
-    -ml-1 sm:ml-4  
-    2xl:-mt-118 2xl:gap-2
+    2xl:-mt-118
+    2xl:gap-2
   "
 >
-  {/* Logo mark */}
-  <div className="ml-17 relative w-[42px] h-[50px] 2xl:mt-3">
+  <div className="relative w-[42px] h-[50px] xl:-mt-3">
     <img
       src="/EasyReach.png"
       alt="EasyReach"
-      className="w-[40px] h-[37px] xl:w-[53px] xl:w-[53px] 2xl:w-[53px] 2xl:h-[55px] mt-2 2xl:-mt-1 ml-2 object-contain"
+      className="w-[40px] h-[37px] xl:w-[53px] xl:h-[53px] 2xl:w-[53px] 2xl:h-[55px] mt-2 object-contain"
     />
   </div>
 
-  {/* EasyReach text */}
   <span className="font-bold text-[23px] leading-[45px] text-[#1F2937] whitespace-nowrap lg:text-3xl xl:text-4xl 2xl:text-4xl">
     Easy<span className="text-[#008000]">Reach</span>
   </span>
@@ -74,9 +72,15 @@ function Welcome() {
           GREEN BOTTOM PANEL
       ========================= */}
       <div
-        className="absolute left-0 bottom-0  w-full sm:w-[640px] md:w-[768px] h-[627px] lg:w-[1024px] xl:w-[1280px] 2xl:w-[1536px] 2xl:-[1536px]
-        bg-gradient-to-br from-[#008000] to-[#00C48C]
-        rounded-tl-[45px] rounded-tr-[45px] ml-6"
+        className="absolute
+    left-1/2
+    -translate-x-1/2
+    bottom-0
+    w-full
+    h-[627px]
+    bg-gradient-to-br from-[#008000] to-[#00C48C]
+    rounded-tl-[45px]
+    rounded-tr-[45px]"
       >
 
         {/* Welcome Back */}
@@ -178,7 +182,7 @@ function Welcome() {
 
 
           {/* Don't have an account */}
-          <div className="flex items-center gap-1 w-[180px] h-[15px] lg:mr-18 2xl:w-[280px] ">
+          <div className="flex items-center justify-center gap-1 w-[180px] h-[15px] 2xl:w-[280px]">
 
             <span className="text-white text-[12px] leading-[15px] font-normal whitespace-nowrap lg:text-xl xl:text-xl 2xl:text-xl">
               Don’t have an account?
@@ -201,9 +205,9 @@ function Welcome() {
       {/* =========================
           IPHONE HOME INDICATOR
       ========================= */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[412px] h-6 flex items-center ml-7 sm:ml-7  xl:ml-4 justify-center">
-        <div className="w-[108px] h-1 bg-[#FFFDFD] rounded-xl"></div>
-      </div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-6 flex items-center justify-center">
+  <div className="w-[108px] h-1 bg-[#FFFDFD] rounded-xl"></div>
+</div>
 
     </div>
   );

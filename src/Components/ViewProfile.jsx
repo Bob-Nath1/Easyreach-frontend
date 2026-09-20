@@ -72,35 +72,41 @@ function ViewProfile() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center">
-      {/* Mobile screen */}
-      <div className="relative w-[428px] h-[926px] bg-white rounded-[35px] overflow-hidden shadow-xl">
+   <div className="min-h-screen w-full bg-gray-100 flex justify-center">
+  <div
+    className="
+      relative
+      w-full
+      sm:w-[640px]
+      md:w-[768px]
+      lg:w-[1024px]
+      xl:w-[1280px]
+      2xl:w-[1536px]
+      h-[926px]
+      md:h-[1026px]
+      lg:h-[1200px]
+      xl:h-[1200px]
+      2xl:h-[1200px]
+      overflow-hidden
+      rounded-[35px]
+      bg-white
+      shadow-xl
+      mx-auto
+    "
+  >
 
-        {/* ================= STATUS BAR ================= */}
-        <div className="absolute top-0 left-0 z-50 w-full h-[62px] bg-transparent flex items-center justify-between px-6">
-          <span className="font-semibold text-[17px]">
-            9:41
-          </span>
-
-          <div className="flex items-center gap-2">
-            <div className="flex items-end gap-[2px]">
-              <span className="w-[3px] h-[6px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[8px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[10px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[12px] bg-black rounded-sm" />
-            </div>
-
-            <div className="w-4 h-3 border-2 border-black rounded-sm" />
-
-            <div className="relative w-7 h-[13px] border border-black rounded-[4px]">
-              <div className="absolute left-1 top-[2px] h-[7px] w-4 bg-black rounded-[2px]" />
-              <div className="absolute -right-[3px] top-[4px] w-[2px] h-[4px] bg-black rounded-r" />
-            </div>
-          </div>
-        </div>
-
-        {/* ================= SCROLLABLE CONTENT ================= */}
-        <div className="absolute top-[61px] left-0 right-0 bottom-0 overflow-y-auto scrollbar-hide">
+                {/* ================= SCROLLABLE CONTENT ================= */}
+       <div
+  className="
+    absolute
+    top-[61px]
+    left-0
+    right-0
+    bottom-[24px]
+    overflow-y-auto
+    scrollbar-hide
+  "
+>
 
           {/* ================= COVER / HERO ================= */}
           <section className="relative w-full">
@@ -557,7 +563,19 @@ function ViewProfile() {
 
 function StatCard({ icon, value, label }) {
   return (
-    <div className="w-[181px] h-[132px] bg-gray-50 rounded-[15px] flex flex-col items-center justify-center gap-4">
+   <div
+  className="
+    w-full
+    h-[132px]
+    bg-gray-50
+    rounded-[15px]
+    flex
+    flex-col
+    items-center
+    justify-center
+    gap-4
+  "
+>
 
       <div className="w-10 h-10 rounded-[15px] bg-emerald-100 flex items-center justify-center">
         {icon}

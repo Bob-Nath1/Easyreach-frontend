@@ -113,39 +113,27 @@ function Settings() {
   };
 
   return (
-    <div className="relative w-[428px] h-[926px] bg-[#F9FAFB] rounded-[35px] overflow-hidden mx-auto">
-      {/* =========================
-          STATUS BAR
-      ========================== */}
-      <div className="absolute top-0 left-0 w-full h-[62px] flex items-center justify-between px-4 pt-[21px] pb-[19px]">
-        {/* Time */}
-        <div className="w-[121px] flex items-center">
-          <span className="text-[17px] leading-[22px] font-semibold text-black text-center">
-            9:41
-          </span>
-        </div>
-
-        {/* Status icons */}
-        <div className="w-[121px] flex justify-end items-center gap-[7px]">
-          {/* Cellular */}
-          <div className="flex items-end gap-[2px] h-[13px]">
-            <span className="w-[3px] h-[5px] bg-black rounded-sm" />
-            <span className="w-[3px] h-[7px] bg-black rounded-sm" />
-            <span className="w-[3px] h-[10px] bg-black rounded-sm" />
-            <span className="w-[3px] h-[12px] bg-black rounded-sm" />
-          </div>
-
-          {/* Wifi */}
-          <div className="text-black text-[14px]">⌁</div>
-
-          {/* Battery */}
-          <div className="relative w-[27px] h-[13px] border border-black/40 rounded-[4px]">
-            <div className="absolute left-[3px] top-[3px] w-[21px] h-[7px] bg-black rounded-[2px]" />
-            <div className="absolute -right-[3px] top-[4px] w-[2px] h-[5px] bg-black/40 rounded-r" />
-          </div>
-        </div>
-      </div>
-
+    <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+  "
+>
+      
       {/* =========================
           HEADER
       ========================== */}
@@ -170,7 +158,18 @@ function Settings() {
       {/* =========================
           SCROLLABLE CONTENT
       ========================== */}
-      <div className="absolute left-0 top-[110px] w-[428px] h-[776px] overflow-y-auto scrollbar-hide">
+   <div
+  className="
+    absolute
+    left-0
+    right-0
+    top-[110px]
+    bottom-[24px]
+    w-full
+    overflow-y-auto
+    scrollbar-hide
+  "
+>
         <div className="w-full flex flex-col items-center gap-4 pb-8">
           {/* =========================
               ACCOUNT
@@ -187,7 +186,7 @@ function Settings() {
             <SettingsItem
               icon={MapPin}
               label="Location Settings"
-              onClick={() => navigate("/location-settings")}
+              onClick={() => navigate("/enter-location")}
             />
 
             <SettingsItem
@@ -214,7 +213,7 @@ function Settings() {
           ========================== */}
           <SectionTitle>PREFERENCES</SectionTitle>
 
-          <div className="w-[380px] bg-white rounded-[24px] overflow-hidden">
+        <div className="mx-6 w-auto bg-white rounded-[24px] overflow-hidden">
             <SettingsItem
               icon={Languages}
               label="Language"
@@ -311,9 +310,9 @@ function Settings() {
       {/* =========================
           BOTTOM HOME INDICATOR
       ========================== */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[412px] h-6 flex items-center justify-center">
-        <div className="w-[108px] h-1 bg-black rounded-xl" />
-      </div>
+     <div className="absolute bottom-0 left-0 z-50 h-6 w-full flex items-center justify-center bg-[#F9FAFB]">
+  <div className="h-1 w-[108px] rounded-full bg-black" />
+</div>
     </div>
   );
 }

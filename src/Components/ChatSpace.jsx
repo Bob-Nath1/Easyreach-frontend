@@ -63,35 +63,29 @@ function ChatSpace() {
   };
 
   return (
-    <div className="mx-auto flex h-[926px] w-[428px] max-w-full flex-col overflow-hidden rounded-[35px] bg-white shadow-lg">
-      {/* ================= STATUS BAR ================= */}
-      <div className="flex h-[62px] shrink-0 items-center justify-between px-4 pt-2">
-        <div className="flex items-center">
-          <span className="text-[17px] font-semibold text-black">
-            10:30
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2 text-black">
-          {/* Cellular */}
-          <div className="flex h-3 items-end gap-[2px]">
-            <span className="h-1.5 w-[3px] rounded-sm bg-black" />
-            <span className="h-2 w-[3px] rounded-sm bg-black" />
-            <span className="h-2.5 w-[3px] rounded-sm bg-black" />
-            <span className="h-3 w-[3px] rounded-sm bg-black" />
-          </div>
-
-          {/* Wifi */}
-          <div className="text-[15px]">⌁</div>
-
-          {/* Battery */}
-          <div className="relative h-[13px] w-[27px] rounded-[4px] border border-black/40">
-            <div className="absolute left-[3px] top-[3px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-            <div className="absolute -right-[3px] top-[4px] h-[5px] w-[2px] rounded-r bg-black/40" />
-          </div>
-        </div>
-      </div>
-
+    <div
+  className="
+    mx-auto
+    flex
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    flex-col
+    overflow-hidden
+    rounded-[35px]
+    bg-white
+    shadow-lg
+  "
+>
+      
       {/* ================= CHAT HEADER ================= */}
       <div className="flex h-[60px] shrink-0 items-center justify-between px-6">
         <div className="flex items-center gap-4">

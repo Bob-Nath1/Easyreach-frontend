@@ -219,55 +219,80 @@ function HomeNotification() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-200 flex justify-center">
-      <div className="relative w-[428px] h-[926px] overflow-hidden rounded-[35px] bg-[#F9FAFB] shadow-xl">
-        
-        {/* ================= STATUS BAR ================= */}
-        <div className="absolute top-0 left-0 right-0 h-[62px] flex items-center justify-between px-4 bg-white">
-          <span className="text-[17px] font-semibold text-black">
-            9:41
-          </span>
-
-          <div className="flex items-center gap-2 text-black">
-            {/* Signal */}
-            <div className="flex items-end gap-[2px] h-4">
-              <span className="w-[3px] h-1 bg-black rounded-sm" />
-              <span className="w-[3px] h-2 bg-black rounded-sm" />
-              <span className="w-[3px] h-3 bg-black rounded-sm" />
-              <span className="w-[3px] h-4 bg-black rounded-sm" />
-            </div>
-
-            {/* Wifi */}
-            <div className="text-sm">◔</div>
-
-            {/* Battery */}
-            <div className="relative w-[27px] h-[13px] border border-black/40 rounded-[4px]">
-              <div className="absolute left-[2px] top-[2px] bottom-[2px] w-[20px] bg-black rounded-[2px]" />
-              <div className="absolute -right-[3px] top-[4px] w-[2px] h-[5px] bg-black/40 rounded-r" />
-            </div>
-          </div>
-        </div>
+    <div className="relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    h-[926px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+    shadow-xl
+    mx-auto">
 
         {/* ================= HEADER ================= */}
-        <div className="absolute top-[62px] left-0 right-0 h-[56px] bg-white border border-gray-200 flex items-center justify-between px-6">
-          <div className="flex items-center gap-6">
-            <button
-              onClick={() => navigate(-1)}
-              className="hover:bg-gray-100 rounded-full p-1"
-            >
-              <ArrowLeft size={24} />
-            </button>
+        <div
+  className="
+    absolute
+    top-[62px]
+    left-0
+    h-[56px]
+    w-full
+    bg-white
+    border
+    border-gray-200
+  "
+>
+  <button
+    onClick={() => navigate(-1)}
+    className="
+      absolute
+      left-[24px]
+      top-1/2
+      -translate-y-1/2
+      rounded-full
+      p-1
+      hover:bg-gray-100
+    "
+  >
+    <ArrowLeft size={24} />
+  </button>
 
-            <h1 className="text-xl font-bold text-gray-800">
-              Notifications
-            </h1>
-          </div>
+  <h1
+    className="
+      absolute
+      left-1/2
+      top-1/2
+      -translate-x-1/2
+      -translate-y-1/2
+      whitespace-nowrap
+      text-xl
+      font-bold
+      text-gray-800
+    "
+  >
+    Notifications
+  </h1>
 
-          <button className="p-1">
-            <MoreVertical size={20} />
-          </button>
-        </div>
-
+  <button
+    className="
+      absolute
+      right-[24px]
+      top-1/2
+      -translate-y-1/2
+      p-1
+    "
+  >
+    <MoreVertical size={20} />
+  </button>
+</div>
         {/* ================= TABS ================= */}
         <div className="absolute top-[117px] left-0 right-0 h-[49px] bg-white border border-gray-200 flex">
           {["All", "Unread", "Mentions"].map((tab) => (
@@ -292,15 +317,23 @@ function HomeNotification() {
         </div>
 
         {/* Green underline */}
-        <div
-          className={`absolute top-[165px] h-[2px] bg-[#008000] transition-all ${
-            activeTab === "All"
-              ? "left-6 w-[126px]"
-              : activeTab === "Unread"
-              ? "left-[151px] w-[126px]"
-              : "left-[277px] w-[126px]"
-          }`}
-        />
+      <div
+  className={`
+    absolute
+    top-[165px]
+    h-[2px]
+    w-1/3
+    bg-[#008000]
+    transition-all
+    ${
+      activeTab === "All"
+        ? "left-0"
+        : activeTab === "Unread"
+        ? "left-1/3"
+        : "left-2/3"
+    }
+  `}
+/>
 
         {/* ================= FILTERS ================= */}
         <div className="absolute top-[166px] left-0 right-0 h-[68px] bg-white border border-gray-200 flex items-center gap-2 px-6 overflow-x-auto scrollbar-hide">
@@ -377,7 +410,6 @@ function HomeNotification() {
           <div className="w-[108px] h-1 rounded-full bg-black" />
         </div>
       </div>
-    </div>
   );
 }
 

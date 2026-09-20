@@ -29,38 +29,29 @@ function SignUpPro() {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* iPhone-sized container */}
-      <div className="relative w-[428px] h-[926px] overflow-hidden rounded-[35px] bg-gradient-to-br from-[#00C48C] to-[#008000]">
-
-        {/* ================= STATUS BAR ================= */}
-        <div className="absolute top-0 left-0 w-full h-[62px] px-4 flex items-center justify-between text-white">
-          <span className="text-[17px] font-semibold pl-2">
-            7:41
-          </span>
-
-          <div className="flex items-center gap-2 pr-2">
-            {/* Cellular */}
-            <div className="flex items-end gap-[2px] h-4">
-              <span className="w-[3px] h-[6px] bg-white rounded-sm" />
-              <span className="w-[3px] h-[9px] bg-white rounded-sm" />
-              <span className="w-[3px] h-[12px] bg-white rounded-sm" />
-              <span className="w-[3px] h-[15px] bg-white rounded-sm" />
-            </div>
-
-            {/* WiFi */}
-            <div className="text-white text-sm">
-              ◔
-            </div>
-
-            {/* Battery */}
-            <div className="relative w-[27px] h-[13px] border border-white/50 rounded-[4px]">
-              <div className="absolute left-[2px] top-[2px] h-[7px] w-[20px] bg-white rounded-[2px]" />
-              <div className="absolute -right-[3px] top-[4px] w-[2px] h-[5px] bg-white/50 rounded-r" />
-            </div>
-          </div>
-        </div>
-
+    <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center">
+  <div
+    className="
+      relative
+      mx-auto
+      h-[926px]
+      w-full
+      sm:w-[640px]
+      md:w-[768px]
+      lg:w-[1024px]
+      xl:w-[1280px]
+      2xl:w-[1536px]
+      md:h-[1026px]
+      lg:h-[1200px]
+      xl:h-[1200px]
+      2xl:h-[1200px]
+      overflow-hidden
+      rounded-[35px]
+      bg-gradient-to-br
+      from-[#00C48C]
+      to-[#008000]
+    "
+  >
         {/* ================= HEADER ================= */}
         <div className="absolute top-[62px] left-0 w-full h-[70px] flex items-center justify-center">
           <button
@@ -105,7 +96,20 @@ function SignUpPro() {
           </div>
 
           {/* ================= FORM ================= */}
-          <div className="absolute top-[91px] left-6 right-6 bottom-[20px] overflow-y-auto pr-1 scrollbar-hide">
+         <div
+  className="
+    absolute
+    top-[91px]
+    left-6
+    right-6
+    bottom-[24px]
+    overflow-y-auto
+    overflow-x-hidden
+    pr-1
+    pb-6
+    scrollbar-hide
+  "
+>
 
             <form className="flex flex-col gap-6">
 

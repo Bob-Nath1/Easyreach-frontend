@@ -23,36 +23,29 @@ function Archived() {
   ];
 
   return (
-    <div className="relative mx-auto h-[926px] w-[428px] overflow-hidden rounded-[35px] bg-white font-[Inter,sans-serif]">
+   <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-white
+    font-[Inter,sans-serif]
+  "
+>
 
-      {/* ================= STATUS BAR ================= */}
-      <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-4">
-        <span className="pt-[2px] text-center text-[17px] font-semibold text-black">
-          9:41
-        </span>
-
-        <div className="flex items-center gap-[7px]">
-          {/* Cellular */}
-          <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-            <span className="h-[5px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[7px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[10px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[13px] w-[3px] rounded-sm bg-black" />
-          </div>
-
-          {/* WiFi */}
-          <div className="text-[14px] font-bold text-black">
-            ◔
-          </div>
-
-          {/* Battery */}
-          <div className="relative h-[13px] w-[27px] rounded-[4px] border border-black/40">
-            <div className="absolute inset-[2px] rounded-[2px] bg-black" />
-            <div className="absolute -right-[3px] top-[4px] h-[5px] w-[2px] rounded-r bg-black/50" />
-          </div>
-        </div>
-      </div>
-
+      
       {/* ================= HEADER ================= */}
       <div className="absolute left-6 right-6 top-[64px] flex h-10 items-center justify-between">
 
@@ -85,11 +78,11 @@ function Archived() {
       </div>
 
       {/* ================= TOP TABS ================= */}
-      <div className="absolute left-1/2 top-[117px] flex h-[49px] w-[430px] -translate-x-1/2 border border-gray-200 bg-white">
+      <div className="absolute left-6 right-6 top-[117px] flex h-[49px] border border-gray-200 bg-white">
 
         {/* ALL */}
         <button
-          onClick={() => navigate("/messages")}
+          onClick={() => navigate("/message")}
           className="flex h-full w-1/3 flex-col items-center justify-center"
         >
           <span className="text-center text-[14px] font-semibold text-gray-500">
@@ -107,9 +100,9 @@ function Archived() {
           </span>
 
           {/* Unread badge */}
-          <span className="absolute right-[32px] top-[12px] flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#008000] text-[11px] font-bold italic text-white">
-            5
-          </span>
+         <span className="absolute right-[12px] top-[12px] flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#008000] text-[11px] font-bold italic text-white">
+  5
+</span>
         </button>
 
         {/* ARCHIVED - ACTIVE */}
@@ -125,7 +118,7 @@ function Archived() {
       </div>
 
       {/* ================= FILTERS ================= */}
-      <div className="absolute left-1/2 top-[165px] h-[69px] w-[430px] -translate-x-1/2 border border-gray-200 bg-white">
+     <div className="absolute left-6 right-6 top-[165px] h-[69px] border border-gray-200 bg-white">
 
         <div className="flex h-full items-center gap-2 overflow-x-auto px-6 scrollbar-hide">
 
@@ -146,7 +139,19 @@ function Archived() {
       </div>
 
       {/* ================= ARCHIVED MESSAGE LIST ================= */}
-      <div className="absolute left-6 top-[258px] h-[628px] w-[380px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300">
+     <div
+  className="
+    absolute
+    left-6
+    right-6
+    top-[258px]
+    bottom-[24px]
+    overflow-y-auto
+    pr-1
+    scrollbar-thin
+    scrollbar-thumb-gray-300
+  "
+>
 
         <div className="flex flex-col gap-1">
 
@@ -219,7 +224,7 @@ function Archived() {
       </div>
 
       {/* ================= BOTTOM IPHONE HANDLE ================= */}
-      <div className="absolute bottom-0 left-1/2 h-6 w-[412px] -translate-x-1/2">
+      <div className="absolute bottom-0 left-0 z-50 h-6 w-full">
 
         <div className="absolute left-1/2 top-1/2 h-1 w-[108px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-800" />
 

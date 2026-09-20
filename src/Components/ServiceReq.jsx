@@ -259,12 +259,31 @@ const ServiceReq = () => {
     visibleCount < filteredRequests.length;
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans">
-      {/* MOBILE APPLICATION CONTAINER */}
-      <div className="mx-auto min-h-screen w-full max-w-[428px] bg-[#F9FAFB]">
+   <div className="min-h-screen bg-gray-100 font-sans">
+  {/* MOBILE APPLICATION CONTAINER */}
+  <div
+    className="
+      relative
+      mx-auto
+      h-[926px]
+      w-full
+      sm:w-[640px]
+      md:w-[768px]
+      lg:w-[1024px]
+      xl:w-[1280px]
+      2xl:w-[1536px]
+      md:h-[1026px]
+      lg:h-[1200px]
+      xl:h-[1200px]
+      2xl:h-[1200px]
+      overflow-hidden
+      rounded-[35px]
+      bg-[#F9FAFB]
+    "
+  >
         
         {/* HEADER */}
-        <header className="sticky top-0 z-30 bg-white">
+<header className="absolute left-0 top-0 z-30 w-full bg-white">
           
           {/* Top Header */}
           <div className="flex h-14 items-center justify-between px-6">
@@ -357,7 +376,22 @@ const ServiceReq = () => {
         </header>
 
         {/* REQUEST LIST */}
-        <main className="space-y-3 px-6 py-3">
+        <main
+  className="
+    absolute
+    left-0
+    right-0
+    top-[138px]
+    bottom-0
+    overflow-y-auto
+    overflow-x-hidden
+    scrollbar-hide
+    space-y-3
+    px-6
+    py-3
+    pb-10
+  "
+>
           
           {displayedRequests.map((request) => (
             <article

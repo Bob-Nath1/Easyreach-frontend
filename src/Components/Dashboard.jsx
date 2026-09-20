@@ -88,50 +88,47 @@ const navigate = useNavigate();
           DEVICE FRAME
           Figma: 428 × 926
       ====================================================== */}
-      <div
-        className="
-          relative
-          h-[926px]
-          w-[448px]
-          max-h-screen
-          max-w-full
-          overflow-hidden
-          rounded-[35px]
-          bg-[#F9FAFB]
-        "
-      >
+     <div
+  className="
+    relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    h-[926px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+    mx-auto
+  "
+>
 
-        {/* =================================================
-            STATUS BAR
-        ================================================== */}
-        <div className="absolute left-0 top-0 z-50 flex h-[62px] w-full items-center justify-between px-4">
-
-         
-
-          {/* Network */}
-          <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-
-          </div>
-        </div>
+        
 
 
         {/* =================================================
             SCROLLABLE DASHBOARD CONTENT
         ================================================== */}
         <div
-          className="
-            absolute
-            left-[24px]
-            right-[24px]
-            top-[70px]
-            bottom-[99px]
-            overflow-y-auto
-            scrollbar-hide
-            pb-8
-          "
-        >
+  className="
+    absolute
+    left-[24px]
+    right-[24px]
+    top-[70px]
+    bottom-[99px]
+    overflow-y-auto
+    scrollbar-hide
+    pb-8
+  "
+>
 
-          <div className="flex w-[380px] flex-col gap-6">
+          <div className="flex w-full flex-col gap-6">
 
 
             {/* =================================================
@@ -172,9 +169,8 @@ const navigate = useNavigate();
     flex
     items-center
     justify-center
-    h-[24px]http://localhost:5173/
+    h-[24px]
     w-[24px]
-    ml-[28px]
     rounded-full
     bg-[#F3F4F6]
   "
@@ -217,8 +213,7 @@ const navigate = useNavigate();
                 className="
                   flex
                   h-[50px]
-                  w-67
-                  items-center
+                  w-full                  items-center
                   justify-between
                   rounded-[15px]
                   bg-[#F3F4F6]
@@ -250,7 +245,7 @@ const navigate = useNavigate();
               {/* =================================================
                   CATEGORIES
               ================================================== */}
-              <div className="flex w-67 flex-col gap-4">
+              <div className="flex w-full flex-col gap-4">
 
                 <div className="flex items-center justify-between">
 
@@ -266,7 +261,7 @@ const navigate = useNavigate();
                     See All
                   </button>
 
-                </div>
+                </div>   
 
 
                 {/* Category Cards */}
@@ -317,7 +312,7 @@ const navigate = useNavigate();
               {/* =================================================
                   MAP
               ================================================== */}
-              <div className="relative h-[200px] w-68 overflow-hidden rounded-[15px] bg-white">
+              <div className="relative h-[200px] w-full overflow-hidden rounded-[15px] bg-white">
 
                 <img
                   src="/basemap.png"
@@ -472,7 +467,7 @@ const navigate = useNavigate();
                   >
 
                     {/* Provider header */}
-                    <div className="absolute left-4 top-4 flex w-[250px] items-start justify-between">
+                    <div className="absolute left-4 right-4 top-4 flex items-start justify-between">
 
                       <div className="flex items-center gap-4">
 
@@ -655,9 +650,9 @@ const navigate = useNavigate();
               w-full
               items-center
               justify-center
-              gap-[36px]
               bg-white
               px-4
+              gap-7
             "
           >
 
@@ -755,7 +750,7 @@ const navigate = useNavigate();
 
 
           {/* iPhone Home Indicator */}
-          <div className="absolute bottom-0 left-1/2 h-6 w-[412px] -translate-x-1/2">
+          <div className="absolute bottom-0 left-0 h-6 w-full">
 
             <div
               className="

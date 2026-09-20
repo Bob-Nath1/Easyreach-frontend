@@ -158,8 +158,27 @@ function InfoRow({ icon: Icon, label, value, verified }) {
 
 function PersonalInfo() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="relative mx-auto w-full max-w-[428px] min-h-screen bg-[#F9FAFB] overflow-hidden">
+   <div className="min-h-screen w-full bg-gray-50">
+  <div
+    className="
+      relative
+      mx-auto
+      h-[926px]
+      w-full
+      sm:w-[640px]
+      md:w-[768px]
+      lg:w-[1024px]
+      xl:w-[1280px]
+      2xl:w-[1536px]
+      md:h-[1026px]
+      lg:h-[1200px]
+      xl:h-[1200px]
+      2xl:h-[1200px]
+      overflow-hidden
+      rounded-[35px]
+      bg-[#F9FAFB]
+    "
+  >
         
         {/* ================= HEADER ================= */}
         <section className="relative h-[458px] flex flex-col items-center">
@@ -222,6 +241,19 @@ function PersonalInfo() {
         </section>
 
         {/* ================= CONTACT INFO ================= */}
+        <div
+  className="
+    absolute
+    left-0
+    right-0
+    top-[458px]
+    bottom-0
+    overflow-y-auto
+    overflow-x-hidden
+    scrollbar-hide
+    pb-[40px]
+  "
+>
         <section className="mx-6 -mt-[14px] relative z-10 bg-white rounded-[24px] p-4">
           <div className="flex flex-col gap-3">
             <InfoRow
@@ -244,6 +276,7 @@ function PersonalInfo() {
             </div>
           </div>
         </section>
+        </div>
 
         {/* ================= ABOUT HEADER ================= */}
         <div className="mx-6 mt-7">

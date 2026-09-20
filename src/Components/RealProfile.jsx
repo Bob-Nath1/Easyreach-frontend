@@ -50,84 +50,43 @@ const navigate= useNavigate();
   return (
     <div className="min-h-screen w-full bg-gray-200 flex items-center justify-center">
       {/* ================= DEVICE FRAME ================= */}
-      <div
-        className="
-          relative
-          h-[926px]
-          w-[428px]
-          max-w-full
-          overflow-hidden
-          rounded-[35px]
-          bg-[#F9FAFB]
-        "
-      >
-        {/* ================= STATUS BAR ================= */}
-        <div
-          className="
-            absolute
-            left-0
-            top-0
-            z-50
-            flex
-            h-[62px]
-            w-full
-            items-center
-            justify-between
-            bg-white
-            px-4
-          "
-        >
-          {/* Time */}
-          <div className="flex h-[22px] w-[121px] items-center">
-            <span className="text-[17px] font-semibold text-black">
-              9:41
-            </span>
-          </div>
-
-          {/* Status icons */}
-          <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-            {/* Cellular */}
-            <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-              <span className="h-[5px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[7px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[10px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[13px] w-[2px] rounded-sm bg-black" />
-            </div>
-
-            {/* WiFi */}
-            <div className="relative h-[13px] w-[18px]">
-              <div className="absolute left-0 top-0 h-[8px] w-[18px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute left-[4px] top-[4px] h-[6px] w-[10px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute bottom-0 left-[7px] h-[3px] w-[3px] rounded-full bg-black" />
-            </div>
-
-            {/* Battery */}
-            <div className="relative h-[13px] w-[27px]">
-              <div className="h-[13px] w-[25px] rounded-[4px] border border-black opacity-40" />
-
-              <div className="absolute left-[3px] top-[3px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-
-              <div className="absolute right-[-2px] top-[4px] h-[5px] w-[2px] rounded-r bg-black opacity-40" />
-            </div>
-          </div>
-        </div>
-
-        {/* =====================================================
+     <div
+  className="
+    relative
+    mx-auto
+    h-[926px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+  "
+>
+         {/* =====================================================
             SCROLLABLE CONTENT
         ===================================================== */}
-        <div
-          className="
-            absolute
-            left-0
-            top-[62px]
-            h-[765px]
-            w-full
-            overflow-y-auto
-            overflow-x-hidden
-            pb-[115px]
-            scrollbar-hide
-          "
-        >
+       <div
+  className="
+    absolute
+    left-0
+    right-0
+    top-[62px]
+    bottom-[99px]
+    w-full
+    overflow-y-auto
+    overflow-x-hidden
+    pb-[40px]
+    scrollbar-hide
+  "
+>
           {/* ================= PROFILE HEADER ================= */}
           <section
             className="
@@ -320,7 +279,7 @@ const navigate= useNavigate();
           </section>
 
           {/* ================= CONTACT INFORMATION ================= */}
-          <section className="mx-auto mt-4 w-[380px] rounded-[24px] bg-white p-4">
+         <section className="mx-6 mt-4 w-auto rounded-[24px] bg-white p-4">
             <div className="flex flex-col gap-3">
               {/* Email row */}
               <div className="flex items-center justify-between">
@@ -413,7 +372,7 @@ const navigate= useNavigate();
           </div>
 
           {/* ================= ACTIVITY CARD ================= */}
-          <section className="mx-auto mt-2 w-[380px] overflow-hidden rounded-[24px] bg-white">
+          <section className="mx-6 mt-2 w-auto overflow-hidden rounded-[24px] bg-white">
             {activities.map((activity, index) => {
               const Icon = activity.icon;
 
@@ -515,13 +474,12 @@ const navigate= useNavigate();
               bottom-[29px]
               left-0
               flex
-              h-[70px]
-              w-full
-              items-center
-              justify-center
-              gap-[36px]
-              bg-white
-              px-4
+h-[70px]
+w-full
+items-center
+justify-around
+bg-white
+px-4
             "
           >
             {/* HOME */}

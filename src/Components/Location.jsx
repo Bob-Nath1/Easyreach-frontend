@@ -55,47 +55,26 @@ const handleAllowLocation = () => {
   };
 
   return (
-    <div className="relative w-[428px] h-[926px] bg-white rounded-[35px] overflow-hidden mx-auto">
-
-      {/* =========================
-          STATUS BAR
-      ========================== */}
-      <div className="absolute top-0 left-0 w-full h-[62px] px-4 flex items-center justify-between">
-
-        {/* Time */}
-        <span className="w-[37px] text-center text-[17px] leading-[22px] font-semibold text-black">
-          9:41
-        </span>
-
-        {/* Status icons */}
-        <div className="flex items-center justify-end gap-[7px]">
-
-          {/* Cellular */}
-          <div className="flex items-end gap-[2px] h-[14px]">
-            <span className="w-[3px] h-[5px] bg-black rounded-sm" />
-            <span className="w-[3px] h-[8px] bg-black rounded-sm" />
-            <span className="w-[3px] h-[11px] bg-black rounded-sm" />
-            <span className="w-[3px] h-[14px] bg-black rounded-sm" />
-          </div>
-
-          {/* WiFi */}
-          <div className="text-black text-[15px] leading-none">
-            ◔
-          </div>
-
-          {/* Battery */}
-          <div className="relative w-[27px] h-[13px]">
-
-            <div className="absolute left-0 top-[1px] w-[25px] h-[12px] border border-black/40 rounded-[4px]" />
-
-            <div className="absolute left-[2px] top-[3px] w-[21px] h-[8px] bg-black rounded-[2px]" />
-
-            <div className="absolute right-[-2px] top-[4px] w-[2px] h-[5px] bg-black/40 rounded-r" />
-
-          </div>
-        </div>
-      </div>
-
+   <div
+  className="
+    relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    h-[926px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    bg-white
+    rounded-[35px]
+    overflow-hidden
+    mx-auto
+  "
+>
 
       {/* =========================
           LOCATION ICON
@@ -137,30 +116,62 @@ const handleAllowLocation = () => {
       {/* =========================
           DESCRIPTION
       ========================== */}
-      <p className="absolute top-[360px] left-1/2 -translate-x-1/2 w-[380px] text-center text-[16px] leading-[25px] font-normal text-[#6B7280]">
-        Help us find service providers near you. Your location is only used
-        to match you with nearby services.
-      </p>
+     <p className="
+  absolute
+  top-[360px]
+  left-1/2
+  -translate-x-1/2
+  w-[calc(100%-48px)]
+  sm:w-[592px]
+  md:w-[720px]
+  lg:w-[976px]
+  xl:w-[1232px]
+  2xl:w-[1488px]
+  text-center
+  text-[16px]
+  leading-[25px]
+  font-normal
+  text-[#6B7280]
+">
+  Help us find service providers near you. Your location is only used
+  to match you with nearby services.
+</p>
 
 
       {/* =========================
           PRIVACY NOTE
       ========================== */}
-      <div className="absolute top-[443px] left-1/2 -translate-x-1/2 w-[337px] h-[68px] bg-[#F0FDF4] rounded-[8px] px-4 flex items-start gap-4">
+  <div
+  className="
+    absolute
+    top-[443px]
+    left-1/2
+    -translate-x-1/2
+    w-[calc(100%-48px)]
+    max-w-[337px]
+    h-[68px]
+    bg-[#F0FDF4]
+    rounded-[8px]
+    px-4
+    flex
+    items-start
+    gap-4
+  "
+>
 
         {/* Shield icon */}
-        <ShieldCheck
-          size={21}
-          className="mt-[3px] shrink-0 text-[#008000]"
-          strokeWidth={2}
-        />
+  <ShieldCheck
+    size={21}
+    className="mt-[3px] shrink-0 text-[#008000]"
+    strokeWidth={2}
+  />
 
-        {/* Privacy text */}
-        <p className="text-[13px] leading-[16px] font-normal text-[#008000] pt-[1px]">
-          Your privacy is protected. Location is never
-          <br />
-          shared without your permission.
-        </p>
+          {/* Privacy text */}
+  <p className="text-[13px] leading-[16px] font-normal text-[#008000] pt-[1px]">
+    Your privacy is protected. Location is never
+    <br />
+    shared without your permission.
+  </p>
 
       </div>
 
@@ -168,7 +179,21 @@ const handleAllowLocation = () => {
       {/* =========================
           BENEFITS
       ========================== */}
-      <div className="absolute top-[535px] left-[46px] w-[272px] flex flex-col gap-4">
+{/* =========================
+    BENEFITS
+========================= */}
+<div
+  className="
+    absolute
+    top-[535px]
+    left-1/2
+    -translate-x-1/2
+    w-[272px]
+    flex
+    flex-col
+    gap-4
+  "
+>
 
         {/* Benefit 1 */}
         <div className="flex items-center gap-2 h-[40px]">
@@ -229,14 +254,28 @@ const handleAllowLocation = () => {
       {/* =========================
           BUTTONS
       ========================== */}
-      <div className="absolute top-[719px] left-[24px] w-[380px] flex flex-col gap-4">
+      <div className="
+  absolute
+  top-[719px]
+  left-1/2
+  -translate-x-1/2
+  w-[calc(100%-48px)]
+  sm:w-[592px]
+  md:w-[720px]
+  lg:w-[976px]
+  xl:w-[1232px]
+  2xl:w-[1488px]
+  flex
+  flex-col
+  gap-4
+">
 
         {/* Allow Location */}
         <button
           type="button"
           onClick={handleAllowLocation}
           className="
-            w-[380px]
+            w-full
             h-[52px]
             rounded-full
             bg-[#008000]
@@ -265,37 +304,40 @@ const handleAllowLocation = () => {
 
 
         {/* Enter Manually */}
-        <button
-          type="button"
-          onClick={handleManualLocation}
-          className="
-            w-[380px]
-            h-[52px]
-            rounded-full
-            bg-white
-            border
-            border-[#008000]
-            flex
-            items-center
-            justify-center
-            gap-[10px]
-            px-[10px]
-            py-3
-            hover:bg-[#F0FDF4]
-            transition-colors
-          "
-        >
-             <img
-          src="/writing.png"
-          alt="Connect and chat"
-          className="w-4 h-4"
-        />
+<button
+  type="button"
+  onClick={handleManualLocation}
+  className="
+    absolute
+    top-[99px]
+    left-1/2
+    -translate-x-1/2
+    w-[380px]
+    h-[52px]
+    rounded-full
+    bg-white
+    border
+    border-[#008000]
+    flex
+    items-center
+    justify-center
+    gap-[10px]
+    px-[10px]
+    py-3
+    hover:bg-[#F0FDF4]
+    transition-colors
+  "
+>
+  <img
+    src="/writing.png"
+    alt="Enter location manually"
+    className="w-4 h-4"
+  />
 
-          <span className="text-[14px] leading-[28px] font-semibold text-[#008000]">
-            Enter Location Manually
-          </span>
-        </button>
-
+  <span className="text-[14px] leading-[28px] font-semibold text-[#008000]">
+    Enter Location Manually
+  </span>
+</button>
       </div>
 
 
@@ -307,7 +349,7 @@ const handleAllowLocation = () => {
         onClick={handleSkip}
         className="
           absolute
-          top-[863px]
+          top-[943px]
           left-1/2
           -translate-x-1/2
           text-[14px]

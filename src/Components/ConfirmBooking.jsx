@@ -39,36 +39,48 @@ function ConfirmBooking() {
   };
 
   return (
-    <div className="relative mx-auto h-[925px] w-[428px] overflow-hidden rounded-[35px] bg-[#F9FAFB] font-['Inter']">
+    <div
+  className="
+    relative
+    mx-auto
+    h-[925px]
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    md:h-[1025px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-[#F9FAFB]
+    font-['Inter']
+  "
+>
       
-      {/* ================= STATUS BAR ================= */}
-      <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-4 pt-1">
-        <span className="w-[121px] text-center text-[17px] font-semibold text-black">
-          9:41
-        </span>
-
-        <div className="flex w-[121px] items-center justify-end gap-2">
-          {/* Cellular */}
-          <div className="flex h-[14px] items-end gap-[2px]">
-            <span className="h-[5px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[8px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[11px] w-[3px] rounded-sm bg-black" />
-            <span className="h-[14px] w-[3px] rounded-sm bg-black" />
-          </div>
-
-          {/* Wifi */}
-          <div className="text-[14px] font-bold">⌁</div>
-
-          {/* Battery */}
-          <div className="relative h-[13px] w-[27px] rounded-[4px] border border-black/40">
-            <div className="absolute left-[2px] top-[2px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-            <div className="absolute -right-[3px] top-[4px] h-[5px] w-[2px] rounded-r bg-black/40" />
-          </div>
-        </div>
-      </div>
-
       {/* ================= HEADER ================= */}
-      <div className="absolute left-1/2 top-[62px] flex h-[75px] w-[430px] -translate-x-1/2 items-center justify-between border border-[#E5E7EB] bg-white px-6 pb-4 pt-1">
+      <div
+  className="
+    absolute
+    left-1/2
+    top-[62px]
+    flex
+    h-[75px]
+    w-full
+    -translate-x-1/2
+    items-center
+    justify-between
+    border
+    border-[#E5E7EB]
+    bg-white
+    px-6
+    pb-4
+    pt-1
+  "
+>
         <div className="flex items-center gap-6">
           <button
             onClick={() => navigate(-1)}
@@ -84,13 +96,23 @@ function ConfirmBooking() {
           </div>
         </div>
 
-        <span className="absolute left-[72px] top-[-11px] text-[12px] text-[#6B7280]">
-          Step 1 of 2
-        </span>
+        
       </div>
 
       {/* ================= SCROLLABLE CONTENT ================= */}
-      <div className="absolute left-6 top-[161px] h-[725px] w-[380px] overflow-y-auto pb-8 pr-0 scrollbar-hide">
+      <div
+  className="
+    absolute
+    left-6
+    right-6
+    top-[161px]
+    bottom-[24px]
+    overflow-y-auto
+    pb-8
+    pr-0
+    scrollbar-hide
+  "
+>
         <div className="flex flex-col gap-6">
 
           {/* ================= PROVIDER CARD ================= */}
@@ -249,7 +271,7 @@ function ConfirmBooking() {
           <div className="rounded-[24px] bg-white px-4 py-6">
             <div className="flex flex-col gap-8">
 
-              {/* Heading */}
+              {/* absolute bottom-[-1px] left-1/2eading */}
               <div className="flex items-center gap-2">
                 <CreditCard size={18} className="text-[#008000]" />
 
@@ -597,9 +619,9 @@ function ConfirmBooking() {
       </div>
 
       {/* ================= IPHONE HOME INDICATOR ================= */}
-      <div className="absolute bottom-[-1px] left-1/2 h-6 w-[412px] -translate-x-1/2 bg-transparent">
-        <div className="absolute left-1/2 top-1/2 h-1 w-[108px] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-[#1F2937]" />
-      </div>
+      <div className="absolute bottom-0 left-0 z-50 flex h-6 w-full items-center justify-center bg-transparent">
+  <div className="h-1 w-[108px] rounded-xl bg-[#1F2937]" />
+</div>
     </div>
 
   );

@@ -38,59 +38,28 @@ function EnterLocation() {
           RESPONSIVE DEVICE FRAME
           Original Figma size = 428 × 926
       ====================================================== */}
+<div
+  className="
+    relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    h-[926px]
+    md:h-[1026px]
+    lg:h-[1200px]
+    xl:h-[1200px]
+    2xl:h-[1200px]
+    overflow-hidden
+    rounded-[35px]
+    bg-white
+    mx-auto
+  "
+>
 
-      <div
-        className="
-          relative
-          w-[428px]
-          h-[926px]
-          max-w-full
-          max-h-screen
-          overflow-hidden
-          rounded-[35px]
-          bg-white
-        "
-      >
-
-        {/* ================= STATUS BAR ================= */}
-
-        <div className="absolute left-0 top-0 flex h-[62px] w-full items-center justify-between px-4">
-
-          {/* Time */}
-          <div className="flex h-[22px] w-[121px] items-center justify-center pt-[2px]">
-            <span className="text-center text-[17px] font-semibold leading-[22px] text-black">
-              9:41
-            </span>
-          </div>
-
-          {/* Network / Wifi / Battery */}
-          <div className="flex h-[22px] w-[121px] items-center justify-end gap-[7px]">
-
-            {/* Cellular */}
-            <div className="flex h-[13px] w-[19px] items-end gap-[2px]">
-              <span className="h-[5px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[7px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[10px] w-[2px] rounded-sm bg-black" />
-              <span className="h-[13px] w-[2px] rounded-sm bg-black" />
-            </div>
-
-            {/* Wifi */}
-            <div className="relative h-[13px] w-[18px]">
-              <div className="absolute left-0 top-0 h-[8px] w-[18px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute left-[4px] top-[4px] h-[6px] w-[10px] rounded-t-full border-t-[3px] border-black" />
-              <div className="absolute bottom-0 left-[7px] h-[3px] w-[3px] rounded-full bg-black" />
-            </div>
-
-            {/* Battery */}
-            <div className="relative h-[13px] w-[27px]">
-              <div className="h-[13px] w-[25px] rounded-[4px] border border-black opacity-40" />
-
-              <div className="absolute left-[3px] top-[3px] h-[7px] w-[20px] rounded-[2px] bg-black" />
-
-              <div className="absolute right-[-2px] top-[4px] h-[5px] w-[2px] rounded-r bg-black opacity-40" />
-            </div>
-          </div>
-        </div>
+        
 
 
         {/* ================= HEADER ================= */}
@@ -130,10 +99,11 @@ function EnterLocation() {
 <div
   className="
     absolute
-    left-[23px]
+    left-1/2
+    -translate-x-1/2
     top-[135px]
     bottom-[133px]
-    w-[381px]
+    w-[calc(100%-48px)]
     overflow-y-auto
     pb-[30px]
   "
@@ -143,29 +113,29 @@ function EnterLocation() {
 
           {/* ================= LOCATION SEARCH ================= */}
 
-          <div className="flex w-[381px] flex-col gap-[16px]">
+         <div className="flex w-full flex-col gap-[16px]">
 
             {/* Use Current Location */}
 
             <button
-              type="button"
-              onClick={() => {
-                setSelectedLocation("Current Location");
-              }}
-              className="
-                flex
-                h-[48px]
-                w-[360px]
-                shrink-0 rounded-[15px]
-                items-center
-                justify-center
-                gap-2
-                border-[1.6px]
-                border-[#008000]
-                bg-[#F0FDF4]
-              "
-            >
-
+  type="button"
+  onClick={() => {
+    setSelectedLocation("Current Location");
+  }}
+  className="
+    flex
+    h-[48px]
+    w-full
+    shrink-0
+    rounded-[15px]
+    items-center
+    justify-center
+    gap-2
+    border-[1.6px]
+    border-[#008000]
+    bg-[#F0FDF4]
+  "
+>
                  <img
           src="/mapicon.png"
           alt="Services near you"
@@ -181,7 +151,7 @@ function EnterLocation() {
 
             {/* Search Location */}
 
-            <div className="flex h-[73px] w-[381px] flex-col gap-2 ">
+            <div className="flex h-[73px] w-full flex-col gap-2 ">
 
               <label
                 htmlFor="location"
@@ -199,7 +169,7 @@ function EnterLocation() {
                 className="
                   box-border
                   h-[48px]
-                  w-[360px]
+                 w-full
                   border-[1.6px]
                   border-[#E5E7EB]
                   bg-white
@@ -220,7 +190,7 @@ function EnterLocation() {
 
           {/* ================= INFORMATION BOX ================= */}
 
-          <div className="mt-[22px] flex h-[95px] w-[381px]">
+          <div className="mt-[22px] flex h-[95px] w-full">
 
             {/* Blue line */}
 
@@ -228,7 +198,7 @@ function EnterLocation() {
 
             {/* Information */}
 
-            <div className="flex h-[92px] w-[360px] items-start gap-4 rounded-[15px] bg-[#DBEAFE] p-4">
+            <div className="flex h-[92px] flex-1 items-start gap-4 rounded-[15px] bg-[#DBEAFE] p-4">
 
               <Info
                 size={21}
@@ -250,7 +220,7 @@ function EnterLocation() {
 
           <div className="mt-[22px]">
 
-            <div className="relative h-[229px] w-[381px] overflow-hidden border border-[#008000] bg-[#E5E7EB]">
+            <div className="relative h-[229px] w-full overflow-hidden border border-[#008000] bg-[#E5E7EB]">
 
               {/* Map background */}
 
@@ -260,7 +230,7 @@ function EnterLocation() {
    <img
           src="/map.png"
           alt="Services near you"
-          className="w-360 h-full object-cover"
+          className="w-full h-full object-cover"
         />
                
 
@@ -276,7 +246,7 @@ function EnterLocation() {
 
             {/* ================= LOCATION LIST ================= */}
 
-            <div className="mt-[16px] flex w-[381px] flex-col gap-2 pb-[30px]">
+            <div className="mt-[16px] flex w-full flex-col gap-2 pb-[30px]">
   {locations.map((item) => (
     <button
       key={item.name}
@@ -286,7 +256,7 @@ function EnterLocation() {
         box-border
         flex
         h-[64px]
-        w-[360px]
+        w-full
         shrink-0
         items-center
         gap-4
@@ -331,43 +301,48 @@ function EnterLocation() {
             BOTTOM CONFIRM SECTION
         ================================================== */}
 
-        <div className="absolute bottom-0 left-0 h-[133px] w-[428px] bg-white">
+       <div className="absolute bottom-0 left-0 h-[133px] w-full bg-white">
 
           <button
-            type="button"
-            onClick={handleConfirm}
-            className="
-              absolute
-              left-1/2
-              top-4
-              flex
-              h-[52px]
-              w-[360px]
-              -translate-x-1/2
-              items-center
-              justify-center
-              rounded-[99px]
-              border-2
-              border-[#008000]
-              bg-[#008000]
-              px-[10px]
-              py-3
-              text-[14px]
-              font-semibold
-              leading-7
-              text-white
-              transition
-              hover:bg-[#006B00]
-              active:scale-[0.98]
-            "
-          >
-            Confirm Location
-          </button>
+  type="button"
+  onClick={handleConfirm}
+  className="
+    absolute
+    left-1/2
+    top-4
+    flex
+    h-[52px]
+    w-[calc(100%-48px)]
+    sm:w-[592px]
+    md:w-[720px]
+    lg:w-[976px]
+    xl:w-[1232px]
+    2xl:w-[1488px]
+    -translate-x-1/2
+    items-center
+    justify-center
+    rounded-[99px]
+    border-2
+    border-[#008000]
+    bg-[#008000]
+    px-[10px]
+    py-3
+    text-[14px]
+    font-semibold
+    leading-7
+    text-white
+    transition
+    hover:bg-[#006B00]
+    active:scale-[0.98]
+  "
+>
+  Confirm Location
+</button>
 
 
           {/* Home Indicator */}
 
-          <div className="absolute bottom-0 left-1/2 h-6 w-[412px] -translate-x-1/2">
+          <div className="absolute bottom-0 left-0 h-6 w-full">
 
             <div className="absolute left-1/2 top-1/2 h-1 w-[108px] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-[#1F2937]" />
 

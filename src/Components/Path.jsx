@@ -19,48 +19,28 @@ const navigate = useNavigate();
   const features = [
     "Search nearby providers",
     "Post service requests",
-    "Road reviews & ratings",
+    "Read reviews & ratings",
   ];
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center">
-      <div
-        className="
-          relative
-          w-full max-w-[428px]
-          min-h-[926px]
-          bg-white
-          rounded-[35px]
-          overflow-hidden
-        "
-      >
-        {/* ================= STATUS BAR ================= */}
-        <div className="absolute top-0 left-0 w-full h-[62px] px-4 flex items-center justify-between">
-          {/* Time */}
-          <div className="text-black text-[17px] font-semibold">
-            9:41
-          </div>
-
-          {/* Status icons */}
-          <div className="flex items-center gap-2 text-black">
-            {/* Cellular */}
-            <div className="flex items-end gap-[2px] h-[14px]">
-              <span className="w-[3px] h-[5px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[8px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[11px] bg-black rounded-sm" />
-              <span className="w-[3px] h-[14px] bg-black rounded-sm" />
-            </div>
-
-            {/* WiFi */}
-            <div className="text-[16px] leading-none">⌁</div>
-
-            {/* Battery */}
-            <div className="relative w-[27px] h-[13px] border border-black rounded-[4px]">
-              <div className="absolute left-[2px] top-[2px] bottom-[2px] w-[19px] bg-black rounded-[2px]" />
-              <div className="absolute -right-[3px] top-[4px] w-[2px] h-[5px] bg-black rounded-r" />
-            </div>
-          </div>
-        </div>
+     <div
+  className="
+    relative
+    w-full
+    sm:w-[640px]
+    md:w-[768px]
+    lg:w-[1024px]
+    xl:w-[1280px]
+    2xl:w-[1536px]
+    min-h-[926px]
+    lg:min-h-[1200px]
+    mx-auto
+    bg-white
+    rounded-[35px]
+    overflow-hidden
+  "
+>
 
         {/* ================= BACK BUTTON ================= */}
         <button
@@ -89,20 +69,20 @@ const navigate = useNavigate();
             Choose Your Path
           </h1>
 
-          <p className="mt-[16px] text-[14px] leading-[17px] font-medium text-gray-500">
+          <p className="mt-[16px] text-base leading-[17px] font-medium text-gray-500">
             How would you like to use EasyReach?
           </p>
         </div>
 
         {/* ================= MAIN CONTENT ================= */}
-        <div className="absolute top-[180px] left-1/2 -translate-x-1/2 w-[380px] space-y-6 pb-10">
+       <div className="absolute top-[180px] left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[380px] space-y-6 pb-10">
 
           {/* ================= SERVICE SEEKER ================= */}
           <button
            onClick={() => handleRoleSelect("seeker")}
             className="
               w-full
-              h-[296px]
+              h-[396px]
               bg-white
               border-[3px]
               border-gray-200
@@ -124,17 +104,17 @@ const navigate = useNavigate();
                 </div>
               </div>
 
-              <h2 className="text-[18px] leading-7 font-bold text-gray-800">
+              <h2 className="text-[18px] sm:text-xl leading-7 font-bold text-gray-800">
                 Service Seeker
               </h2>
 
-              <p className="text-[14px] leading-6 font-medium text-gray-500">
+              <p className="text-base leading-6 font-medium text-gray-500">
                 Find and connect with trusted service providers near you
               </p>
             </div>
 
             {/* Features */}
-            <div className="mt-5 flex flex-col gap-2">
+            <div className="mt-5 flex flex-col gap-2 ">
               {features.map((feature, index) => (
                 <div
                   key={index}
@@ -144,7 +124,7 @@ const navigate = useNavigate();
                     ●
                   </span>
 
-                  <span className="text-[14px] leading-[17px] font-medium text-gray-700">
+                  <span className="text-base leading-[17px] font-medium text-gray-700">
                     {feature}
                   </span>
                 </div>
@@ -158,7 +138,7 @@ const navigate = useNavigate();
   onClick={() => handleRoleSelect("provider")}
             className="
               w-full
-              h-[296px]
+              h-[396px]
               bg-white
               border-[3px]
               border-gray-200
@@ -181,11 +161,11 @@ const navigate = useNavigate();
                 </div>
               </div>
 
-              <h2 className="text-[18px] leading-7 font-bold text-gray-800">
+              <h2 className="text-xl leading-7 font-bold text-gray-800">
                 Service Provider
               </h2>
 
-              <p className="text-[14px] leading-6 font-medium text-gray-500">
+              <p className="text-base leading-6 font-medium text-gray-500">
                 Grow your business by connecting with customers who need
                 your services
               </p>
@@ -202,7 +182,7 @@ const navigate = useNavigate();
                     ●
                   </span>
 
-                  <span className="text-[14px] leading-[17px] font-medium text-gray-700">
+                  <span className="text-base leading-[17px] font-medium text-gray-700">
                     {feature}
                   </span>
                 </div>
@@ -212,9 +192,9 @@ const navigate = useNavigate();
         </div>
 
         {/* ================= BOTTOM NAVIGATION ================= */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[412px] h-6 bg-white">
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[108px] h-1 bg-gray-800 rounded-xl" />
-        </div>
+        <div className="absolute bottom-0 left-0 w-full h-6 bg-white flex items-center justify-center">
+  <div className="w-[108px] h-1 bg-gray-800 rounded-xl" />
+</div>
       </div>
     </div>
   );
