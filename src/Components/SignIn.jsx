@@ -141,11 +141,25 @@ function SignIn() {
 
 
           {/* ================= SIGN IN BUTTON ================= */}
-          <button
-          onClick={() => navigate("/signingin")}
-            type="submit"
-            className="absolute ml-48 top-[287px] w-[270px] h-[52px] flex items-center justify-center bg-[#008000] hover:bg-green-700 transition rounded-full"
-          >
+        <button
+  onClick={() => navigate("/signingin")}
+  type="submit"
+  className="
+    absolute
+    left-1/2
+    -translate-x-1/2
+    top-[287px]
+    w-[270px]
+    h-[52px]
+    flex
+    items-center
+    justify-center
+    bg-[#008000]
+    hover:bg-green-700
+    transition
+    rounded-full
+  "
+>
             <span className="text-white text-[14px] leading-[28px] font-semibold">
               Sign in
             </span>
@@ -155,10 +169,21 @@ function SignIn() {
 
 
         {/* ================= SOCIAL LOGIN ================= */}
-        <div className="absolute left-[109px] top-[405px] w-[210px] flex flex-col items-center">
+       <div
+  className="
+    absolute
+    left-1/2
+    -translate-x-1/2
+    top-[405px]
+    w-[210px]
+    flex
+    flex-col
+    items-center
+  "
+>
 
           {/* Sign in with */}
-          <div className="flex items-center gap-[4px] w-[210px] ml-57">
+         <div className="flex w-[210px] items-center gap-[4px]">
 
             <div className="w-[60px] border-t border-[#9CA3AF]"></div>
 
@@ -172,7 +197,7 @@ function SignIn() {
 
 
           {/* Social icons */}
-          <div className="mt-[28px] flex items-center gap-[16px] ml-54">
+         <div className="mt-[28px] flex items-center justify-center gap-[16px]">
 
             {/* Apple */}
             <button
