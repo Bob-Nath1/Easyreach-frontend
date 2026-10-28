@@ -8,13 +8,33 @@ function Profile() {
   const [about, setAbout] = useState("");
   const [photo, setPhoto] = useState(null);
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
+ 
+const handlePhotoChange = (e) => {
+  const file = e.target.files[0];
 
-    if (file) {
-      setPhoto(URL.createObjectURL(file));
-    }
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Please select a valid image.");
+    return;
+  }
+
+  // Limit image size to 2 MB for localStorage.
+  if (file.size > 2 * 1024 * 1024) {
+    alert("Please select an image smaller than 2 MB.");
+    e.target.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onloadend = () => {
+    setPhoto(reader.result);
   };
+
+  reader.readAsDataURL(file);
+};
+
 
   const handleDone = () => {
   const profileData = {

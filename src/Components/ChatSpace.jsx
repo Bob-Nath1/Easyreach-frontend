@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Phone,
@@ -12,55 +13,226 @@ import {
 } from "lucide-react";
 
 function ChatSpace() {
+const location = useLocation();
+const navigate = useNavigate();
+
+useEffect(() => {
+  window.scrollTo(0, 0);
+}, []);
+
+const provider =
+  location.state?.provider ||
+  location.state?.participant;
+
+const request = location.state?.request;
+
+const existingConversationId =
+  location.state?.conversationId;
+
+  const providerImage =
+  provider?.profile_image ||
+  provider?.profileImage ||
+  provider?.image ||
+  null;
+
+const providerName =
+  provider?.full_name ||
+  provider?.fullName ||
+  provider?.name ||
+  "Provider";
+
   const [message, setMessage] = useState("");
+const [conversationId, setConversationId] = useState(null);
+const [loadingConversation, setLoadingConversation] = useState(true);
 
-  const messages = [
-    {
-      id: 1,
-      sender: "user",
-      text: "Hello Can you help with my car AC issue",
-      time: "10:22 AM",
-    },
-    {
-      id: 2,
-      sender: "provider",
-      text: "Hi! Thanks for reaching out. I can definitely help with your car AC issue.",
-      time: "10:24 AM",
-    },
-    {
-      id: 3,
-      sender: "user",
-      text: "Great! How soon can you come check it out?",
-      time: "10:25 AM",
-    },
-    {
-      id: 4,
-      sender: "provider",
-      text: "I'm available this afternoon if that works for you. Here's my workshop location:",
-      time: "10:28 AM",
-    },
-    {
-      id: 5,
-      type: "quote",
-    },
-    {
-      id: 6,
-      type: "location",
-    },
-    {
-      id: 7,
-      sender: "user",
-      text: "Perfect! I'll be there around 2 PM. See you then!",
-      time: "10:30 AM",
-    },
-  ];
+const [messages, setMessages] = useState([]);
+const [loadingMessages, setLoadingMessages] = useState(true);
 
-  const handleSend = () => {
-    if (!message.trim()) return;
+useEffect(() => {
 
-    console.log("Message:", message);
-    setMessage("");
+  if (existingConversationId) {
+  setConversationId(existingConversationId);
+  setLoadingConversation(false);
+  return;
+}
+  const createOrGetConversation = async () => {
+
+    const token = localStorage.getItem("token");
+
+    if (!token || !provider?.id) {
+      setLoadingConversation(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/messages/conversations",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            participantId: provider.id,
+            serviceRequestId: request?.id || null,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(
+          "Failed to create/get conversation:",
+          data.message
+        );
+        return;
+      }
+
+      setConversationId(data.conversation.id);
+    } catch (error) {
+      console.error("Conversation error:", error);
+    } finally {
+      setLoadingConversation(false);
+    }
   };
+
+  createOrGetConversation();
+}, [provider, request, existingConversationId]);
+
+useEffect(() => {
+  const fetchMessages = async () => {
+    if (!conversationId) {
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setLoadingMessages(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/messages/${conversationId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(
+          "Failed to fetch messages:",
+          data.message
+        );
+        return;
+      }
+
+      setMessages(data.messages || []);
+    } catch (error) {
+      console.error("Messages fetch error:", error);
+    } finally {
+      setLoadingMessages(false);
+    }
+  };
+
+  fetchMessages();
+}, [conversationId]);
+
+useEffect(() => {
+  const markMessagesAsRead = async () => {
+    if (!conversationId) {
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/messages/${conversationId}/read`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        console.error(
+          "Failed to mark messages as read:",
+          data.message
+        );
+      }
+    } catch (error) {
+      console.error("Mark messages as read error:", error);
+    }
+  };
+
+  markMessagesAsRead();
+}, [conversationId]);
+
+const handleSend = async () => {
+  if (!message.trim() || !conversationId) return;
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    console.error("Authentication required");
+    return;
+  }
+
+  const text = message.trim();
+
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/messages/${conversationId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          message: text,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Failed to send message:", data.message);
+      return;
+    }
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        ...data.data,
+        sender_id: data.data.senderId,
+        message: data.data.message,
+        created_at: data.data.createdAt,
+      },
+    ]);
+
+    setMessage("");
+  } catch (error) {
+    console.error("Send message error:", error);
+  }
+};
 
   return (
     <div
@@ -100,19 +272,32 @@ function ChatSpace() {
           {/* Profile */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="flex h-[50px] w-[50px] items-center justify-center overflow-hidden rounded-[15px] bg-gray-200">
-                <span className="text-lg font-bold text-gray-500">
-                  TM
-                </span>
-              </div>
+  <div className="flex h-[50px] w-[50px] items-center justify-center overflow-hidden rounded-[15px] bg-gray-200">
+  {providerImage ? (
+  <img
+    src={providerImage}
+    alt={providerName}
+    className="h-full w-full object-cover"
+  />
+) : (
+      <span className="text-lg font-bold text-gray-500">
+        {providerName
+  .split(" ")
+  .map((name) => name[0])
+  .join("")
+  .slice(0, 2)
+  .toUpperCase()}
+      </span>
+    )}
+  </div>
 
-              <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-white bg-[#008000]" />
-            </div>
+  <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-white bg-[#008000]" />
+</div>
 
             <div>
-              <h2 className="text-[16px] font-bold leading-[19px] text-gray-800">
-                Timi Motors
-              </h2>
+             <h2 className="text-[16px] font-bold leading-[19px] text-gray-800">
+  {providerName}
+</h2>
 
               <p className="mt-1 text-[13px] text-[#008000]">
                 Online
@@ -254,33 +439,50 @@ function ChatSpace() {
               );
             }
 
-            /* ================= PROVIDER MESSAGE ================= */
-            if (item.sender === "provider") {
-              return (
-                <div
-                  key={item.id}
-                  className="flex items-start gap-2"
-                >
-                  <div className="mt-0.5 flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full bg-gray-200">
-                    <span className="text-[9px] font-bold text-gray-500">
-                      TM
-                    </span>
-                  </div>
+           /* ================= PROVIDER MESSAGE ================= */
+if (Number(item.sender_id) === Number(provider?.id)) {
+  return (
+    <div
+      key={item.id}
+      className="flex items-start gap-2"
+    >
+      <div className="mt-0.5 flex h-[30px] w-[30px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200">
+       {providerImage ? (
+  <img
+    src={providerImage}
+    alt={providerName}
+    className="h-full w-full object-cover"
+  />
+) : (
+          <span className="text-[9px] font-bold text-gray-500">
+           {providerName
+  .split(" ")
+  .map((name) => name[0])
+  .join("")
+  .slice(0, 2)
+  .toUpperCase()}
+  
+          </span>
+        )}
+      </div>
 
-                  <div className="max-w-[300px]">
-                    <div className="rounded-lg bg-white px-2 py-2 pb-1">
-                      <p className="text-[14px] leading-5 text-gray-800">
-                        {item.text}
-                      </p>
-                    </div>
+      <div className="max-w-[300px]">
+        <div className="rounded-lg bg-white px-2 py-2 pb-1">
+          <p className="text-[14px] leading-5 text-gray-800">
+            {item.message}
+          </p>
+        </div>
 
-                    <p className="ml-1 mt-1 text-[10px] leading-5 text-gray-400">
-                      {item.time}
-                    </p>
-                  </div>
-                </div>
-              );
-            }
+        <p className="ml-1 mt-1 text-[10px] leading-5 text-gray-400">
+          {new Date(item.created_at).toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })}
+        </p>
+      </div>
+    </div>
+  );
+}
 
             /* ================= USER MESSAGE ================= */
             return (
@@ -290,13 +492,16 @@ function ChatSpace() {
               >
                 <div className="w-full rounded-lg bg-[#008000] px-2 py-2 pb-1">
                   <p className="text-[14px] leading-5 text-white">
-                    {item.text}
+                    {item.message}
                   </p>
                 </div>
 
                 <div className="mt-0.5 flex items-center gap-2">
                   <span className="text-[10px] leading-5 text-gray-400">
-                    {item.time}
+                    {new Date(item.created_at).toLocaleTimeString([], {
+  hour: "numeric",
+  minute: "2-digit",
+})}
                   </span>
 
                   <CheckCheck

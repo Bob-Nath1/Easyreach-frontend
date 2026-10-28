@@ -8,21 +8,63 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const goBack = () => {
     navigate("/welcome");
   };
 
-  const handleSignIn = (e) => {
-    e.preventDefault();
+  const handleSignIn = async (e) => {
+  e.preventDefault();
 
-    // Add your login API here later
-    console.log({
-      email,
-      password,
-      rememberMe,
-    });
-  };
+  if (!email || !password) {
+    alert("Please enter your email and password.");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const response = await fetch(
+      "http://localhost:5000/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Invalid email or password.");
+      return;
+    }
+
+    console.log("Login successful:", data);
+
+    // Save authentication details
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    // Go to the appropriate dashboard
+    if (data.user.role === "provider") {
+      navigate("/dashboardprov");
+    } else {
+      navigate("/dashboard");
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("Unable to connect to the server. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="relative w-full h-[926px] mx-auto overflow-hidden rounded-[35px] bg-gradient-to-br from-[#008000] to-[#00C48C]">
@@ -142,7 +184,7 @@ function SignIn() {
 
           {/* ================= SIGN IN BUTTON ================= */}
         <button
-  onClick={() => navigate("/signingin")}
+  disabled={loading}
   type="submit"
   className="
     absolute
@@ -160,9 +202,10 @@ function SignIn() {
     rounded-full
   "
 >
-            <span className="text-white text-[14px] leading-[28px] font-semibold">
-              Sign in
-            </span>
+              <span className="text-white text-[14px] leading-[28px] font-semibold">
+    {loading ? "Signing in..." : "Sign in"}
+  </span>
+
           </button>
 
         </form>

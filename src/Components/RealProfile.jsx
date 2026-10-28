@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Pencil,
@@ -6,7 +6,6 @@ import {
   Mail,
   Phone,
   CheckCircle,
-  ChevronRight,
   ClipboardList,
   CalendarDays,
   Heart,
@@ -20,6 +19,176 @@ import {
 
 function RealProfile() {
 const navigate= useNavigate();
+
+
+const [savedProfile] = useState(() => {
+  try {
+    return JSON.parse(localStorage.getItem("profile") || "null");
+  } catch {
+    return null;
+  }
+});
+
+
+const [user, setUser] = useState(null);
+const [loadingUser, setLoadingUser] = useState(true);
+const [providerProfile, setProviderProfile] = useState(null);
+const [loadingProviderProfile, setLoadingProviderProfile] = useState(true);
+const [providerProfileError, setProviderProfileError] = useState("");
+const [profileError, setProfileError] = useState("");
+
+
+
+const [profileImageFailed, setProfileImageFailed] = useState(false);useEffect(() => {
+  setProfileImageFailed(false);
+}, [user?.profileImage]);
+
+
+
+useEffect(() => {
+  let cancelled = false;
+
+  const fetchProfiles = async () => {
+    try {
+      setLoadingUser(true);
+      setLoadingProviderProfile(true);
+      setProfileError("");
+      setProviderProfileError("");
+
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Please log in to view your profile.");
+      }
+
+      // 1. Fetch the account profile.
+      const userResponse = await fetch(
+        "http://localhost:5000/api/users/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const userData = await userResponse.json();
+
+      if (!userResponse.ok) {
+        throw new Error(
+          userData.message || "Unable to load your profile."
+        );
+      }
+
+      if (cancelled) return;
+
+     const account = userData.user || {};
+
+const updatedAccount = {
+  ...account,
+  serviceCategory: account.serviceCategory || "",
+  occupation: account.occupation || "",
+};
+
+setUser(updatedAccount);
+localStorage.setItem("user", JSON.stringify(updatedAccount));
+
+      // 2. Only providers need a business profile.
+      if (account?.role !== "provider") {
+        setProviderProfile(null);
+        localStorage.removeItem("providerProfile");
+        setLoadingProviderProfile(false);
+        return;
+      }
+
+      // Use cached business information while fetching fresh data.
+      const cachedProfile = JSON.parse(
+        localStorage.getItem("providerProfile") || "null"
+      );
+
+      if (!cancelled && cachedProfile) {
+        setProviderProfile(cachedProfile);
+      }
+
+      // 3. Fetch the provider's business profile separately.
+      try {
+        const providerResponse = await fetch(
+          "http://localhost:5000/api/users/provider-profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const providerData = await providerResponse.json();
+
+        if (!providerResponse.ok) {
+          throw new Error(
+            providerData.message ||
+              "Unable to load your business profile."
+          );
+        }
+
+        if (cancelled) return;
+
+        const profile = providerData.profile || null;
+
+        setProviderProfile(profile);
+
+        localStorage.setItem(
+          "providerProfile",
+          JSON.stringify(profile)
+        );
+
+        // Refresh account information if returned by this endpoint.
+        if (providerData.user) {
+          const updatedAccount = {
+            ...account,
+            ...providerData.user,
+          };
+
+          setUser(updatedAccount);
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify(updatedAccount)
+          );
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error(
+            "Fetch business profile error:",
+            error
+          );
+
+          setProviderProfileError(
+            error.message ||
+              "Unable to load your business profile."
+          );
+        }
+      }
+    } catch (error) {
+      if (!cancelled) {
+        console.error("Fetch account profile error:", error);
+
+        setProfileError(
+          error.message || "Unable to load your profile."
+        );
+      }
+    } finally {
+      if (!cancelled) {
+        setLoadingUser(false);
+        setLoadingProviderProfile(false);
+      }
+    }
+  };
+
+  fetchProfiles();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
 
 
   const activities = [
@@ -47,8 +216,40 @@ const navigate= useNavigate();
     },
   ];
 
+  const formatLocation = (location) => {
+  if (!location) return "Not added yet";
+
+  if (typeof location === "string") {
+    return location;
+  }
+
+  if (typeof location === "object") {
+    return (
+      location.address ||
+      [
+        location.city,
+        location.state,
+        location.country,
+      ]
+        .filter(Boolean)
+        .join(", ") ||
+      "Not added yet"
+    );
+  }
+
+  return "Not added yet";
+};
+
+
   return (
     <div className="min-h-screen w-full bg-gray-200 flex items-center justify-center">
+
+            {/* PUT THE ERROR HERE */}
+      {profileError && (
+        <p className="text-sm text-red-600">
+          {profileError}
+        </p>
+      )}
       {/* ================= DEVICE FRAME ================= */}
      <div
   className="
@@ -164,56 +365,90 @@ const navigate= useNavigate();
               </button>
             </div>
 
-            {/* Profile picture */}
-            <div
-              className="
-                absolute
-                left-1/2
-                top-[76px]
-                flex
-                h-[100px]
-                w-[100px]
-                -translate-x-1/2
-                items-center
-                justify-center
-                overflow-hidden
-                rounded-full
-                border-[2.4px]
-                border-dashed
-                border-white
-                bg-gray-200
-              "
-            >
-              <img
-                src="/profile.jpg"
-                alt="Timi Abidoye"
-                className="h-full w-full object-cover"
-              />
-            </div>
 
-            {/* Name */}
-            <h1
-              className="
-                absolute
-                left-1/2
-                top-[190px]
-                -translate-x-1/2
-                whitespace-nowrap
-                text-[24px]
-                font-bold
-                leading-[29px]
-                text-white
-              "
-            >
-              Timi Abidoye
-            </h1>
+{/* Profile picture */}
+<div
+  className="
+    absolute
+    left-1/2
+    top-[76px]
+    flex
+    h-[100px]
+    w-[100px]
+    -translate-x-1/2
+    items-center
+    justify-center
+    overflow-hidden
+    rounded-full
+    border-[2.4px]
+    border-dashed
+    border-white
+    bg-gray-200
+  "
+>
+  {(savedProfile?.photo || user?.profileImage) &&
+  !profileImageFailed ? (
+    <img
+      src={savedProfile?.photo || user?.profileImage}
+      alt={user?.fullName || "Profile"}
+      className="h-full w-full object-cover"
+      onError={() => setProfileImageFailed(true)}
+    />
+  ) : (
+    <img
+      src="/profile.jpg"
+      alt="Default profile"
+      className="h-full w-full object-cover"
+    />
+  )}
+</div>
+
+
+          {/* Name */}
+<p
+  className="
+    absolute
+    left-1/2
+    top-[188px]
+    -translate-x-1/2
+    whitespace-nowrap
+    text-[20px]
+    font-bold
+    leading-6
+    text-white
+  "
+>
+  {loadingUser
+    ? "..."
+    : user?.fullName || "User"}
+</p>
+
+{/* Username */}
+<p
+  className="
+    absolute
+    left-1/2
+    top-[213px]
+    -translate-x-1/2
+    whitespace-nowrap
+    text-[12px]
+    leading-[15px]
+    text-white/80
+  "
+>
+  {loadingUser
+    ? "..."
+    : user?.username
+      ? `@${user.username}`
+      : ""}
+</p>
 
             {/* Email */}
             <p
               className="
                 absolute
                 left-1/2
-                top-[232px]
+                top-[238px]
                 -translate-x-1/2
                 whitespace-nowrap
                 text-[14px]
@@ -221,7 +456,9 @@ const navigate= useNavigate();
                 text-white
               "
             >
-              timilehinabidoye@gmail.com
+              {loadingUser
+  ? "..."
+  : user?.email || "No email"}
             </p>
 
             {/* Member + Edit */}
@@ -229,7 +466,7 @@ const navigate= useNavigate();
               className="
                 absolute
                 left-1/2
-                top-[258px]
+                top-[266px]
                 flex
                 -translate-x-1/2
                 items-center
@@ -249,8 +486,19 @@ const navigate= useNavigate();
                 "
               >
                 <span className="whitespace-nowrap text-[12px] text-white">
-                  Member since Jan 2024
-                </span>
+  Member since{" "}
+  {loadingUser
+    ? "..."
+    : user?.createdAt
+      ? new Date(user.createdAt).toLocaleDateString(
+          "en-US",
+          {
+            month: "short",
+            year: "numeric",
+          }
+        )
+      : "N/A"}
+</span>
               </div>
 
               {/* Edit Profile */}
@@ -279,179 +527,194 @@ const navigate= useNavigate();
           </section>
 
           {/* ================= CONTACT INFORMATION ================= */}
-         <section className="mx-6 mt-4 w-auto rounded-[24px] bg-white p-4">
-            <div className="flex flex-col gap-3">
-              {/* Email row */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="
-                      flex
-                      h-10
-                      w-10
-                      items-center
-                      justify-center
-                      rounded-lg
-                      bg-[#F3F4F6]
-                    "
-                  >
-                    <Mail size={17} className="text-[#6B7280]" />
-                  </div>
+<section className="mx-6 mt-4 rounded-[24px] bg-white p-4">
+  <div className="flex flex-col gap-4">
+    {/* Email */}
+    <div className="flex items-center justify-between gap-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F3F4F6]">
+          <Mail size={17} className="text-[#6B7280]" />
+        </div>
 
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[12px] text-[#9CA3AF]">
-                      Email
-                    </span>
+        <div className="min-w-0">
+          <p className="text-[12px] text-[#9CA3AF]">Email</p>
+          <p className="break-all text-[14px] text-[#1F2937]">
+            {loadingUser ? "..." : user?.email || "No email"}
+          </p>
+        </div>
+      </div>
 
-                    <span className="text-[14px] text-[#1F2937]">
-                      timilehinabidoye@gmail.com
-                    </span>
-                  </div>
-                </div>
+      <span className="shrink-0 rounded-full bg-[#D1FAE5] px-3 py-2 text-[12px] font-bold text-[#008000]">
+        <CheckCircle size={13} className="mr-1 inline" />
+        Verified
+      </span>
+    </div>
 
-                {/* Verified */}
-                <div
-                  className="
-                    flex
-                    h-[35px]
-                    items-center
-                    gap-1
-                    rounded-full
-                    bg-[#D1FAE5]
-                    px-[10px]
-                  "
-                >
-                  <CheckCircle size={13} className="text-[#008000]" />
+    {/* Phone */}
+    <div className="flex items-center justify-between gap-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F3F4F6]">
+          <Phone size={17} className="text-[#6B7280]" />
+        </div>
 
-                  <span className="text-[12px] font-bold italic text-[#008000]">
-                    Verified
-                  </span>
-                </div>
-              </div>
+        <div className="min-w-0">
+          <p className="text-[12px] text-[#9CA3AF]">Phone</p>
+          <p className="break-words text-[14px] text-[#1F2937]">
+            {loadingUser ? "..." : user?.phone || "No phone number"}
+          </p>
+        </div>
+      </div>
 
-              {/* Phone row */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="
-                      flex
-                      h-10
-                      w-10
-                      items-center
-                      justify-center
-                      rounded-lg
-                      bg-[#F3F4F6]
-                    "
-                  >
-                    <Phone size={17} className="text-[#6B7280]" />
-                  </div>
+      <span className="shrink-0 text-[12px] text-red-500">
+        Verify
+      </span>
+    </div>
 
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[12px] text-[#9CA3AF]">
-                      Phone
-                    </span>
+    {/* City */}
+    <div className="flex items-center gap-3">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F3F4F6]">
+        <MapPin size={17} className="text-[#6B7280]" />
+      </div>
 
-                    <span className="text-[14px] text-[#1F2937]">
-                      +234 7050852180
-                    </span>
-                  </div>
-                </div>
+      <div className="min-w-0">
+        <p className="text-[12px] text-[#9CA3AF]">City</p>
+        <p className="break-words text-[14px] text-[#1F2937]">
+          {loadingUser ? "..." : user?.city || "No city added"}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <span className="text-[12px] text-red-500">
-                  Verify
-                </span>
-              </div>
-            </div>
-          </section>
 
-          {/* ================= MY ACTIVITY ================= */}
-          <div className="mt-4 px-6">
-            <h2 className="text-[12px] font-bold text-[#6B7280]">
-              MY ACTIVITY
-            </h2>
+          
+{/* ================= PROVIDER BUSINESS PROFILE ================= */}
+{user?.role === "provider" && (
+  <section className="mx-6 mt-4 rounded-[24px] bg-white p-4">
+    <div className="mb-4 flex items-center justify-between gap-3">
+      <h2 className="text-[16px] font-bold text-[#1F2937]">
+        Business Profile
+      </h2>
+
+      <button
+        type="button"
+        onClick={() => navigate("/providerprofile")}
+        className="flex shrink-0 items-center gap-1 text-[12px] font-semibold text-[#008000]"
+      >
+        Edit
+        <Pencil size={13} />
+      </button>
+    </div>
+
+    {loadingProviderProfile ? (
+      <p className="text-[13px] text-[#6B7280]">
+        Loading business details...
+      </p>
+    ) : providerProfileError && !providerProfile ? (
+      <p className="text-[13px] text-red-600">
+        {providerProfileError}
+      </p>
+    ) : (
+      <div className="flex flex-col gap-4">
+        {/* Business name */}
+        <div>
+          <p className="text-[12px] text-[#9CA3AF]">
+            Business Name
+          </p>
+          <p className="mt-1 break-words text-[14px] font-semibold text-[#1F2937]">
+            {providerProfile?.businessName || "Not added yet"}
+          </p>
+        </div>
+
+      
+{/* Service Category */}
+<div>
+  <p className="text-[12px] text-[#9CA3AF]">
+    Service Category
+  </p>
+
+  <div className="mt-2 flex flex-wrap gap-2">
+    {user?.serviceCategory ? (
+      <span className="rounded-full bg-[#F0FDF4] px-3 py-1.5 text-[12px] font-semibold text-[#008000]">
+        {user.serviceCategory}
+      </span>
+    ) : (
+      <span className="text-[13px] text-[#6B7280]">
+        No service category added
+      </span>
+    )}
+  </div>
+</div>
+
+{/* Occupation */}
+<div className="flex items-start gap-3">
+  <User
+    size={18}
+    className="mt-1 shrink-0 text-[#008000]"
+  />
+
+  <div className="min-w-0">
+    <p className="text-[12px] text-[#9CA3AF]">
+      Occupation
+    </p>
+
+    <p className="mt-1 break-words text-[14px] font-semibold text-[#1F2937]">
+      {user?.occupation || "Not added yet"}
+    </p>
+  </div>
+</div>
+
+        {/* Business location */}
+        <div>
+          <div className="flex items-center gap-2">
+            <MapPin size={16} className="text-[#008000]" />
+            <p className="text-[12px] text-[#9CA3AF]">
+              Business Location
+            </p>
           </div>
 
-          {/* ================= ACTIVITY CARD ================= */}
-          <section className="mx-6 mt-2 w-auto overflow-hidden rounded-[24px] bg-white">
-            {activities.map((activity, index) => {
-              const Icon = activity.icon;
-
-              return (
-                <React.Fragment key={activity.title}>
-                  <button
-                    type="button"
-                    className="
-                      flex
-                      h-[72px]
-                      w-full
-                      items-center
-                      justify-between
-                      px-4
-                      text-left
-                    "
-                  >
-                    <div className="flex items-center gap-3">
-                      {/* Icon background */}
-                      <div
-                        className="
-                          flex
-                          h-10
-                          w-10
-                          shrink-0
-                          items-center
-                          justify-center
-                          rounded-lg
-                          bg-[#F0FDF4]
-                        "
-                      >
-                        <Icon
-                          size={19}
-                          className="text-[#008000]"
-                        />
-                      </div>
-
-                      <span className="text-[14px] text-[#1F2937]">
-                        {activity.title}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      {activity.badge && (
-                        <span
-                          className="
-                            flex
-                            h-[19px]
-                            min-w-[25px]
-                            items-center
-                            justify-center
-                            rounded-full
-                            bg-[#008000]
-                            px-1
-                            text-[11px]
-                            font-bold
-                            text-white
-                          "
-                        >
-                          {activity.badge}
-                        </span>
-                      )}
-
-                      <ChevronRight
-                        size={20}
-                        className="text-[#9CA3AF]"
-                      />
-                    </div>
-                  </button>
-
-                  {/* Divider */}
-                  {index < activities.length - 1 && (
-                    <div className="mx-4 h-px bg-[#F3F4F6]" />
-                  )}
-                </React.Fragment>
-              );
-            })}
-          </section>
+          <p className="mt-1 break-words text-[14px] text-[#1F2937]">
+  {formatLocation(providerProfile?.serviceArea)}
+</p>
+      
         </div>
+
+        {/* Experience */}
+        <div>
+          <p className="text-[12px] text-[#9CA3AF]">
+            Years of Experience
+          </p>
+
+          <p className="mt-1 text-[14px] text-[#1F2937]">
+            {providerProfile?.yearsOfExperience != null
+              ? `${providerProfile.yearsOfExperience} ${
+                  Number(providerProfile.yearsOfExperience) === 1
+                    ? "year"
+                    : "years"
+                }`
+              : "Not specified"}
+          </p>
+        </div>
+
+        {/* Business description */}
+        <div>
+          <p className="text-[12px] text-[#9CA3AF]">
+            About Your Business
+          </p>
+
+          <p className="mt-1 whitespace-pre-wrap break-words text-[14px] leading-6 text-[#4B5563]">
+            {providerProfile?.about ||
+              "No business description added yet."}
+          </p>
+        </div>
+      </div>
+    )}
+  </section>
+)}
+
+        </div>
+
+        
 
         {/* =====================================================
             FIXED BOTTOM NAVIGATION

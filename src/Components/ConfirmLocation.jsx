@@ -1,15 +1,91 @@
 import React, { useState } from "react";
 import { ArrowLeft, MapPin } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function ConfirmLocation() {
   const navigate = useNavigate();
 
-  const [radius, setRadius] = useState("2 km");
+  const locationState = useLocation();
 
- const handleSaveLocation = () => {
-  console.log("Location saved");
-  navigate("/location-set");
+const selectedLocation = locationState.state?.location;
+  const [radius, setRadius] = useState("2");
+
+  const [savingLocation, setSavingLocation] = useState(false);
+
+
+const handleSaveLocation = async () => {
+  if (
+    !selectedLocation?.displayName ||
+    selectedLocation.latitude == null ||
+    selectedLocation.longitude == null
+  ) {
+    alert("Please select a valid location before continuing.");
+    return;
+  }
+
+  const user = JSON.parse(
+    localStorage.getItem("user") || "{}"
+  );
+
+  if (!["seeker", "provider"].includes(user.role)) {
+    navigate("/signin");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Your session has expired. Please sign in again.");
+    navigate("/signin");
+    return;
+  }
+
+  try {
+    setSavingLocation(true);
+
+    const response = await fetch(
+      "http://localhost:5000/api/users/location",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+       
+body: JSON.stringify({
+  realAddress: selectedLocation.displayName,
+  latitude: Number(selectedLocation.latitude),
+  longitude: Number(selectedLocation.longitude),
+  searchRadius: Number(radius),
+  city: selectedLocation.city || "",
+}),
+
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.message || "Unable to save your location."
+      );
+    }
+
+    navigate(
+      user.role === "seeker" ? "/location-set" : "/profile",
+      {
+        state: {
+          location: selectedLocation,
+          radius,
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Save location error:", error);
+    alert(error.message || "Unable to save your location.");
+  } finally {
+    setSavingLocation(false);
+  }
 };
 
   const handleChangeLocation = () => {
@@ -170,9 +246,9 @@ navigate("/enter-location");
     className="shrink-0 text-[#9CA3AF]"
   />
 
-  <span className="text-[16px] font-normal leading-[19px] text-[#1F2937]">
-    Ikeja, Lagos
-  </span>
+ <span className="text-[16px] font-normal leading-[19px] text-[#1F2937]">
+  {selectedLocation?.displayName || "No location selected"}
+</span>
 </div>
 
 
@@ -207,7 +283,7 @@ navigate("/enter-location");
     <button
       key={item}
       type="button"
-      onClick={() => setRadius(item)}
+      onClick={() => setRadius(item.replace(" km", ""))}
       className={`
         box-border
         flex
@@ -224,7 +300,7 @@ navigate("/enter-location");
         font-bold
         leading-[16px]
         ${
-          radius === item
+          radius === item.replace(" km", "")
             ? "border-[#008000] bg-[#008000] text-white"
             : "border-[#E5E7EB] bg-white text-[#6B7280]"
         }
@@ -254,6 +330,7 @@ navigate("/enter-location");
           <button
   type="button"
   onClick={handleSaveLocation}
+  disabled={savingLocation}
   className="
     absolute
     left-1/2
@@ -279,7 +356,7 @@ navigate("/enter-location");
     active:scale-[0.98]
   "
 >
-  Save Location
+  {savingLocation ? "Saving Location..." : "Save Location"}
 </button>
 
 

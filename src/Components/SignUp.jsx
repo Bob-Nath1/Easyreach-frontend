@@ -12,6 +12,19 @@ import {
   UserRound,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  GoogleLogin,
+  GoogleOAuthProvider,
+} from "@react-oauth/google";
+
+const isValidPassword = (password) => {
+  return (
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^A-Za-z0-9\s]/.test(password)
+  );
+};
 
 function SignUp() {
   const navigate = useNavigate();
@@ -20,6 +33,11 @@ function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
+  const [googleLoading, setGoogleLoading] = useState(false);
+const [pendingGoogleCredential, setPendingGoogleCredential] =
+  useState("");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -37,29 +55,165 @@ function SignUp() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!agreeTerms) {
-      alert("Please agree to the Terms of Service and Privacy Policy.");
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-
-    console.log("Sign Up Data:", formData);
-
-    // Connect your registration API here later
-
-    
-  };
-
-  const goToOTP = () => {
-  navigate("/otp");
+  const handleSocialSignup = (provider) => {
+  alert(
+    `${provider === "apple" ? "Apple" : "Facebook"} signup is not available yet. Please use Google or email signup.`
+  );
 };
+
+
+const handleGoogleSuccess = async (response) => {
+  if (!agreeTerms) {
+    alert("Please agree to the Terms of Service and Privacy Policy.");
+    return;
+  }
+
+  if (!response.credential) {
+    alert("Google sign-in did not return a credential. Please try again.");
+    return;
+  }
+
+  await submitGoogleCredential(response.credential);
+};
+
+const submitGoogleCredential = async (credential) => {
+  try {
+    setGoogleLoading(true);
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/auth/google`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          credential,
+          role: "seeker",
+          phone: formData.phone,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Google sign-in failed.");
+      return;
+    }
+
+    if (data.needsProfileCompletion) {
+      setPendingGoogleCredential(credential);
+
+      setFormData((prev) => ({
+        ...prev,
+        fullName: data.googleProfile.fullName || prev.fullName,
+        email: data.googleProfile.email || prev.email,
+      }));
+
+      alert(
+        "Your Google account was recognized. Please enter your phone number, then click Complete Google Signup."
+      );
+
+      return;
+    }
+
+    // We'll connect successful login to your existing
+    // sign-in storage and navigation logic next.
+if (!data.token || !data.user) {
+  alert("Authentication succeeded, but the server did not return your login details.");
+  return;
+}
+
+localStorage.setItem("token", data.token);
+localStorage.setItem("user", JSON.stringify(data.user));
+
+setPendingGoogleCredential("");
+
+if (data.user.role === "provider") {
+  navigate("/dashboardprov");
+} else {
+  navigate("/dashboard");
+}
+  } catch (error) {
+    console.error("Google authentication error:", error);
+    alert("Unable to connect to EasyReach. Please try again.");
+  } finally {
+    setGoogleLoading(false);
+  }
+};
+
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!agreeTerms) {
+    alert("Please agree to the Terms of Service and Privacy Policy.");
+    return;
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    if (!isValidPassword(formData.password)) {
+  alert(
+    "Password must contain at least 8 characters, " +
+    "one uppercase letter, one number, and one special character."
+  );
+  return;
+}
+
+if (formData.password !== formData.confirmPassword) {
+  alert("Passwords do not match.");
+  return;
+}
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/auth/signup`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          role: "seeker",
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Unable to create account.");
+      return;
+    }
+
+    console.log("Seeker signup successful:", data);
+
+    navigate("/otp", {
+      state: {
+        email: formData.email,
+      },
+    });
+  } catch (error) {
+    console.error("Signup error:", error);
+    alert("Unable to connect to the server. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center">
@@ -477,13 +631,13 @@ function SignUp() {
                 CONTINUE BUTTON
             ========================== */}
             <button
-            
-  type="button"
-  onClick={goToOTP}
-  className="w-full h-[52px] bg-[#008000] hover:bg-[#006b00] transition-colors rounded-full flex items-center justify-center text-white text-[14px] font-semibold"
+  type="submit"
+  disabled={loading}
+  className="w-full h-[52px] bg-[#008000] hover:bg-[#006b00] transition-colors rounded-full flex items-center justify-center text-white text-[14px] font-semibold disabled:opacity-60"
 >
-  Continue
+  {loading ? "Creating account..." : "Continue"}
 </button>
+
             {/* =========================
                 SIGN UP WITH
             ========================== */}
@@ -500,72 +654,73 @@ function SignUp() {
 
               {/* SOCIAL BUTTONS */}
               <div className="flex justify-center gap-4 mt-6">
-
-                {/* Apple */}
+ {/* Apple */}
                 <button
-                  type="button"
-                  className="
-                    w-8
-                    h-8
-                    rounded-full
-                    bg-white
-                    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
-                    flex
-                    items-center
-                    justify-center
-                  "
-                >
-                  <img
-            src="/Apple.png"
-            alt="EasyReach"
-            className="w-[27px] h-[32px] object-contain"
-          />
-                </button>
+  type="button"
+  onClick={() => handleSocialSignup("apple")}
+  aria-label="Sign up with Apple"
+  className="
+    w-8 h-8 rounded-full bg-white
+    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
+    flex items-center justify-center
+  "
+>
+  <img
+    src="/Apple.png"
+    alt="Apple"
+    className="w-[27px] h-[32px] object-contain"
+  />
+</button>
 
-                {/* Google */}
-                <button
-                  type="button"
-                  className="
-                    w-8
-                    h-8
-                    rounded-full
-                    bg-white
-                    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
-                    flex
-                    items-center
-                    justify-center
-                    font-bold
-                  "
-                >
-                  <img
-            src="/Google.png"
-            alt="EasyReach"
-            className="w-[27px] h-[32px] object-contain"
-          />
-                </button>
+               {/* Google */}
+                <div className="flex items-center justify-center">
+  <GoogleLogin
+    onSuccess={handleGoogleSuccess}
+    onError={() => {
+      alert("Google sign-in was cancelled or failed. Please try again.");
+    }}
+    text="signup_with"
+    shape="circle"
+    size="large"
+    theme="outline"
+  />
+</div>
+
 
                 {/* Facebook */}
                 <button
-                  type="button"
-                  className="
-                    w-8
-                    h-8
-                    rounded-full
-                    bg-white
-                    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
-                    flex
-                    items-center
-                    justify-center
-                  "
-                >
-                  <img
-            src="/Facebook.png"
-            alt="EasyReach"
-            className="w-[27px] h-[32px] object-contain"
-          />
-                </button>
+  type="button"
+  onClick={() => handleSocialSignup("facebook")}
+  aria-label="Sign up with Facebook"
+  className="
+    w-8 h-8 rounded-full bg-white
+    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
+    flex items-center justify-center
+  "
+>
+  <img
+    src="/Facebook.png"
+    alt="facebook"
+    className="w-[27px] h-[32px] object-contain"
+  />
+</button>
               </div>
             </div>
+
+            {pendingGoogleCredential && (
+  <button
+    type="button"
+    onClick={() =>
+      submitGoogleCredential(pendingGoogleCredential)
+    }
+    disabled={googleLoading || !formData.phone.trim()}
+    className="w-full h-[48px] mt-5 rounded-full bg-[#008000] text-white font-semibold disabled:opacity-50"
+  >
+    {googleLoading
+      ? "Please wait..."
+      : "Complete Google Signup"}
+  </button>
+)}
 
             {/* =========================
                 LOGIN LINK

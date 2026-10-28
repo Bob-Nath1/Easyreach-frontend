@@ -19,6 +19,7 @@ import {
   Trash2,
   ChevronRight,
 } from "lucide-react";
+import { logout } from "../utils/logout";
 import { useNavigate } from "react-router-dom";
 
 
@@ -193,12 +194,13 @@ const navigate = useNavigate();
             <div className="overflow-hidden rounded-[24px] bg-white">
               
               {/* Logout */}
-              <SettingsRow
-                title="Log Out"
-                Icon={LogOut}
-                titleClass="font-bold text-[#008000]"
-                showBorder
-              />
+             <SettingsRow
+  title="Log Out"
+  Icon={LogOut}
+  titleClass="font-bold text-[#008000]"
+  showBorder
+  onClick={() => logout(navigate)}
+/>
 
               {/* Delete Account */}
               <SettingsRow
@@ -236,13 +238,15 @@ function SettingsRow({
   titleClass = "",
   iconBoxClass = "bg-[#F0FDF4]",
   iconClass = "text-[#008000]",
+  onClick,
 }) {
   return (
     <div>
-      <button
-        type="button"
-        className="flex h-[72px] w-full items-center px-4 pt-4 text-left"
-      >
+   <button
+  type="button"
+  onClick={onClick}
+  className="flex h-[72px] w-full items-center px-4 pt-4 text-left"
+>
         {/* Icon + Title */}
         <div className="flex flex-1 items-center gap-3">
           

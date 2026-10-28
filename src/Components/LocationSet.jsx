@@ -1,20 +1,38 @@
 import React from "react";
 import { MapPin, CheckCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
 
 function LocationSet() {
-const navigate = useNavigate();
+  const navigate = useNavigate();
+  const locationState = useLocation();
 
-  const handleStartExploring = () => {
-    console.log("Start exploring");
-    navigate("/notification");
-  };
+  const selectedLocation = locationState.state?.location;
+
+  console.log("Selected location received:", selectedLocation);
+
+  const selectedRadius =
+    locationState.state?.radius || "5 km";
+
+    
+
+    if (!selectedLocation) {
+  navigate("/enter-location");
+  return null;
+}
+
+ 
+const handleStartExploring = () => {
+  navigate("/profile", {
+    state: {
+      location: selectedLocation,
+      radius: selectedRadius,
+    },
+  });
+};
 
   const handleChangeLocation = () => {
-    window.history.back();
+    navigate("/enter-location");
   };
-
   return (
     <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center overflow-hidden">
 
@@ -97,9 +115,9 @@ const navigate = useNavigate();
               className="text-[#008000]"
             />
 
-            <span className="text-[14px] font-bold italic leading-[17px] text-[#008000]">
-              Ikeja, Lagos
-            </span>
+           <span className="text-[14px] font-bold italic leading-[17px] text-[#008000]">
+  {selectedLocation.displayName}
+</span>
 
           </div>
 
@@ -110,8 +128,8 @@ const navigate = useNavigate();
             <div className="h-[20px] w-[20px]" />
 
             <span className="text-[14px] font-bold leading-[17px] text-[#1F2937]">
-              Searching within 5 km
-            </span>
+  Searching within {selectedRadius}
+</span>
 
           </div>
 
@@ -149,7 +167,9 @@ const navigate = useNavigate();
 
           {/* Start Exploring */}
 
-          <button
+          
+{/* Start Exploring */}
+<button
   type="button"
   onClick={handleStartExploring}
   className="
@@ -177,6 +197,7 @@ const navigate = useNavigate();
 >
   Start Exploring
 </button>
+
 
 
           {/* Change Location */}

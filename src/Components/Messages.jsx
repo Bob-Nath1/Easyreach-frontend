@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArrowLeft,
   MoreVertical,
@@ -10,124 +10,234 @@ import { useNavigate } from "react-router-dom";
 function Message() {
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState("All");
+  useEffect(() => {
+  window.scrollTo(0, 0);
+}, []);
 
-  const messages = [
-    {
-      name: "Timi Motors",
-      service: "Auto Repair Specialist",
-      message: "I can come to your location in 30 min",
-      time: "5m ago",
-      unread: 5,
-      online: true,
-    },
-    {
-      name: "Sarah Ahmed",
-      service: "Service Request",
-      message: "Thank you! When can you start the",
-      time: "12m ago",
-      unread: 1,
-      online: true,
-    },
-    {
-      name: "Adex Garage",
-      service: "Auto Repair",
-      message: "Your car is ready for pickup. Total c",
-      time: "1h ago",
-      unread: 1,
-      online: false,
-    },
-    {
-      name: "Ade Kitchen",
-      service: "Food Delivery",
-      message: "Your order is ready for pickup! Sho",
-      time: "1h ago",
-      unread: 1,
-      online: false,
-    },
-    {
-      name: "ChiChi Plumbing",
-      service: "Plumbing",
-      message: "I’ll be there tomorrow morning by",
-      time: "2h ago",
-      unread: 1,
-      online: true,
-    },
-  ];
+  const [activeView, setActiveView] = useState("All");
+  const [showMenu, setShowMenu] = useState(false);
 
-  const archivedMessages = [
-    {
-      name: "FastFood Delivery",
-      service: "Food Delivery",
-      message: "Your order has been delivered. Tha",
-      time: "3h ago",
-    },
-    {
-      name: "Michael’s Workshop",
-      service: "IT Services",
-      message: "Great I’ll bring my laptop repair tools",
-      time: "Yesterday",
-    },
-    {
-      name: "Emma’s Tailoring",
-      service: "Tailoring Services",
-      message: "Your cloth is ready",
-      time: "Yesterday",
-    },
-    {
-      name: "DevTech Solutions",
-      service: "IT Services",
-      message: "Perfect! See you on Monday",
-      time: "Yesterday",
-    },
-    {
-      name: "Sparkle Clean",
-      service: "Cleaning Services",
-      message: "Thank you for choosing us!",
-      time: "2 days ago",
-    },
-    {
-      name: "Bella Fashion",
-      service: "Tailoring",
-      message: "Thanks! I’ll bring the fabric tomorrow",
-      time: "Jan 15",
-    },
-  ];
+  const [conversations, setConversations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filters = ["All", "Service Requests", "Active", "Completed"];
+  const API_URL = "http://localhost:5000";
+
+  // ================= FETCH CONVERSATIONS =================
+  useEffect(() => {
+  let isMounted = true;
+
+  const fetchConversations = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      if (isMounted) {
+        setError("Authentication required.");
+        setLoading(false);
+      }
+      return;
+    }
+
+    try {
+      if (isMounted) {
+        setLoading(true);
+        setError("");
+      }
+
+      const response = await fetch(
+        `${API_URL}/api/messages`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to fetch conversations"
+        );
+      }
+
+      if (isMounted) {
+        setConversations(data.conversations || []);
+      }
+    } catch (error) {
+      console.error("Fetch conversations error:", error);
+
+      if (isMounted) {
+        setError(
+          error.message ||
+            "Unable to load your messages."
+        );
+      }
+    } finally {
+      if (isMounted) {
+        setLoading(false);
+      }
+    }
+  };
+
+  fetchConversations();
+
+  return () => {
+    isMounted = false;
+  };
+}, []);
+  // ================= FORMAT TIME =================
+  const formatMessageTime = (dateValue) => {
+    if (!dateValue) {
+      return "";
+    }
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return "";
+    }
+
+    const now = new Date();
+
+    const difference =
+      now.getTime() - date.getTime();
+
+    const minutes = Math.floor(
+      difference / (1000 * 60)
+    );
+
+    const hours = Math.floor(
+      difference / (1000 * 60 * 60)
+    );
+
+    const days = Math.floor(
+      difference / (1000 * 60 * 60 * 24)
+    );
+
+    if (minutes < 1) {
+      return "Just now";
+    }
+
+    if (minutes < 60) {
+      return `${minutes}m ago`;
+    }
+
+    if (hours < 24) {
+      return `${hours}h ago`;
+    }
+
+    if (days === 1) {
+      return "Yesterday";
+    }
+
+    if (days < 7) {
+      return `${days}d ago`;
+    }
+
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  // ================= SPLIT CONVERSATIONS =================
+  const activeMessages = conversations.filter(
+    (conversation) =>
+      !conversation.is_archived
+  );
+
+  const archivedMessages = conversations.filter(
+    (conversation) =>
+      conversation.is_archived
+  );
+
+  // ================= UNREAD COUNT =================
+  const unreadMessages = activeMessages.filter(
+    (conversation) =>
+      Number(conversation.unread_count || 0) > 0
+  );
+
+  const totalUnread = unreadMessages.reduce(
+    (total, conversation) =>
+      total +
+      Number(conversation.unread_count || 0),
+    0
+  );
+
+  // ================= OPEN CONVERSATION =================
+  const handleOpenConversation = (
+    conversation
+  ) => {
+    navigate("/chatspace", {
+      state: {
+        conversationId: conversation.id,
+        participant: {
+          id: conversation.other_user_id,
+          name: conversation.other_user_name,
+          image: conversation.other_user_image,
+          role: conversation.other_user_role,
+        },
+      },
+    });
+  };
+
+  // ================= CHANGE VIEW =================
+  const handleViewChange = (view) => {
+    setActiveView(view);
+    setShowMenu(false);
+  };
+
+  // ================= DISPLAY ACTIVE LIST =================
+ const displayedMessages = conversations.filter((conversation) => {
+  if (activeView === "Unread") {
+    return !conversation.is_archived && Number(conversation.unread_count) > 0;
+  }
+
+  if (activeView === "Archived") {
+    return conversation.is_archived;
+  }
+
+  return !conversation.is_archived;
+});
 
   return (
-   <div
-  className="
-    relative
-    mx-auto
-    h-[926px]
-    w-full
-    sm:w-[640px]
-    md:w-[768px]
-    lg:w-[1024px]
-    xl:w-[1280px]
-    2xl:w-[1536px]
-    md:h-[1026px]
-    lg:h-[1200px]
-    xl:h-[1200px]
-    2xl:h-[1200px]
-    overflow-hidden
-    rounded-[35px]
-    bg-white
-    font-[Inter,sans-serif]
-  "
->
+    <div
+      className="
+        relative
+        mx-auto
+        h-[926px]
+        w-full
+        sm:w-[640px]
+        md:w-[768px]
+        lg:w-[1024px]
+        xl:w-[1280px]
+        2xl:w-[1536px]
+        md:h-[1026px]
+        lg:h-[1200px]
+        xl:h-[1200px]
+        2xl:h-[1200px]
+        overflow-hidden
+        rounded-[35px]
+        bg-white
+        font-[Inter,sans-serif]
+      "
+    >
 
-      
       {/* ================= HEADER ================= */}
       <div className="absolute left-6 right-6 top-[64px] flex h-10 items-center justify-between">
         <div className="flex items-center gap-6">
           <button
-            onClick={() => navigate("/dashboard")}
+            type="button"
+            onClick={() => navigate(-1)}
             className="flex h-6 w-6 items-center justify-center"
           >
-            <ArrowLeft size={24} strokeWidth={2} className="text-gray-800" />
+            <ArrowLeft
+              size={24}
+              strokeWidth={2}
+              className="text-gray-800"
+            />
           </button>
 
           <h1 className="text-[20px] font-bold leading-6 text-gray-800">
@@ -135,224 +245,285 @@ function Message() {
           </h1>
         </div>
 
-        <button className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50">
-          <MoreVertical size={18} className="text-gray-700" />
-        </button>
+        {/* ================= MORE MENU ================= */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() =>
+              setShowMenu((previous) => !previous)
+            }
+            aria-label="Message options"
+            aria-expanded={showMenu}
+            className="
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-lg
+              bg-gray-50
+            "
+          >
+            <MoreVertical
+              size={18}
+              className="text-gray-700"
+            />
+          </button>
+
+          {showMenu && (
+            <div
+              className="
+                absolute
+                right-0
+                top-[46px]
+                z-50
+                w-[150px]
+                overflow-hidden
+                rounded-lg
+                border
+                border-gray-200
+                bg-white
+                shadow-lg
+              "
+            >
+            <button
+  type="button"
+  onClick={() =>
+    handleViewChange("Unread")
+  }
+  className={`
+    flex
+    w-full
+    items-center
+    justify-between
+    px-4
+    py-3
+    text-left
+    text-[13px]
+    font-medium
+    ${
+      activeView === "Unread"
+        ? "bg-green-50 text-[#008000]"
+        : "text-gray-700"
+    }
+  `}
+>
+                <span>Unread</span>
+
+                  {totalUnread > 0 && (
+    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#008000] px-1 text-[10px] font-bold text-white">
+      {totalUnread > 99
+        ? "99+"
+        : totalUnread}
+    </span>
+  )}
+</button>
+
+<button
+  type="button"
+  onClick={() =>
+    handleViewChange("Archived")
+  }
+  className={`
+    w-full
+    border-t
+    border-gray-100
+    px-4
+    py-3
+    text-left
+    text-[13px]
+    font-medium
+    ${
+      activeView === "Archived"
+        ? "bg-green-50 text-[#008000]"
+        : "text-gray-700"
+    }
+  `}
+>
+  Archived
+</button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  handleViewChange("All")
+                }
+                className={`
+                  w-full
+                  border-t
+                  border-gray-100
+                  px-4
+                  py-3
+                  text-left
+                  text-[13px]
+                  font-medium
+                  ${
+                    activeView === "All"
+                      ? "text-[#008000]"
+                      : "text-gray-700"
+                  }
+                `}
+              >
+                All
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
-{/* ================= TOP TABS ================= */}
-<div
-  className="
-    absolute
-    left-1/2
-    top-[117px]
-    h-[49px]
-    w-[calc(100%-48px)]
-    -translate-x-1/2
-    border
-    border-gray-200
-    bg-white
-  "
->
-
-  {["All", "Unread", "Archived"].map((tab) => (
-    <button
-      key={tab}
-      onClick={() => {
-        if (tab === "Unread") {
-          navigate("/unread");
-        } else if (tab === "Archived") {
-          navigate("/archive");
-        } else {
-          setActiveTab("All");
-        }
-      }}
-      className="relative flex h-full w-1/3 flex-col items-center justify-center"
-    >
-      <span
-        className={`text-center text-[14px] font-semibold ${
-          activeTab === tab
-            ? "text-[#008000]"
-            : "text-gray-500"
-        }`}
+      {/* ================= TOP TAB ================= */}
+      <div
+        className="
+          absolute
+          left-1/2
+          top-[117px]
+          flex
+          h-[49px]
+          w-[calc(100%-48px)]
+          -translate-x-1/2
+          items-center
+          justify-center
+          border
+          border-gray-200
+          bg-white
+        "
       >
-        {tab}
-      </span>
+       <span className="text-[14px] font-semibold text-[#008000]">
+  All
+</span>
 
-      {/* Unread badge */}
-      {tab === "Unread" && (
-        <span className="absolute right-[12px] top-[12px] flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#008000] text-[11px] font-bold italic text-white">
-          5
-        </span>
-      )}
-    </button>
-  ))}
-
-</div>
-
-      {/* ================= FILTERS ================= */}
-   <div
-  className="
-    absolute
-    left-1/2
-    top-[165px]
-    h-[69px]
-    w-[calc(100%-48px)]
-    -translate-x-1/2
-    border
-    border-gray-200
-    bg-white
-  "
->
-        <div className="flex h-full items-center gap-2 overflow-x-auto px-6 scrollbar-hide">
-
-          {filters.map((filter, index) => (
-            <button
-              key={filter}
-              className={`h-[37px] shrink-0 rounded-full px-4 text-[14px] font-semibold ${
-                index === 0
-                  ? "border border-[#008000] bg-emerald-100 text-[#008000]"
-                  : "border border-gray-100 bg-gray-100 text-gray-500"
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
+        {/* Unread badge */}
+        {activeView === "All" &&
+          totalUnread > 0 && (
+            <span className="ml-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#008000] px-1 text-[10px] font-bold italic text-white">
+              {totalUnread > 99
+                ? "99+"
+                : totalUnread}
+            </span>
+          )}
       </div>
 
       {/* ================= MESSAGE LIST ================= */}
       <div
-  className="
-    absolute
-    left-6
-    right-6
-    top-[258px]
-    bottom-[24px]
-    overflow-y-auto
-    pr-1
-    scrollbar-thin
-    scrollbar-thumb-gray-300
-  "
->
+        className="
+          absolute
+          left-6
+          right-6
+          top-[190px]
+          bottom-[24px]
+          overflow-y-auto
+          pr-1
+          scrollbar-thin
+          scrollbar-thumb-gray-300
+        "
+      >
 
-        {/* Active Messages */}
-        <div className="flex flex-col gap-1">
+        {/* ================= LOADING ================= */}
+        {loading && (
+          <div className="flex min-h-[200px] items-center justify-center">
+            <p className="text-[14px] font-medium text-gray-500">
+              Loading messages...
+            </p>
+          </div>
+        )}
 
-          {messages.map((item, index) => (
-            <button
-              key={index}
-              className="flex min-h-[94px] w-full items-center gap-[31px] rounded-lg bg-green-50 p-4 text-left"
-            >
-              {/* Left content */}
-              <div className="flex min-w-0 flex-1 items-center gap-[10px]">
+        {/* ================= ERROR ================= */}
+        {!loading && error && (
+          <div className="flex min-h-[200px] items-center justify-center px-6 text-center">
+            <p className="text-[14px] font-medium text-red-500">
+              {error}
+            </p>
+          </div>
+        )}
 
-                {/* Avatar */}
-                <div className="relative h-[50px] w-[50px] shrink-0 overflow-hidden rounded-full bg-white">
-                  <div className="flex h-full w-full items-center justify-center bg-gray-200 text-lg font-bold text-gray-500">
-                    {item.name.charAt(0)}
-                  </div>
+        {/* ================= CONTENT ================= */}
+        {!loading && !error && (
+          <div className="flex flex-col gap-1">
 
-                  {/* Online status */}
-                  <span
-                    className={`absolute bottom-0 right-0 h-[14px] w-[14px] rounded-full border-[1.6px] border-white ${
-                      item.online
-                        ? "bg-[#008000]"
-                        : "bg-gray-400"
-                    }`}
-                  />
-                </div>
+            {displayedMessages.length === 0 ? (
+ <div className="flex min-h-[200px] items-center justify-center">
+    <p className="text-[13px] text-gray-400">
+      {activeView === "Unread"
+        ? "No unread messages"
+        : activeView === "Archived"
+        ? "No archived messages"
+        : "No messages"}
+    </p>
+  </div>
+) : (
+  displayedMessages.map((conversation) => (
+    <button
+      key={conversation.id}
+      type="button"
+      onClick={() =>
+        navigate("/chatspace", {
+          state: {
+            conversationId: conversation.id,
+            participant: {
+              id: conversation.other_user_id,
+              name: conversation.other_user_name,
+              image: conversation.other_user_image,
+              role: conversation.other_user_role,
+            },
+          },
+        })
+      }
+      className="flex w-full items-center gap-3 border-b border-gray-100 py-4 text-left"
+    >
+      <img
+        src={
+          conversation.other_user_image ||
+          "/default-avatar.png"
+        }
+        alt={conversation.other_user_name}
+        className="h-12 w-12 rounded-full object-cover"
+      />
 
-                {/* Text */}
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[14px] font-semibold leading-[17px] text-black">
-                    {item.name}
-                  </p>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between">
+          <h3 className="truncate text-[14px] font-semibold text-gray-900">
+            {conversation.other_user_name}
+          </h3>
 
-                  <p className="truncate text-[12px] leading-[15px] text-black">
-                    {item.service}
-                  </p>
-
-                  <p className="truncate text-[12px] font-semibold italic leading-[15px] text-black">
-                    {item.message}
-                  </p>
-                </div>
-              </div>
-
-              {/* Right */}
-              <div className="flex w-[44px] shrink-0 flex-col items-end gap-[27px]">
-                <span className="whitespace-nowrap text-[12px] font-semibold italic text-black">
-                  {item.time}
-                </span>
-
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#008000] text-[11px] font-bold italic text-white">
-                  {item.unread}
-                </span>
-              </div>
-            </button>
-          ))}
-
-          {/* ================= ARCHIVED TITLE ================= */}
-          <h2 className="mt-3 w-full text-[14px] font-bold leading-[17px] text-black">
-            Archived
-          </h2>
-
-          {/* ================= ARCHIVED MESSAGES ================= */}
-          {archivedMessages.map((item, index) => (
-            <button
-             onClick={() => navigate("/archive")}
-              key={index}
-              className="flex min-h-[87px] w-full items-center gap-[31px] rounded-lg bg-gray-50 p-4 text-left"
-            >
-              {/* Left content */}
-              <div className="flex min-w-0 flex-1 items-center gap-[10px]">
-
-                {/* Avatar */}
-                <div className="relative h-[50px] w-[50px] shrink-0 overflow-hidden rounded-full bg-white">
-                  <div className="flex h-full w-full items-center justify-center bg-gray-200 text-lg font-bold text-gray-500">
-                    {item.name.charAt(0)}
-                  </div>
-
-                  <span className="absolute bottom-0 right-0 h-[14px] w-[14px] rounded-full border-[1.6px] border-white bg-gray-400" />
-                </div>
-
-                {/* Text */}
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[14px] font-semibold leading-[17px] text-gray-800">
-                    {item.name}
-                  </p>
-
-                  <p className="truncate text-[12px] leading-[15px] text-gray-500">
-                    {item.service}
-                  </p>
-
-                  <p className="truncate text-[12px] font-semibold italic leading-[15px] text-gray-500">
-                    {item.message}
-                  </p>
-                </div>
-              </div>
-
-              {/* Right */}
-              <div className="flex w-[50px] shrink-0 flex-col items-end gap-[27px]">
-                <span className="whitespace-nowrap text-[12px] font-semibold italic text-gray-400">
-                  {item.time}
-                </span>
-
-                <Check
-                  size={12}
-                  strokeWidth={3}
-                  className="text-[#008000]"
-                />
-              </div>
-            </button>
-          ))}
+          {conversation.last_message_time && (
+            <span className="ml-2 text-[10px] text-gray-400">
+              {new Date(
+                conversation.last_message_time
+              ).toLocaleDateString()}
+            </span>
+          )}
         </div>
+
+        <p className="mt-1 truncate text-[12px] text-gray-500">
+          {conversation.last_message || "No messages yet"}
+        </p>
+      </div>
+
+      {Number(conversation.unread_count) > 0 && (
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#008000] px-1.5 text-[10px] font-bold text-white">
+          {conversation.unread_count}
+        </span>
+      )}
+    </button>
+  ))
+)}
+
+            
+            {/* ================= NO ACTIVE MESSAGES ================= */}
+            
+
+            {/* ================= ARCHIVED SECTION ================= */}
+            
+            {/* ================= ARCHIVED VIEW ================= */}
+            
+          </div>
+        )}
       </div>
 
       {/* ================= BOTTOM IPHONE HANDLE ================= */}
       <div className="absolute bottom-0 left-0 z-50 flex h-6 w-full items-center justify-center bg-white">
-  <div className="h-1 w-[108px] rounded-full bg-gray-800" />
-</div>
+        <div className="h-1 w-[108px] rounded-full bg-gray-800" />
+      </div>
 
     </div>
   );

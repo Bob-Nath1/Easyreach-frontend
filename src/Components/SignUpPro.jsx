@@ -13,15 +13,308 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-function SignUpPro() {
-  const navigate = useNavigate();
+const occupationCatalogue = {
+  "Home Cleaning & Domestic Services": [
+    "House Cleaner",
+    "Deep Cleaning Specialist",
+    "Laundry Attendant",
+    "Ironing Service Provider",
+    "Housekeeper",
+    "Other",
+  ],
+  "Plumbing & Water Services": [
+    "Plumber",
+    "Plumbing Technician",
+    "Pipe Fitter",
+    "Water Pump Technician",
+    "Drainage Technician",
+    "Other",
+  ],
+  "Electrical & Power Services": [
+    "Electrician",
+    "Electrical Technician",
+    "Generator Technician",
+    "Inverter Technician",
+    "Solar Installation Technician",
+    "Other",
+  ],
+  "Construction & Building Services": [
+    "Builder",
+    "Mason",
+    "Bricklayer",
+    "Construction Worker",
+    "Site Supervisor",
+    "Other",
+  ],
+  "Painting & Wall Decoration": [
+    "House Painter",
+    "Spray Painter",
+    "Wall Decorator",
+    "Wallpaper Installer",
+    "Other",
+  ],
+  "Carpentry, Furniture & Interior Design": [
+    "Carpenter",
+    "Furniture Maker",
+    "Furniture Repairer",
+    "Interior Designer",
+    "Cabinet Maker",
+    "Other",
+  ],
+  "Automobile & Vehicle Repair": [
+    "Auto Mechanic",
+    "Auto Electrician",
+    "Motorcycle Mechanic",
+    "Car Diagnostic Technician",
+    "Other",
+  ],
+  "Transport, Delivery & Moving": [
+    "Driver",
+    "Delivery Rider",
+    "Courier",
+    "Moving Service Provider",
+    "Other",
+  ],
+  "Beauty, Hair & Grooming": [
+    "Hairdresser",
+    "Barber",
+    "Makeup Artist",
+    "Nail Technician",
+    "Lash Technician",
+    "Other",
+  ],
+  "Fashion, Tailoring & Clothing": [
+    "Tailor",
+    "Fashion Designer",
+    "Clothing Alteration Specialist",
+    "Shoe Maker",
+    "Other",
+  ],
+  "Healthcare & Medical Services": [
+    "Nurse",
+    "Physiotherapist",
+    "Care Assistant",
+    "Medical Laboratory Technician",
+    "Other",
+  ],
+  "Education, Tutoring & Training": [
+    "Private Tutor",
+    "Language Teacher",
+    "Music Teacher",
+    "Computer Instructor",
+    "Other",
+  ],
+  "Information Technology & Software": [
+    "Web Developer",
+    "Mobile App Developer",
+    "Software Engineer",
+    "IT Support Technician",
+    "Computer Repair Technician",
+    "Network Technician",
+    "Other",
+  ],
+  "Graphic Design & Creative Services": [
+    "Graphic Designer",
+    "UI/UX Designer",
+    "Photographer",
+    "Video Editor",
+    "Illustrator",
+    "Other",
+  ],
+  "Catering, Cooking & Food Services": [
+    "Chef",
+    "Caterer",
+    "Baker",
+    "Pastry Chef",
+    "Food Vendor",
+    "Other",
+  ],
+  "Agriculture, Farming & Gardening": [
+    "Farmer",
+    "Gardener",
+    "Landscaper",
+    "Irrigation Technician",
+    "Other",
+  ],
+  "Security & Safety Services": [
+    "Security Guard",
+    "Security Systems Installer",
+    "CCTV Technician",
+    "Safety Officer",
+    "Other",
+  ],
+  "Property & Real Estate": [
+    "Real Estate Agent",
+    "Property Manager",
+    "Property Inspector",
+    "Other",
+  ],
+  "Repairs, Installation & Equipment Rental": [
+    "Appliance Repair Technician",
+    "Washing Machine Repairer",
+    "Refrigerator Repairer",
+    "Equipment Installer",
+    "Equipment Rental Provider",
+    "Other",
+  ],
+};
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [accepted, setAccepted] = useState(false);
+const isValidPassword = (password) => {
+  return (
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^A-Za-z0-9\s]/.test(password)
+  );
+};
+
+function SignUpPro() {
+
+  const navigate = useNavigate();
 
   const goToPath = () => {
     navigate("/path");
   };
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [accepted, setAccepted] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+const [formData, setFormData] = useState({
+  fullName: "",
+  email: "",
+  phone: "",
+  password: "",
+  confirmPassword: "",
+});
+
+const [serviceCategory, setServiceCategory] = useState("");
+const [occupationSearch, setOccupationSearch] = useState("");
+const [selectedOccupation, setSelectedOccupation] = useState("");
+const [customOccupation, setCustomOccupation] = useState("");
+const [showOccupationOptions, setShowOccupationOptions] = useState(false);
+
+const occupations = serviceCategory
+  ? occupationCatalogue[serviceCategory] || []
+  : [];
+
+const filteredOccupations = occupations.filter((occupation) =>
+  occupation.toLowerCase().includes(
+    occupationSearch.trim().toLowerCase()
+  )
+);
+
+const isCustomOccupation = selectedOccupation === "Other";
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+
+const handleSocialSignup = (provider) => {
+  alert(
+    `${provider.charAt(0).toUpperCase() + provider.slice(1)} signup will be available once authentication is configured.`
+  );
+};
+
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!accepted) {
+    alert("Please agree to the Terms of Service and Privacy Policy.");
+    return;
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  if (!serviceCategory) {
+  alert("Please select your service category.");
+  return;
+}
+
+const finalOccupation =
+  selectedOccupation === "Other"
+    ? customOccupation.trim()
+    : selectedOccupation || occupationSearch.trim();
+
+if (!finalOccupation) {
+  alert("Please select or enter your occupation.");
+  return;
+}
+
+if (finalOccupation.length > 100) {
+  alert("Your occupation must not exceed 100 characters.");
+  return;
+}
+
+  try {
+    setLoading(true);
+
+    if (!isValidPassword(formData.password)) {
+  alert(
+    "Password must contain at least 8 characters, " +
+    "one uppercase letter, one number, and one special character."
+  );
+  return;
+}
+
+if (formData.password !== formData.confirmPassword) {
+  alert("Passwords do not match.");
+  return;
+}
+
+    const response = await fetch(
+      "http://localhost:5000/api/auth/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          serviceCategory,
+          occupation: finalOccupation,
+          role: "provider",
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Something went wrong during signup.");
+      return;
+    }
+
+    console.log("Provider signup successful:", data);
+
+    navigate("/otp", {
+      state: {
+        email: formData.email,
+      },
+    });
+  } catch (error) {
+    console.error("Provider signup error:", error);
+
+    alert(
+      "Unable to connect to the server. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   const goToOTP = () => {
   navigate("/otp");
@@ -111,7 +404,10 @@ function SignUpPro() {
   "
 >
 
-            <form className="flex flex-col gap-6">
+            <form
+  onSubmit={handleSubmit}
+  className="flex flex-col gap-6"
+>
 
               {/* Full Name */}
               <div>
@@ -125,9 +421,12 @@ function SignUpPro() {
                     className="absolute left-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
                   />
 
-                  <input
-                    type="text"
-                    placeholder="Enter your full name"
+                 <input
+  type="text"
+  name="fullName"
+  value={formData.fullName}
+  onChange={handleChange}
+  placeholder="Enter your full name"
                     className="w-full h-full pl-8 pr-2 text-[12px] font-bold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
                   />
                 </div>
@@ -146,8 +445,11 @@ function SignUpPro() {
                   />
 
                   <input
-                    type="email"
-                    placeholder="your.email@gmail.com"
+  type="email"
+  name="email"
+  value={formData.email}
+  onChange={handleChange}
+  placeholder="your.email@gmail.com"
                     className="w-full h-full pl-8 pr-2 text-[12px] font-bold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
                   />
                 </div>
@@ -178,13 +480,164 @@ function SignUpPro() {
                     />
 
                     <input
-                      type="tel"
-                      placeholder="705 085 2180"
+  type="tel"
+  name="phone"
+  value={formData.phone}
+  onChange={handleChange}
+  placeholder="705 085 2180"
                       className="w-full h-full pl-8 pr-2 text-[12px] font-bold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
                     />
                   </div>
                 </div>
               </div>
+
+              {/* Service Category */}
+<div>
+  <label
+    htmlFor="serviceCategory"
+    className="mb-2 block text-[14px] font-bold text-[#008000]"
+  >
+    Service Category
+  </label>
+
+  <div className="relative border-b border-[#9CA3AF]">
+    <select
+      id="serviceCategory"
+      value={serviceCategory}
+      onChange={(e) => {
+        setServiceCategory(e.target.value);
+        setOccupationSearch("");
+        setSelectedOccupation("");
+        setCustomOccupation("");
+        setShowOccupationOptions(false);
+      }}
+      required
+      className="h-[40px] w-full appearance-none bg-white pr-8 text-[12px] font-semibold text-gray-700 outline-none"
+    >
+      <option value="">Select your service category</option>
+
+      {Object.keys(occupationCatalogue).map((category) => (
+        <option key={category} value={category}>
+          {category}
+        </option>
+      ))}
+    </select>
+
+    <ChevronDown
+      size={18}
+      className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
+    />
+  </div>
+</div>
+
+{/* Occupation */}
+<div>
+  <label
+    htmlFor="occupationSearch"
+    className="mb-2 block text-[14px] font-bold text-[#008000]"
+  >
+    Occupation
+  </label>
+
+  <div className="relative">
+    <input
+      id="occupationSearch"
+      type="text"
+      value={occupationSearch}
+      onChange={(e) => {
+        setOccupationSearch(e.target.value);
+        setSelectedOccupation("");
+        setCustomOccupation("");
+        setShowOccupationOptions(true);
+      }}
+      onFocus={() => setShowOccupationOptions(true)}
+      onBlur={() => {
+        setTimeout(() => setShowOccupationOptions(false), 150);
+      }}
+      disabled={!serviceCategory}
+      placeholder={
+        serviceCategory
+          ? "Search your occupation"
+          : "Select a category first"
+      }
+      autoComplete="off"
+      required={!isCustomOccupation}
+      className="h-[40px] w-full border-b border-[#9CA3AF] bg-white pr-8 text-[12px] font-semibold text-gray-700 outline-none placeholder:font-normal placeholder:text-[#9CA3AF] disabled:bg-gray-50"
+    />
+
+    <UserRound
+      size={18}
+      className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
+    />
+
+    {showOccupationOptions && serviceCategory && (
+      <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-[190px] overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+        {filteredOccupations
+          .filter((occupation) => occupation !== "Other")
+          .map((occupation) => (
+            <button
+              key={occupation}
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                setSelectedOccupation(occupation);
+                setOccupationSearch(occupation);
+                setCustomOccupation("");
+                setShowOccupationOptions(false);
+              }}
+              className="block w-full px-3 py-3 text-left text-[12px] text-gray-700 hover:bg-green-50"
+            >
+              {occupation}
+            </button>
+          ))}
+
+        <button
+          type="button"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => {
+            setSelectedOccupation("Other");
+            setCustomOccupation(
+              occupationSearch.trim() === "Other"
+                ? ""
+                : occupationSearch.trim()
+            );
+            setOccupationSearch(
+              occupationSearch.trim() === "Other"
+                ? ""
+                : occupationSearch.trim()
+            );
+            setShowOccupationOptions(false);
+          }}
+          className="block w-full border-t border-gray-100 px-3 py-3 text-left text-[12px] font-semibold text-[#008000] hover:bg-green-50"
+        >
+          + Enter my own occupation
+        </button>
+      </div>
+    )}
+  </div>
+
+  {isCustomOccupation && (
+    <div className="mt-3">
+      <label
+        htmlFor="customOccupation"
+        className="mb-2 block text-[12px] font-semibold text-gray-600"
+      >
+        Enter your occupation
+      </label>
+
+      <input
+        id="customOccupation"
+        type="text"
+        value={customOccupation}
+        onChange={(e) => setCustomOccupation(e.target.value)}
+        maxLength={100}
+        required
+        placeholder="Enter your job title"
+        className="h-[40px] w-full border-b border-[#9CA3AF] text-[12px] font-semibold text-gray-700 outline-none placeholder:font-normal placeholder:text-[#9CA3AF]"
+      />
+    </div>
+  )}
+</div>
 
               {/* Password */}
               <div>
@@ -200,8 +653,11 @@ function SignUpPro() {
                   />
 
                   <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+  type={showPassword ? "text" : "password"}
+  name="password"
+  value={formData.password}
+  onChange={handleChange}
+  placeholder="Enter your password"
                     className="w-full h-full pl-8 pr-10 text-[12px] font-bold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
                   />
 
@@ -259,11 +715,14 @@ function SignUpPro() {
                     className="absolute left-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
                   />
 
-                  <input
-                    type="password"
-                    placeholder="Enter your password"
-                    className="w-full h-full pl-8 pr-10 text-[12px] font-bold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
-                  />
+       <input
+  type="password"
+  name="confirmPassword"
+  value={formData.confirmPassword}
+  onChange={handleChange}
+  placeholder="Enter your password"
+  className="w-full h-full pl-8 pr-10 text-[12px] font-bold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
+/>
 
                   <Eye
                     size={18}
@@ -311,11 +770,11 @@ function SignUpPro() {
 
               {/* Continue */}
              <button
-  type="button"
-  onClick={goToOTP}
-  className="w-full h-[52px] bg-[#008000] hover:bg-[#006b00] transition-colors rounded-full flex items-center justify-center text-white text-[14px] font-semibold"
+  type="submit"
+  disabled={loading}
+  className="w-full h-[52px] bg-[#008000] hover:bg-[#006b00] transition-colors rounded-full flex items-center justify-center text-white text-[14px] font-semibold disabled:opacity-60"
 >
-  Continue
+  {loading ? "Creating account..." : "Continue"}
 </button>
 
               {/* Sign up with */}
@@ -331,41 +790,70 @@ function SignUpPro() {
                   <div className="w-[60px] h-px bg-gray-300" />
                 </div>
 
-                {/* Social icons */}
-                <div className="flex justify-center items-center gap-4 mt-6">
+                {/* =========================
+                SIGN UP WITH
+            ========================== */}
+            <div className="mt-6">
+              
 
-                  {/* Facebook */}
-                  <button
-                    type="button"
-                    className="w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center"
-                  >
-                    <span className="text-[#1877F2] text-lg font-bold">
-                      f
-                    </span>
-                  </button>
+              {/* SOCIAL BUTTONS */}
+              <div className="flex justify-center gap-4 mt-6">
 
-                  {/* Google */}
-                  <button
-                    type="button"
-                    className="w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center"
-                  >
-                    <span className="text-[17px] font-bold">
-                      <span className="text-[#4285F4]">G</span>
-                    </span>
-                  </button>
+                {/* Apple */}
+                <button
+  type="button"
+  onClick={() => handleSocialSignup("apple")}
+  aria-label="Sign up with Apple"
+  className="
+    w-8 h-8 rounded-full bg-white
+    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
+    flex items-center justify-center
+  "
+>
+  <img
+    src="/Apple.png"
+    alt="Apple"
+    className="w-[27px] h-[32px] object-contain"
+  />
+</button>
 
-                  {/* Apple */}
-                  <button
-                    type="button"
-                    className="w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center"
-                  >
-                    <span className="text-black text-lg">
-                      
-                    </span>
-                  </button>
+                {/* Google */}
+                <button
+  type="button"
+  onClick={() => handleSocialSignup("google")}
+  aria-label="Sign up with Google"
+  className="
+    w-8 h-8 rounded-full bg-white
+    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
+    flex items-center justify-center
+  "
+>
+  <img
+    src="/Google.png"
+    alt="Google"
+    className="w-[27px] h-[32px] object-contain"
+  />
+</button>
 
-                </div>
+                {/* Facebook */}
+                <button
+  type="button"
+  onClick={() => handleSocialSignup("facebook")}
+  aria-label="Sign up with Facebook"
+  className="
+    w-8 h-8 rounded-full bg-white
+    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
+    flex items-center justify-center
+  "
+>
+  <img
+    src="/Facebook.png"
+    alt="facebook"
+    className="w-[27px] h-[32px] object-contain"
+  />
+</button>
               </div>
+            </div>              </div>
 
               {/* Already have account */}
               <div className="text-right pb-6">

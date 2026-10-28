@@ -1,14 +1,18 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function OTP() {
   const navigate = useNavigate();
+const location = useLocation();
+
+const email = location.state?.email;
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(45);
-
+  const [loading, setLoading] = useState(false);
+  
   const inputRefs = useRef([]);
 
   // =========================
@@ -45,6 +49,12 @@ function OTP() {
     }
   };
 
+  useEffect(() => {
+  if (!email) {
+    navigate("/signup", { replace: true });
+  }
+}, [email, navigate]);
+
   // =========================
   // RESEND TIMER
   // =========================
@@ -61,21 +71,52 @@ function OTP() {
   // =========================
   // RESEND OTP
   // =========================
-  const handleResend = () => {
-    if (timeLeft > 0) return;
+  const handleResend = async () => {
+  if (timeLeft > 0) return;
+
+  if (!email) {
+    alert("Email information is missing. Please go back and sign up again.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/auth/resend-otp",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Unable to resend OTP.");
+      return;
+    }
+
+    
 
     setOtp(["", "", "", "", "", ""]);
     setTimeLeft(45);
 
     inputRefs.current[0]?.focus();
 
-    console.log("OTP resent");
-  };
-
+    alert("A new OTP has been sent.");
+  } catch (error) {
+    console.error("Resend OTP error:", error);
+    alert("Unable to connect to the server. Please try again.");
+  }
+};
 // =========================
 // VERIFY OTP
 // =========================
-const handleVerify = (e) => {
+const handleVerify = async (e) => {
   e.preventDefault();
 
   const code = otp.join("");
@@ -85,12 +126,65 @@ const handleVerify = (e) => {
     return;
   }
 
-  console.log("OTP:", code);
+  if (!email) {
+    alert("Email information is missing. Please go back and sign up again.");
+    return;
+  }
 
-  // OTP is valid, go to Location page
+  try {
+    setLoading(true);
+
+    const response = await fetch(
+      "http://localhost:5000/api/auth/verify-otp",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          otp: code,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Invalid OTP.");
+      return;
+    }
+
+    console.log("OTP verification successful:", data);
+
+    
+
+   // Save verified user information
+if (!data.token) {
+  alert("No authentication token was returned.");
+  return;
+}
+
+localStorage.setItem("token", data.token);
+localStorage.setItem("user", JSON.stringify(data.user));
+
+// Both roles use the same location screens after OTP verification
+if (
+  data.user.role === "seeker" ||
+  data.user.role === "provider"
+) {
   navigate("/location");
+} else {
+  alert(
+    "Your account role could not be identified. Please contact support."
+  );
+}  } catch (error) {
+    console.error("OTP verification error:", error);
+    alert("Unable to connect to the server. Please try again.");
+  } finally {
+    setLoading(false);
+  }
 };
-
 
   return (
     <div
@@ -121,13 +215,13 @@ const handleVerify = (e) => {
       <div className="absolute top-[70px] left-0 w-full h-[30px]">
 
         <button
-          type="button"
-          onClick={goBack}
-          className="absolute left-6 top-0 w-6 h-6 flex items-center justify-center text-[#1F2937]"
-          aria-label="Go back"
-        >
-          <ArrowLeft size={24} strokeWidth={2} />
-        </button>
+  type="button"
+  onClick={goBack}
+  className="absolute left-6 top-0 flex h-6 w-6 items-center justify-center text-[#1F2937]"
+  aria-label="Go back"
+>
+  <ArrowLeft size={24} strokeWidth={2} />
+</button>
 
 <h1 className="absolute left-1/2 -translate-x-1/2 text-[20px] leading-[24px] font-bold text-[#1F2937]">
   Verify Phone
@@ -160,18 +254,17 @@ const handleVerify = (e) => {
       </p>
 
       {/* Phone */}
-      <p className="absolute top-[410px] left-1/2 -translate-x-1/2 text-[18px] leading-[22px] font-bold text-[#10B981]">
-        +234 803 456 7890
-      </p>
+      <p className="absolute top-[410px] left-4 right-4 text-center text-[16px] leading-[22px] font-bold text-[#10B981] break-all">
+  {email || "Email address unavailable"}
+</p>
 
-      {/* Edit number */}
-      <button
-        type="button"
-        onClick={goBack}
-        className="absolute top-[453px] left-1/2 -translate-x-1/2 text-[14px] leading-[17px] font-bold text-[#10B981]"
-      >
-        Edit number
-      </button>
+<button
+  type="button"
+  onClick={goBack}
+  className="absolute top-[453px] left-1/2 -translate-x-1/2 text-[14px] leading-[17px] font-bold text-[#10B981]"
+>
+  Edit email
+</button>
 
       {/* =========================
           OTP INPUTS

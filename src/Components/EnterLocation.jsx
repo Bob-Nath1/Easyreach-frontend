@@ -10,7 +10,10 @@ import { useNavigate } from "react-router-dom";
 function EnterLocation() {
   const navigate = useNavigate();
   const [location, setLocation] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("Ikeja, Lagos");
+const [selectedLocation, setSelectedLocation] = useState(null);
+
+const [searchResults, setSearchResults] = useState([]);
+const [searching, setSearching] = useState(false);
 
   const locations = [
     {
@@ -27,8 +30,184 @@ function EnterLocation() {
     },
   ];
 
-  const handleConfirm = () => {
-  navigate("/confirm-location");
+  const handleSearchLocation = async () => {
+  if (!location.trim()) {
+    setSearchResults([]);
+    return;
+  }
+
+  try {
+    setSearching(true);
+
+    const response = await fetch(
+      "http://localhost:5000/api/location/geocode",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: location,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error(
+        "Location search failed:",
+        data.message
+      );
+
+      setSearchResults([]);
+      return;
+    }
+
+    setSearchResults(data.locations || []);
+  } catch (error) {
+    console.error("Location search error:", error);
+    setSearchResults([]);
+  } finally {
+    setSearching(false);
+  }
+};
+
+const handleSuggestedLocation = async (item) => {
+  try {
+    setSearching(true);
+
+    const response = await fetch(
+      "http://localhost:5000/api/location/geocode",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: item.name,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    console.log("GEOCODE RESPONSE:", data);
+
+    if (!response.ok || !data.locations?.length) {
+      console.error("Suggested location search failed:", data.message);
+      return;
+    }
+
+    const result = data.locations[0];
+
+    setSelectedLocation({
+      displayName: result.displayName,
+      latitude: result.latitude,
+      longitude: result.longitude,
+      city: result.city,
+      state: result.state,
+      country: result.country,
+    });
+
+    setLocation(result.displayName);
+    setSearchResults([]);
+  } catch (error) {
+    console.error("Suggested location error:", error);
+  } finally {
+    setSearching(false);
+  }
+};
+
+const handleUseCurrentLocation = () => {
+  if (!navigator.geolocation) {
+    alert("Location is not supported by your browser.");
+    return;
+  }
+
+  setSearching(true);
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const { latitude, longitude } = position.coords;
+
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/location/reverse-geocode",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              latitude,
+              longitude,
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.location) {
+          throw new Error(
+            data.message || "Unable to identify your current address."
+          );
+        }
+
+        setSelectedLocation({
+          ...data.location,
+          latitude,
+          longitude,
+        });
+
+        setLocation(data.location.displayName);
+        setSearchResults([]);
+      } catch (error) {
+        console.error("Reverse geocoding error:", error);
+        alert(
+          error.message ||
+            "Unable to identify your current address. Please search manually."
+        );
+      } finally {
+        setSearching(false);
+      }
+    },
+    (error) => {
+      console.error("Geolocation error:", error);
+
+      alert(
+        error.code === 1
+          ? "Please allow location access in your browser settings."
+          : "Unable to get your current location. Please search manually."
+      );
+
+      setSearching(false);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0,
+    }
+  );
+};
+
+
+const handleConfirm = () => {
+  if (
+    !selectedLocation ||
+    !selectedLocation.displayName ||
+    !Number.isFinite(Number(selectedLocation.latitude)) ||
+    !Number.isFinite(Number(selectedLocation.longitude))
+  ) {
+    alert("Please select a valid location from the search results.");
+    return;
+  }
+
+  navigate("/confirm-location", {
+    state: {
+      location: selectedLocation,
+    },
+  });
 };
 
   return (
@@ -119,9 +298,7 @@ function EnterLocation() {
 
             <button
   type="button"
-  onClick={() => {
-    setSelectedLocation("Current Location");
-  }}
+ onClick={handleUseCurrentLocation}
   className="
     flex
     h-[48px]
@@ -161,32 +338,110 @@ function EnterLocation() {
               </label>
 
               <input
-                id="location"
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="Enter a location"
-                className="
-                  box-border
-                  h-[48px]
-                 w-full
-                  border-[1.6px]
-                  border-[#E5E7EB]
-                  bg-white
-                  rounded-[15px]
-                  px-4
-                  text-[14px]
-                  text-[#1F2937]
-                  outline-none
-                  placeholder:text-[#9CA3AF]
-                  focus:border-[#008000]
-                "
-              />
+  id="location"
+  type="text"
+  value={location}
+  onChange={(e) => setLocation(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      handleSearchLocation();
+    }
+  }}
+  onBlur={() => {
+    if (location.trim()) {
+      handleSearchLocation();
+    }
+  }}
+  placeholder="Enter a location"
+  className="
+    box-border
+    h-[48px]
+    w-full
+    border-[1.6px]
+    border-[#E5E7EB]
+    bg-white
+    rounded-[15px]
+    px-4
+    text-[14px]
+    text-[#1F2937]
+    outline-none
+    placeholder:text-[#9CA3AF]
+    focus:border-[#008000]
+  "
+/>
 
             </div>
 
           </div>
 
+{searching && (
+  <div className="mt-3 text-center text-[13px] text-[#6B7280]">
+    Searching locations...
+  </div>
+)}
+
+{searchResults.length > 0 && (
+  <div className="mt-3 flex w-full flex-col gap-2">
+    {searchResults.map((item, index) => (
+      <button
+        key={`${item.displayName}-${index}`}
+        type="button"
+        onClick={() => {
+          if (
+            !item.displayName ||
+            item.latitude == null ||
+            item.longitude == null
+          ) {
+            alert("Please select a valid location with coordinates.");
+            return;
+          }
+
+          setSelectedLocation({
+            displayName: item.displayName,
+            latitude: Number(item.latitude),
+            longitude: Number(item.longitude),
+            city: item.city,
+            state: item.state,
+            country: item.country,
+          });
+
+          setLocation(item.displayName);
+          setSearchResults([]);
+        }}
+        className="
+          flex
+          w-full
+          items-center
+          gap-3
+          rounded-[15px]
+          border
+          border-[#E5E7EB]
+          bg-white
+          p-3
+          text-left
+          transition
+          hover:border-[#008000]
+          hover:bg-[#F0FDF4]
+        "
+      >
+        <MapPin
+          size={20}
+          className="shrink-0 text-[#008000]"
+        />
+
+        <div className="min-w-0 flex-1">
+          <p className="break-words text-[14px] font-semibold text-[#1F2937]">
+            {item.displayName}
+          </p>
+
+          <p className="mt-1 text-[12px] text-[#6B7280]">
+            {item.state || item.country || "Nigeria"}
+          </p>
+        </div>
+      </button>
+    ))}
+  </div>
+)}
 
           {/* ================= INFORMATION BOX ================= */}
 
@@ -246,12 +501,19 @@ function EnterLocation() {
 
             {/* ================= LOCATION LIST ================= */}
 
-            <div className="mt-[16px] flex w-full flex-col gap-2 pb-[30px]">
-  {locations.map((item) => (
+           <div className="mt-[16px] flex w-full flex-col gap-2 pb-[30px]">
+  {locations
+    .filter(
+      (item) =>
+        item &&
+        typeof item.name === "string" &&
+        item.name.trim() !== ""
+    )
+    .map((item, index) => (
     <button
       key={item.name}
       type="button"
-      onClick={() => setSelectedLocation(item.name)}
+      onClick={() => handleSuggestedLocation(item)}
       className={`
         box-border
         flex
@@ -266,7 +528,7 @@ function EnterLocation() {
         text-left
         transition
         ${
-          selectedLocation === item.name
+          selectedLocation?.displayName === item.name
             ? "border-[#008000] bg-[#F0FDF4]"
             : "border-[#E5E7EB] bg-white"
         }

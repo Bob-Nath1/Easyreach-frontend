@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MapPin,
   Search,
@@ -18,6 +18,199 @@ const navigate = useNavigate();
 
   const [activeCategory, setActiveCategory] = useState("All");
 
+  const [user, setUser] = useState(null);
+const [loadingUser, setLoadingUser] = useState(true);
+
+
+  const [providers, setProviders] = useState([]);
+const [loadingProviders, setLoadingProviders] = useState(true);
+
+const [requests, setRequests] = useState([]);
+const [loadingRequests, setLoadingRequests] = useState(true);
+
+const [unreadNotificationCount, setUnreadNotificationCount] =
+  useState(0);
+
+
+  useEffect(() => {
+  const fetchUnreadNotificationCount = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/notifications/unread-count",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(
+          "Failed to fetch notification count:",
+          data.message
+        );
+        return;
+      }
+
+      setUnreadNotificationCount(
+        Number(data.count || 0)
+      );
+    } catch (error) {
+      console.error(
+        "Notification count fetch error:",
+        error
+      );
+    }
+  };
+
+  fetchUnreadNotificationCount();
+}, []);
+
+useEffect(() => {
+  const fetchUserProfile = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setLoadingUser(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        
+        "http://localhost:5000/api/users/profile",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+
+
+        
+      );
+
+
+      const data = await response.json();
+
+console.log("DASHBOARD LOCATION:", {
+  realAddress: data.user.realAddress,
+  city: data.user.city,
+  latitude: data.user.latitude,
+  longitude: data.user.longitude,
+  searchRadius: data.user.searchRadius,
+});
+
+      if (!response.ok) {
+        console.error(
+          "Failed to fetch user profile:",
+          data.message
+        );
+        return;
+      }
+
+      setUser(data.user);
+    } catch (error) {
+      console.error("Profile fetch error:", error);
+    } finally {
+      setLoadingUser(false);
+    }
+  };
+
+  fetchUserProfile();
+}, []);
+
+useEffect(() => {
+  const fetchNearbyProviders = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setLoadingProviders(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/users/nearby-providers",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(
+          "Failed to fetch nearby providers:",
+          data.message
+        );
+        return;
+      }
+
+      setProviders(data.providers || []);
+    } catch (error) {
+      console.error("Nearby providers fetch error:", error);
+    } finally {
+      setLoadingProviders(false);
+    }
+  };
+
+  fetchNearbyProviders();
+}, []);
+
+useEffect(() => {
+  const fetchServiceRequests = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setLoadingRequests(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/requests",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(
+          "Failed to fetch service requests:",
+          data.message
+        );
+        return;
+      }
+
+      setRequests(data.requests || []);
+    } catch (error) {
+      console.error("Service requests fetch error:", error);
+    } finally {
+      setLoadingRequests(false);
+    }
+  };
+
+  fetchServiceRequests();
+}, []);
+
   const categories = [
     {
       name: "Auto Repair",
@@ -33,53 +226,17 @@ const navigate = useNavigate();
     },
   ];
 
-  const providers = [
-    {
-      name: "Timi Motors",
-      service: "Auto Repair Specialist",
-      distance: "800m away",
-      price: "₦10,000 - ₦20,000",
-      rating: "4.8",
-      reviews: "124 reviews",
-      image: "/provider1.jpg",
-    },
-    {
-      name: "Ada’s Plumbing",
-      service: "Plumbing & Repairs",
-      distance: "1.2km away",
-      price: "₦5,000 - ₦10,000",
-      rating: "4.9",
-      reviews: "89 reviews",
-      image: "/provider2.jpg",
-    },
-    {
-      name: "Chef Francis",
-      service: "Food & Catering",
-      distance: "1.8km away",
-      price: "₦5,000 - ₦15,000",
-      rating: "4.7",
-      reviews: "56 reviews",
-      image: "/provider3.jpg",
-    },
-    {
-      name: "Olu Plumbing",
-      service: "Auto Repair Specialist",
-      distance: "800m away",
-      price: "₦10,000 - ₦15,000",
-      rating: "4.8",
-      reviews: "124 reviews",
-      image: "/provider4.jpg",
-    },
-    {
-      name: "Amaka’s Kitchen",
-      service: "Food & Catering",
-      distance: "2.1km away",
-      price: "₦8,000 - ₦18,000",
-      rating: "4.8",
-      reviews: "124 reviews",
-      image: "/provider5.jpg",
-    },
-  ];
+  const handleContactProvider = (provider) => {
+  console.log("CONTACT PROVIDER:", provider);
+  console.log("CONTACT PHONE:", provider?.phone);
+
+  if (!provider?.phone) {
+    alert("This provider has not added a phone number.");
+    return;
+  }
+
+  window.location.href = `tel:${provider.phone}`;
+};
 
   return (
     <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center overflow-hidden -mt-8">
@@ -140,10 +297,9 @@ const navigate = useNavigate();
               <div className="flex h-[50px] w-full items-center justify-between">
 
                 <div className="flex flex-col gap-1">
-
-                  <h1 className="text-md font-bold italic leading-[29px] text-[#1F2937]">
-                    Hello, Timi 👋
-                  </h1>
+<h1 className="text-md font-bold italic leading-[29px] text-[#1F2937]">
+  Hello, {loadingUser ? "..." : user?.fullName?.split(" ").pop() || "User"} 👋
+</h1>
 
                   <div className="flex items-center gap-1">
                     <MapPin
@@ -152,9 +308,9 @@ const navigate = useNavigate();
                       className="text-[#008000]"
                     />
 
-                    <span className="text-xs leading-[17px] text-[#6B7280]">
-                      Ikeja, Lagos
-                    </span>
+              <span className="text-xs leading-[17px] text-[#6B7280]">
+  {loadingUser ? "..." : user?.realAddress || "Location not set"}
+</span>
                   </div>
 
                 </div>
@@ -181,6 +337,7 @@ const navigate = useNavigate();
     className="w-3 h-4"
   />
 
+{unreadNotificationCount > 0 && (
   <span
     className="
       absolute
@@ -188,19 +345,23 @@ const navigate = useNavigate();
       -top-[3px]
       flex
       h-[8px]
-      w-[8px]
+      min-w-[8px]
       items-center
       justify-center
       rounded-full
       bg-[#EF4444]
+      px-[2px]
       text-[7px]
       font-bold
       italic
       text-white
     "
   >
-    2
+    {unreadNotificationCount > 99
+      ? "99+"
+      : unreadNotificationCount}
   </span>
+)}
 </button>
 
               </div>
@@ -397,7 +558,9 @@ const navigate = useNavigate();
                     text-black
                   "
                 >
-                  6 providers nearby
+                  {loadingProviders
+  ? "..."
+  : `${providers.length} provider${providers.length !== 1 ? "s" : ""} nearby`}
                 </div>
 
               </div>
@@ -452,177 +615,207 @@ const navigate = useNavigate();
               ================================================== */}
               <div className="flex w-full flex-col gap-4">
 
-                {providers.map((provider) => (
-
-                  <div
-                    key={provider.name}
-                    className="
-                      relative
-                      h-[218px]
-                      w-full
-                      shrink-0
-                      rounded-[15px]
-                      bg-white
-                    "
-                  >
-
-                    {/* Provider header */}
-                    <div className="absolute left-4 right-4 top-4 flex items-start justify-between">
-
-                      <div className="flex items-center gap-4">
-
-                        {/* Provider image */}
-                        <div className="relative h-[50px] w-[50px] overflow-hidden rounded-[15px] bg-[#F3F4F6]">
-
-                          <img
-                            src={provider.image}
-                            alt={provider.name}
-                            className="h-full w-full object-cover"
-                          />
-
-                        </div>
+  {loadingProviders ? (
+    <div className="flex h-[120px] items-center justify-center rounded-[15px] bg-white">
+      <p className="text-xs text-[#6B7280]">
+        Finding providers near you...
+      </p>
+    </div>
+  ) : providers.length === 0 ? (
+    <div className="flex h-[120px] items-center justify-center rounded-[15px] bg-white px-4">
+      <p className="text-center text-xs text-[#6B7280]">
+        No providers found within your search radius.
+      </p>
+    </div>
+  ) : (
+   [...providers]
+  .sort(
+    (a, b) =>
+      Number(a.distance_meters ?? Infinity) -
+      Number(b.distance_meters ?? Infinity)
+  )
+  .map((provider) => (
 
 
-                        {/* Provider information */}
-                        <div className="flex flex-col gap-1">
+      <div
+        key={provider.id}
+        className="
+          relative
+          h-[218px]
+          w-full
+          shrink-0
+          rounded-[15px]
+          bg-white
+        "
+      >
 
-                          <h3 className="text-xs font-bold text-[#1F2937]">
-                            {provider.name}
-                          </h3>
+        {/* Provider header */}
+        <div className="absolute left-4 right-4 top-4 flex items-start justify-between">
 
-                          <p className="text-[10px] font-normal italic text-[#6B7280]">
-                            {provider.service}
-                          </p>
+          <div className="flex items-center gap-4">
 
-                          <div className="flex items-center gap-2">
+            {/* Provider image */}
+            <div className="relative h-[50px] w-[50px] overflow-hidden rounded-[15px] bg-[#F3F4F6]">
 
-                            <div className="flex items-center gap-1">
-                              <Star
-                                size={9}
-                                fill="#FBBF24"
-                                stroke="#FBBF24"
-                              />
+              <img
+                src={provider.profile_image || "/profile.jpg"}
+                alt={provider.full_name}
+                className="h-full w-full object-cover"
+              />
 
-                              <span className="text-[10px] font-bold italic text-[#1F2937]">
-                                {provider.rating}
-                              </span>
-                            </div>
+            </div>
 
-                            <span className="text-[10px] text-[#6B7280]">
-                              ({provider.reviews})
-                            </span>
+            {/* Provider information */}
+            <div className="flex flex-col gap-1">
 
-                          </div>
+              <h3 className="text-xs font-bold text-[#1F2937]">
+                {provider.full_name}
+              </h3>
 
-                        </div>
+              <p className="text-[10px] font-normal italic text-[#6B7280]">
+                Service Provider
+              </p>
 
-                      </div>
+              <div className="flex items-center gap-1">
 
+                <Star
+                  size={9}
+                  fill="#FBBF24"
+                  stroke="#FBBF24"
+                />
 
-                      {/* Verification icon */}
-                      <div className="flex h-[12px] w-[12px] items-center justify-center rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] text-[9px] font-bold text-white">
-                        ✓
-                      </div>
-
-                    </div>
-
-
-                    {/* Distance */}
-                    <div className="absolute left-4 top-[93px] flex items-center gap-[5px]">
-
-                      <MapPin
-                        size={9}
-                        className="text-[#008000]"
-                      />
-
-                      <span className="text-xs font-bold italic text-[#008000]">
-                        {provider.distance}
-                      </span>
-
-                    </div>
-
-
-                    {/* Price */}
-                    <p className="absolute left-4 top-[116px] text-xs font-bold text-[#008000]">
-                      {provider.price}
-                    </p>
-
-
-                    {/* Actions */}
-                    <div className="absolute top-[151px] flex h-[48px] items-center gap-2">
-
-                      <button
-                        type="button"
-                        className="
-                          flex
-                          h-[40px]
-                          w-[100px]
-                          items-center
-                          justify-center
-                          rounded-[8px]
-                          border-[1.5px]
-                          border-[#008000]
-                          bg-white
-                          text-[10px]
-                          font-bold
-                          italic
-                          text-[#008000]
-                        "
-                      >
-                        View Profile
-                      </button>
-
-                      <button
-                        type="button"
-                        className="
-                          flex
-                          h-[40px]
-                          w-[100px]
-                          items-center
-                          justify-center
-                          rounded-[8px]
-                          border-[1.5px]
-                          border-[#008000]
-                          bg-[#008000]
-                          text-[10px]
-                          font-bold
-                          italic
-                          text-white
-                        "
-                      >
-                        Contact Now
-                      </button>
-
-                      <button
-                        type="button"
-                        className="
-                          flex
-                          h-[48px]
-                          w-[48px]
-                          items-center
-                          justify-center
-                          rounded-[15px]
-                          bg-[#F3F4F6]
-                        "
-                      >
-                        <Phone
-                          size={18}
-                          className="text-[#6B7280]"
-                        />
-                      </button>
-
-                    </div>
-
-                  </div>
-
-                ))}
+                <span className="text-[10px] text-[#6B7280]">
+                  No reviews yet
+                </span>
 
               </div>
 
             </div>
 
           </div>
+
+          {/* Verification icon */}
+          <div className="flex h-[12px] w-[12px] items-center justify-center rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] text-[9px] font-bold text-white">
+            ✓
+          </div>
+
         </div>
+
+        {/* Distance */}
+        <div className="absolute left-4 top-[93px] flex items-center gap-[5px]">
+
+          <MapPin
+            size={9}
+            className="text-[#008000]"
+          />
+
+          <span className="text-xs font-bold italic text-[#008000]">
+            {provider.distance_meters < 1000
+              ? `${Math.round(provider.distance_meters)}m away`
+              : `${(provider.distance_meters / 1000).toFixed(1)}km away`}
+          </span>
+
+        </div>
+
+        {/* Location */}
+        <p className="absolute left-4 top-[116px] text-xs font-bold text-[#008000]">
+          {provider.city || provider.real_address || "Location available"}
+        </p>
+
+        {/* Actions */}
+<div className="absolute left-3 right-3 top-[151px] flex h-[48px] items-center gap-2">
+
+  {/* View Profile */}
+  <button
+    type="button"
+    onClick={() =>
+      navigate("/viewprofile", {
+        state: { provider },
+      })
+    }
+    className="
+      flex
+      h-[40px]
+      min-w-0
+      flex-1
+      items-center
+      justify-center
+      rounded-[8px]
+      border-[1.5px]
+      border-[#008000]
+      bg-white
+      px-1
+      text-[10px]
+      font-bold
+      italic
+      text-[#008000]
+    "
+  >
+    View Profile
+  </button>
+
+  {/* Contact Now */}
+  <button
+    type="button"
+    onClick={() => handleContactProvider(provider)}
+    className="
+      flex
+      h-[40px]
+      min-w-0
+      flex-1
+      items-center
+      justify-center
+      rounded-[8px]
+      border-[1.5px]
+      border-[#008000]
+      bg-[#008000]
+      px-1
+      text-[10px]
+      font-bold
+      italic
+      text-white
+    "
+  >
+    Contact Now
+  </button>
+
+  {/* Request Service */}
+  <button
+    type="button"
+    onClick={() =>
+      navigate("/confirmbooking", {
+        state: { provider },
+      })
+    }
+    className="
+      flex
+      h-[40px]
+      min-w-0
+      flex-1
+      items-center
+      justify-center
+      rounded-[8px]
+      bg-[#008000]
+      px-1
+      text-[10px]
+      font-bold
+      italic
+      text-white
+    "
+  >
+    Request
+  </button>
+
+</div>
+
+
+      </div>
+
+    ))
+  )}
+
+</div>        </div>
+</div>        </div>
 
 
         {/* =================================================
@@ -674,22 +867,37 @@ const navigate = useNavigate();
 
 
             {/* Request */}
-            <button
-                 onClick={() => navigate("/seekrequest")}
+            {/* Request */}
+<button
+  onClick={() => {
+    if (loadingRequests) {
+      return;
+    }
 
-              type="button"
-              className="flex w-[49px] flex-col items-center gap-[9px]"
-            >
-                     <img
-            src="/request.png"
-            alt="Request"
-            className="w-[17px] h-[22px] object-contain"
-          />
+    if (!requests.length) {
+      alert("You do not have a service request yet.");
+      return;
+    }
 
-              <span className="text-[9px] font-bold text-[#9CA3AF]">
-                Request
-              </span>
-            </button>
+    navigate("/seekrequest", {
+      state: {
+        requestId: requests[0].id,
+      },
+    });
+  }}
+  type="button"
+  className="flex w-[49px] flex-col items-center gap-[9px]"
+>
+  <img
+    src="/request.png"
+    alt="Request"
+    className="w-[17px] h-[22px] object-contain"
+  />
+
+  <span className="text-[9px] font-bold text-[#9CA3AF]">
+    Request
+  </span>
+</button>
 
 
             {/* Messages */}
