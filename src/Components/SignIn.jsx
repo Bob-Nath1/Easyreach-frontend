@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { GoogleLogin } from "@react-oauth/google";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ function SignIn() {
     setLoading(true);
 
     const response = await fetch(
-      "http://localhost:5000/api/auth/login",
+     `${import.meta.env.VITE_API_URL}/api/auth/login`,
       {
         method: "POST",
         headers: {
@@ -60,6 +60,69 @@ function SignIn() {
     }
   } catch (error) {
     console.error("Login error:", error);
+    alert("Unable to connect to the server. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+const handleGoogleSuccess = async (response) => {
+  if (!response.credential) {
+    alert("Google sign-in failed. Please try again.");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const result = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/auth/google`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          credential: response.credential,
+          role: "seeker",
+        }),
+      }
+    );
+
+    const data = await result.json();
+
+    if (!result.ok) {
+      alert(data.message || "Google sign-in failed. Please try again.");
+      return;
+    }
+
+    if (data.needsProfileCompletion) {
+      alert(
+        "Your Google account needs to finish registration. Please return to Sign Up to complete your profile."
+      );
+      navigate("/signup", {
+        state: {
+          email: data.googleProfile?.email,
+          fullName: data.googleProfile?.fullName,
+        },
+      });
+      return;
+    }
+
+    if (!data.token || !data.user) {
+      alert("The server did not return your login details. Please try again.");
+      return;
+    }
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    if (data.user.role === "provider") {
+      navigate("/dashboardprov");
+    } else {
+      navigate("/dashboard");
+    }
+  } catch (error) {
+    console.error("Google sign-in error:", error);
     alert("Unable to connect to the server. Please try again.");
   } finally {
     setLoading(false);
@@ -254,18 +317,23 @@ function SignIn() {
           />
             </button>
 
+            
             {/* Google */}
-            <button
-              type="button"
-              className="w-[32px] h-[32px] rounded-full bg-white shadow flex items-center justify-center"
-            >
-              <img
-            src="/Google.png"
-            alt="EasyReach"
-            className="w-[27px] h-[32px] object-contain"
-          />
-            </button>
 
+
+
+<div className="flex items-center justify-center">
+  <GoogleLogin
+    onSuccess={handleGoogleSuccess}
+    onError={() => {
+      alert("Google sign-in was cancelled or failed. Please try again.");
+    }}
+    text="signin_with"
+    shape="circle"
+    size="large"
+    theme="outline"
+  />
+</div>
             {/* Facebook */}
             <button
               type="button"
