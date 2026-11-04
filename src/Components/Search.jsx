@@ -15,11 +15,13 @@ import {
   Smartphone,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import occupationCatalogue from "../data/occupationCatalogue";
 
 function Search() {
   const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeTab, setActiveTab] = useState("Near me");
 
   const [recentSearches, setRecentSearches] = useState([
@@ -64,6 +66,24 @@ function Search() {
       icon: Droplets,
     },
   ];
+
+  const occupationSuggestions = Object.entries(occupationCatalogue)
+  .flatMap(([category, occupations]) =>
+    occupations
+      .filter((occupation) => occupation !== "Other")
+      .map((occupation) => ({
+        occupation,
+        category,
+      }))
+  )
+  .filter(({ occupation }) => {
+    const query = search.trim().toLowerCase();
+
+    return (
+      query.length > 0 &&
+      occupation.toLowerCase().startsWith(query)
+    );
+  });
 
   const handleSearch = (value = search) => {
     const trimmed = value.trim();
@@ -165,12 +185,15 @@ function Search() {
         <input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+         onChange={(e) => {
+  setSearch(e.target.value);
+  setShowSuggestions(true);
+}}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSearch();
-            }
-          }}
+  if (e.key === "Enter" && occupationSuggestions.length > 0) {
+    e.preventDefault();
+  }
+}}
           placeholder="Search"
           className="w-full bg-transparent text-[14px] text-[#1F2937] outline-none placeholder:text-[#9CA3AF]"
         />
@@ -184,6 +207,38 @@ function Search() {
           </button>
         )}
       </div>
+
+{/* ================= OCCUPATION SUGGESTIONS ================= */}
+{showSuggestions && search.trim() && (
+  <div className="absolute left-[62px] right-6 top-[115px] z-50 max-h-[250px] overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-lg">
+    {occupationSuggestions.length > 0 ? (
+      occupationSuggestions.map(({ occupation, category }) => (
+        <button
+          key={`${category}-${occupation}`}
+          onClick={() => {
+            setSearch(occupation);
+            setShowSuggestions(false);
+            handleSearch(occupation);
+          }}
+          className="flex w-full flex-col border-b border-gray-100 px-4 py-3 text-left hover:bg-gray-50"
+        >
+          <span className="text-sm font-semibold text-gray-800">
+            {occupation}
+          </span>
+
+          <span className="text-xs text-gray-400">
+            {category}
+          </span>
+        </button>
+      ))
+    ) : (
+      <p className="px-4 py-3 text-sm text-gray-400">
+        No matching occupation found
+      </p>
+    )}
+  </div>
+)}
+
 
       {/* ================= FILTER TABS ================= */}
       <div className="absolute left-6 right-6 top-[120px] flex h-[35px] items-center gap-4">

@@ -13,151 +13,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const occupationCatalogue = {
-  "Home Cleaning & Domestic Services": [
-    "House Cleaner",
-    "Deep Cleaning Specialist",
-    "Laundry Attendant",
-    "Ironing Service Provider",
-    "Housekeeper",
-    "Other",
-  ],
-  "Plumbing & Water Services": [
-    "Plumber",
-    "Plumbing Technician",
-    "Pipe Fitter",
-    "Water Pump Technician",
-    "Drainage Technician",
-    "Other",
-  ],
-  "Electrical & Power Services": [
-    "Electrician",
-    "Electrical Technician",
-    "Generator Technician",
-    "Inverter Technician",
-    "Solar Installation Technician",
-    "Other",
-  ],
-  "Construction & Building Services": [
-    "Builder",
-    "Mason",
-    "Bricklayer",
-    "Construction Worker",
-    "Site Supervisor",
-    "Other",
-  ],
-  "Painting & Wall Decoration": [
-    "House Painter",
-    "Spray Painter",
-    "Wall Decorator",
-    "Wallpaper Installer",
-    "Other",
-  ],
-  "Carpentry, Furniture & Interior Design": [
-    "Carpenter",
-    "Furniture Maker",
-    "Furniture Repairer",
-    "Interior Designer",
-    "Cabinet Maker",
-    "Other",
-  ],
-  "Automobile & Vehicle Repair": [
-    "Auto Mechanic",
-    "Auto Electrician",
-    "Motorcycle Mechanic",
-    "Car Diagnostic Technician",
-    "Other",
-  ],
-  "Transport, Delivery & Moving": [
-    "Driver",
-    "Delivery Rider",
-    "Courier",
-    "Moving Service Provider",
-    "Other",
-  ],
-  "Beauty, Hair & Grooming": [
-    "Hairdresser",
-    "Barber",
-    "Makeup Artist",
-    "Nail Technician",
-    "Lash Technician",
-    "Other",
-  ],
-  "Fashion, Tailoring & Clothing": [
-    "Tailor",
-    "Fashion Designer",
-    "Clothing Alteration Specialist",
-    "Shoe Maker",
-    "Other",
-  ],
-  "Healthcare & Medical Services": [
-    "Nurse",
-    "Physiotherapist",
-    "Care Assistant",
-    "Medical Laboratory Technician",
-    "Other",
-  ],
-  "Education, Tutoring & Training": [
-    "Private Tutor",
-    "Language Teacher",
-    "Music Teacher",
-    "Computer Instructor",
-    "Other",
-  ],
-  "Information Technology & Software": [
-    "Web Developer",
-    "Mobile App Developer",
-    "Software Engineer",
-    "IT Support Technician",
-    "Computer Repair Technician",
-    "Network Technician",
-    "Other",
-  ],
-  "Graphic Design & Creative Services": [
-    "Graphic Designer",
-    "UI/UX Designer",
-    "Photographer",
-    "Video Editor",
-    "Illustrator",
-    "Other",
-  ],
-  "Catering, Cooking & Food Services": [
-    "Chef",
-    "Caterer",
-    "Baker",
-    "Pastry Chef",
-    "Food Vendor",
-    "Other",
-  ],
-  "Agriculture, Farming & Gardening": [
-    "Farmer",
-    "Gardener",
-    "Landscaper",
-    "Irrigation Technician",
-    "Other",
-  ],
-  "Security & Safety Services": [
-    "Security Guard",
-    "Security Systems Installer",
-    "CCTV Technician",
-    "Safety Officer",
-    "Other",
-  ],
-  "Property & Real Estate": [
-    "Real Estate Agent",
-    "Property Manager",
-    "Property Inspector",
-    "Other",
-  ],
-  "Repairs, Installation & Equipment Rental": [
-    "Appliance Repair Technician",
-    "Washing Machine Repairer",
-    "Refrigerator Repairer",
-    "Equipment Installer",
-    "Equipment Rental Provider",
-    "Other",
-  ],
-};
+import occupationCatalogue from "../data/occupationCatalogue";
+
 
 const isValidPassword = (password) => {
   return (
@@ -214,12 +71,6 @@ const handleChange = (e) => {
     ...prev,
     [name]: value,
   }));
-};
-
-const handleSocialSignup = (provider) => {
-  alert(
-    `${provider.charAt(0).toUpperCase() + provider.slice(1)} signup will be available once authentication is configured.`
-  );
 };
 
  const handleSubmit = async (e) => {
@@ -789,71 +640,7 @@ if (formData.password !== formData.confirmPassword) {
 
                   <div className="w-[60px] h-px bg-gray-300" />
                 </div>
-
-                {/* =========================
-                SIGN UP WITH
-            ========================== */}
-            <div className="mt-6">
-              
-
-              {/* SOCIAL BUTTONS */}
-              <div className="flex justify-center gap-4 mt-6">
-
-                {/* Apple */}
-                <button
-  type="button"
-  onClick={() => handleSocialSignup("apple")}
-  aria-label="Sign up with Apple"
-  className="
-    w-8 h-8 rounded-full bg-white
-    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
-    flex items-center justify-center
-  "
->
-  <img
-    src="/Apple.png"
-    alt="Apple"
-    className="w-[27px] h-[32px] object-contain"
-  />
-</button>
-
-                {/* Google */}
-                <button
-  type="button"
-  onClick={() => handleSocialSignup("google")}
-  aria-label="Sign up with Google"
-  className="
-    w-8 h-8 rounded-full bg-white
-    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
-    flex items-center justify-center
-  "
->
-  <img
-    src="/Google.png"
-    alt="Google"
-    className="w-[27px] h-[32px] object-contain"
-  />
-</button>
-
-                {/* Facebook */}
-                <button
-  type="button"
-  onClick={() => handleSocialSignup("facebook")}
-  aria-label="Sign up with Facebook"
-  className="
-    w-8 h-8 rounded-full bg-white
-    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
-    flex items-center justify-center
-  "
->
-  <img
-    src="/Facebook.png"
-    alt="facebook"
-    className="w-[27px] h-[32px] object-contain"
-  />
-</button>
-              </div>
-            </div>              </div>
+             </div>
 
               {/* Already have account */}
               <div className="text-right pb-6">

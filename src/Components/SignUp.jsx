@@ -12,10 +12,6 @@ import {
   UserRound,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import {
-  GoogleLogin,
-  GoogleOAuthProvider,
-} from "@react-oauth/google";
 
 const isValidPassword = (password) => {
   return (
@@ -34,10 +30,6 @@ function SignUp() {
   const [agreeTerms, setAgreeTerms] = useState(false);
 
   const [loading, setLoading] = useState(false);
-
-  const [googleLoading, setGoogleLoading] = useState(false);
-const [pendingGoogleCredential, setPendingGoogleCredential] =
-  useState("");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -55,105 +47,12 @@ const [pendingGoogleCredential, setPendingGoogleCredential] =
     }));
   };
 
-  const handleSocialSignup = (provider) => {
-  alert(
-    `${provider === "apple" ? "Apple" : "Facebook"} signup is not available yet. Please use Google or email signup.`
-  );
-};
-
-
-const handleGoogleSuccess = async (response) => {
-  if (!agreeTerms) {
-    alert("Please agree to the Terms of Service and Privacy Policy.");
-    return;
-  }
-
-  if (!response.credential) {
-    alert("Google sign-in did not return a credential. Please try again.");
-    return;
-  }
-
-  await submitGoogleCredential(response.credential);
-};
-
-const submitGoogleCredential = async (credential) => {
-  try {
-    setGoogleLoading(true);
-
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/auth/google`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          credential,
-          role: "seeker",
-          phone: formData.phone,
-        }),
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      alert(data.message || "Google sign-in failed.");
-      return;
-    }
-
-    if (data.needsProfileCompletion) {
-      setPendingGoogleCredential(credential);
-
-      setFormData((prev) => ({
-        ...prev,
-        fullName: data.googleProfile.fullName || prev.fullName,
-        email: data.googleProfile.email || prev.email,
-      }));
-
-      alert(
-        "Your Google account was recognized. Please enter your phone number, then click Complete Google Signup."
-      );
-
-      return;
-    }
-
-    // We'll connect successful login to your existing
-    // sign-in storage and navigation logic next.
-if (!data.token || !data.user) {
-  alert("Authentication succeeded, but the server did not return your login details.");
-  return;
-}
-
-localStorage.setItem("token", data.token);
-localStorage.setItem("user", JSON.stringify(data.user));
-
-setPendingGoogleCredential("");
-
-if (data.user.role === "provider") {
-  navigate("/dashboardprov");
-} else {
-  navigate("/dashboard");
-}
-  } catch (error) {
-    console.error("Google authentication error:", error);
-    alert("Unable to connect to EasyReach. Please try again.");
-  } finally {
-    setGoogleLoading(false);
-  }
-};
-
 
   const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (!agreeTerms) {
     alert("Please agree to the Terms of Service and Privacy Policy.");
-    return;
-  }
-
-  if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match.");
     return;
   }
 
@@ -638,90 +537,9 @@ if (formData.password !== formData.confirmPassword) {
   {loading ? "Creating account..." : "Continue"}
 </button>
 
-            {/* =========================
-                SIGN UP WITH
-            ========================== */}
-            <div className="mt-6">
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-[60px] h-px bg-gray-300" />
+            
 
-                <span className="text-[14px] font-semibold text-[#1F2937]">
-                  Sign up with
-                </span>
-
-                <div className="w-[60px] h-px bg-gray-300" />
-              </div>
-
-              {/* SOCIAL BUTTONS */}
-              <div className="flex justify-center gap-4 mt-6">
- {/* Apple */}
-                <button
-  type="button"
-  onClick={() => handleSocialSignup("apple")}
-  aria-label="Sign up with Apple"
-  className="
-    w-8 h-8 rounded-full bg-white
-    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
-    flex items-center justify-center
-  "
->
-  <img
-    src="/Apple.png"
-    alt="Apple"
-    className="w-[27px] h-[32px] object-contain"
-  />
-</button>
-
-               {/* Google */}
-                <div className="flex items-center justify-center">
-  <GoogleLogin
-    onSuccess={handleGoogleSuccess}
-    onError={() => {
-      alert("Google sign-in was cancelled or failed. Please try again.");
-    }}
-    text="signup_with"
-    shape="circle"
-    size="large"
-    theme="outline"
-  />
-</div>
-
-
-                {/* Facebook */}
-                <button
-  type="button"
-  onClick={() => handleSocialSignup("facebook")}
-  aria-label="Sign up with Facebook"
-  className="
-    w-8 h-8 rounded-full bg-white
-    shadow-[0_-1px_1px_rgba(0,0,0,0.25),0_1px_1px_rgba(0,0,0,0.25)]
-    flex items-center justify-center
-  "
->
-  <img
-    src="/Facebook.png"
-    alt="facebook"
-    className="w-[27px] h-[32px] object-contain"
-  />
-</button>
-              </div>
-            </div>
-
-            {pendingGoogleCredential && (
-  <button
-    type="button"
-    onClick={() =>
-      submitGoogleCredential(pendingGoogleCredential)
-    }
-    disabled={googleLoading || !formData.phone.trim()}
-    className="w-full h-[48px] mt-5 rounded-full bg-[#008000] text-white font-semibold disabled:opacity-50"
-  >
-    {googleLoading
-      ? "Please wait..."
-      : "Complete Google Signup"}
-  </button>
-)}
-
+              
             {/* =========================
                 LOGIN LINK
             ========================== */}

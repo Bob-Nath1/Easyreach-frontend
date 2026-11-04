@@ -12,11 +12,56 @@ import {
   Phone,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import occupationCatalogue from "../data/occupationCatalogue";
 
 function Dashboard() {
 const navigate = useNavigate();
 
   const [activeCategory, setActiveCategory] = useState("All");
+
+  const [search, setSearch] = useState("");
+const [showSuggestions, setShowSuggestions] = useState(false);
+const [selectedOccupation, setSelectedOccupation] = useState("");
+const [searchingProviders, setSearchingProviders] = useState(false);
+
+const handleOccupationSearch = async (occupation) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please log in to search for providers.");
+    return;
+  }
+
+  setSearchingProviders(true);
+  setLoadingProviders(true);
+  setProviders([]);
+
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/users/nearby-providers?occupation=${encodeURIComponent(occupation)}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to find providers.");
+    }
+
+    setProviders(data.providers || []);
+  } catch (error) {
+    console.error("Occupation search error:", error);
+    alert(error.message);
+  } finally {
+    setSearchingProviders(false);
+    setLoadingProviders(false);
+  }
+};
 
   const [user, setUser] = useState(null);
 const [loadingUser, setLoadingUser] = useState(true);
@@ -85,9 +130,8 @@ useEffect(() => {
     }
 
     try {
-      const response = await fetch(
-        
-        "http://localhost:5000/api/users/profile",
+const response = await fetch(
+  `${import.meta.env.VITE_API_URL}/api/users/profile`,
         {
           method: "GET",
           headers: {
@@ -139,8 +183,8 @@ useEffect(() => {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/users/nearby-providers",
+const response = await fetch(
+  `${import.meta.env.VITE_API_URL}/api/users/nearby-providers`,
         {
           method: "GET",
           headers: {
@@ -150,6 +194,8 @@ useEffect(() => {
       );
 
       const data = await response.json();
+
+      console.log("NEARBY PROVIDERS DATA:", data.providers);
 
       if (!response.ok) {
         console.error(
@@ -225,6 +271,24 @@ useEffect(() => {
       icon: <Droplets size={14} className="text-white" />,
     },
   ];
+
+  const occupationSuggestions = Object.entries(occupationCatalogue)
+  .flatMap(([category, occupations]) =>
+    occupations
+      .filter((occupation) => occupation !== "Other")
+      .map((occupation) => ({
+        occupation,
+        category,
+      }))
+  )
+  .filter(({ occupation }) => {
+    const query = search.trim().toLowerCase();
+
+    return (
+      query.length > 0 &&
+      occupation.toLowerCase().startsWith(query)
+    );
+  });
 
   const handleContactProvider = (provider) => {
   console.log("CONTACT PROVIDER:", provider);
@@ -368,39 +432,86 @@ useEffect(() => {
 
 
               {/* =================================================
-                  SEARCH
-              ================================================== */}
-              <div
-                className="
-                  flex
-                  h-[50px]
-                  w-full                  items-center
-                  justify-between
-                  rounded-[15px]
-                  bg-[#F3F4F6]
-                  px-4
-                "
-              >
-                <div className="flex items-center gap-2">
+    SEARCH
+================================================== */}
+<div className="relative w-full">
 
-                  <Search
-                  onClick={() => navigate("/search")}
-                    size={10}
-                    className="text-[#008000]"
-                  />
+  <div className="flex h-[50px] w-full items-center gap-3 rounded-[15px] bg-[#F3F4F6] px-4">
 
-                  <span className="text-xs text-black">
-                    Search
-                  </span>
+    <Search
+      size={16}
+      className="shrink-0 text-[#008000]"
+    />
 
-                </div>
+    <input
+      type="text"
+      value={search}
+      onFocus={() => setShowSuggestions(true)}
+      onChange={(e) => {
+        setSearch(e.target.value);
+        setSelectedOccupation("");
+        setShowSuggestions(true);
+      }}
+      placeholder="Search for a service or occupation"
+      className="w-full bg-transparent text-xs text-black outline-none placeholder:text-[#9CA3AF]"
+    />
 
-                <MapPin
-                  size={10}
-                  className="text-[#008000]"
-                />
+    {search && (
+      <button
+        type="button"
+        onClick={() => {
+          setSearch("");
+          setSelectedOccupation("");
+          setShowSuggestions(false);
+        }}
+      >
+        <span className="text-gray-400">✕</span>
+      </button>
+    )}
 
-              </div>
+    <MapPin
+      size={14}
+      className="shrink-0 text-[#008000]"
+    />
+
+  </div>
+
+  {/* OCCUPATION SUGGESTIONS */}
+  {showSuggestions && search.trim() && (
+    <div className="absolute left-0 right-0 top-[55px] z-50 max-h-[220px] overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-lg">
+
+      {occupationSuggestions.length > 0 ? (
+        occupationSuggestions.map(({ occupation, category }) => (
+          <button
+            key={`${category}-${occupation}`}
+            type="button"
+            onClick={() => {
+  setSearch(occupation);
+  setSelectedOccupation(occupation);
+  setShowSuggestions(false);
+  handleOccupationSearch(occupation);
+}}
+            className="flex w-full flex-col border-b border-gray-100 px-4 py-3 text-left hover:bg-gray-50"
+          >
+            <span className="text-sm font-semibold text-gray-800">
+              {occupation}
+            </span>
+
+            <span className="text-xs text-gray-400">
+              {category}
+            </span>
+          </button>
+        ))
+      ) : (
+        <p className="px-4 py-3 text-sm text-gray-400">
+          No matching occupation found
+        </p>
+      )}
+
+    </div>
+  )}
+
+</div>
 
 
               {/* =================================================
@@ -671,10 +782,9 @@ useEffect(() => {
               <h3 className="text-xs font-bold text-[#1F2937]">
                 {provider.full_name}
               </h3>
-
-              <p className="text-[10px] font-normal italic text-[#6B7280]">
-                Service Provider
-              </p>
+<p className="text-[10px] font-normal italic text-[#6B7280]">
+  {provider.occupation || "Occupation not specified"}
+</p>
 
               <div className="flex items-center gap-1">
 
