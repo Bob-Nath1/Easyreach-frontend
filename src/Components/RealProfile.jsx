@@ -63,7 +63,7 @@ useEffect(() => {
 
       // 1. Fetch the account profile.
       const userResponse = await fetch(
-        "http://localhost:5000/api/users/profile",
+        `${import.meta.env.VITE_API_URL}/api/users/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -112,7 +112,7 @@ localStorage.setItem("user", JSON.stringify(updatedAccount));
       // 3. Fetch the provider's business profile separately.
       try {
         const providerResponse = await fetch(
-          "http://localhost:5000/api/users/provider-profile",
+          `${import.meta.env.VITE_API_URL}/api/users/provider-profile`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

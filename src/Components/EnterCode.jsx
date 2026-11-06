@@ -6,22 +6,30 @@ const EnterCode = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const email = location.state?.email;
+
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(45);
+  const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [error, setError] = useState("");
 
-  // Get email/phone passed from ResetPassword page
-  const email =
-    location.state?.email || "timilehinabidoye@gmail.com";
+  // Redirect if the user opens this page without an email
+  useEffect(() => {
+    if (!email) {
+      navigate("/resetpassword", { replace: true });
+    }
+  }, [email, navigate]);
 
   // Countdown
   useEffect(() => {
     if (timeLeft <= 0) return;
 
-    const timer = setInterval(() => {
+    const timer = setTimeout(() => {
       setTimeLeft((prev) => prev - 1);
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => clearTimeout(timer);
   }, [timeLeft]);
 
   const handleCodeChange = (value, index) => {
@@ -30,8 +38,8 @@ const EnterCode = () => {
     const newCode = [...code];
     newCode[index] = value;
     setCode(newCode);
+    setError("");
 
-    // Move to next input
     if (value && index < 5) {
       document.getElementById(`code-${index + 1}`)?.focus();
     }
@@ -43,35 +51,96 @@ const EnterCode = () => {
     }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     const enteredCode = code.join("");
 
     if (enteredCode.length !== 6) {
-      alert("Please enter the 6-digit verification code.");
+      setError("Please enter the 6-digit verification code.");
       return;
     }
 
-    // Navigate to create new password
-    navigate("/create-password");
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/verify-reset-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            otp: enteredCode,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Invalid verification code.");
+      }
+
+      if (!data.resetToken) {
+        throw new Error("Verification succeeded but no reset token was returned.");
+      }
+
+      navigate("/create-password", {
+        state: {
+          email,
+          resetToken: data.resetToken,
+        },
+      });
+    } catch (err) {
+      setError(err.message || "Unable to verify your code.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleResend = () => {
-    if (timeLeft > 0) return;
+  const handleResend = async () => {
+    if (timeLeft > 0 || resending) return;
 
-    setTimeLeft(45);
-    setCode(["", "", "", "", "", ""]);
+    try {
+      setResending(true);
+      setError("");
 
-    alert("A new verification code has been sent.");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/forgot-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to resend the code.");
+      }
+
+      setCode(["", "", "", "", "", ""]);
+      setTimeLeft(45);
+
+      document.getElementById("code-0")?.focus();
+    } catch (err) {
+      setError(err.message || "Unable to resend the code.");
+    } finally {
+      setResending(false);
+    }
   };
+
+  if (!email) return null;
 
   return (
     <div className="min-h-screen bg-white font-sans">
-      {/* Mobile screen */}
       <div className="mx-auto min-h-screen w-full max-w-[428px] rounded-[35px] bg-white">
-
-        {/* Scrollable page */}
         <div className="relative min-h-screen overflow-y-auto px-6 pb-10">
-
 
           {/* Back + title */}
           <div className="mt-2 flex items-center gap-6">
@@ -115,7 +184,6 @@ const EnterCode = () => {
               Enter Verification Code
             </h2>
 
-            {/* Code inputs */}
             <div className="mt-6 flex justify-between gap-2">
               {code.map((digit, index) => (
                 <input
@@ -123,6 +191,7 @@ const EnterCode = () => {
                   id={`code-${index}`}
                   type="text"
                   inputMode="numeric"
+                  autoComplete="one-time-code"
                   maxLength={1}
                   value={digit}
                   onChange={(e) =>
@@ -146,14 +215,14 @@ const EnterCode = () => {
             <button
               type="button"
               onClick={handleResend}
-              disabled={timeLeft > 0}
+              disabled={timeLeft > 0 || resending}
               className={`font-bold italic ${
-                timeLeft > 0
+                timeLeft > 0 || resending
                   ? "text-[#9CA3AF]"
                   : "text-[#008000]"
               }`}
             >
-              Resend
+              {resending ? "Sending..." : "Resend"}
             </button>
 
             <span className="font-bold italic text-[#F59E0B]">
@@ -161,22 +230,33 @@ const EnterCode = () => {
             </span>
           </div>
 
+          {/* Error message */}
+          {error && (
+            <p className="mt-4 text-center text-[13px] text-red-600">
+              {error}
+            </p>
+          )}
+
           {/* Verify button */}
           <button
             type="button"
             onClick={handleVerify}
-            className="mt-8 flex h-[52px] w-full items-center justify-center rounded-full border-2 border-[#008000] bg-[#008000] px-[10px] text-[14px] font-semibold text-white transition hover:bg-green-700 active:scale-[0.98]"
+            disabled={loading}
+            className="mt-8 flex h-[52px] w-full items-center justify-center rounded-full border-2 border-[#008000] bg-[#008000] px-[10px] text-[14px] font-semibold text-white transition hover:bg-green-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Verify Code
+            {loading ? "Verifying..." : "Verify Code"}
           </button>
 
           {/* Extra information box */}
-          <div className="mt-8 h-[49px] w-full rounded-[15px] border-[1.5px] border-[#E5E7EB] bg-[#F9FAFB]" />
+          <div className="mt-8 flex min-h-[49px] w-full items-center rounded-[15px] border-[1.5px] border-[#E5E7EB] bg-[#F9FAFB] px-4 py-2">
+            <p className="text-[12px] leading-5 text-[#6B7280]">
+              Your verification code expires after 5 minutes. Please use
+              the most recently sent code.
+            </p>
+          </div>
 
           {/* Bottom spacing */}
           <div className="mt-8 flex flex-col items-center">
-
-            {/* Try another way */}
             <div className="flex w-full items-center justify-between">
               <span className="text-[14px] font-bold italic text-[#374151]">
                 Try another way
@@ -187,7 +267,6 @@ const EnterCode = () => {
               </span>
             </div>
 
-            {/* Options */}
             <div className="mt-4 w-full">
               <button
                 type="button"
@@ -206,7 +285,6 @@ const EnterCode = () => {
               <div className="mt-2 h-[1.5px] w-full bg-[#F3F4F6]" />
             </div>
 
-            {/* Sign in */}
             <div className="mt-6 flex items-center gap-1 text-[14px]">
               <span className="text-[#6B7280]">
                 Remember your password?

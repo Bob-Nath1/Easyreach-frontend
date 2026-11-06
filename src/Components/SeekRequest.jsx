@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function SeekRequest() {
   const navigate = useNavigate();
@@ -650,16 +650,17 @@ const handleOpenRequest = (request) => {
                     </button>
 
                     <button
-                      type="button"
-                      onClick={() =>
-                        handleMessage(request, provider)
-                      }
-                      disabled={!provider?.id}
-                      className="flex h-[43px] min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-[#008000] bg-white px-2 text-[12px] font-bold text-[#008000] disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      <MessageCircle size={15} />
-                      Let's Chat
-                    </button>
+  type="button"
+  onClick={() => handleMessage(request, provider)}
+  disabled={
+    !provider?.id ||
+    !["accepted", "in_progress"].includes(status)
+  }
+  className="flex h-[43px] min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-[#008000] bg-white px-2 text-[12px] font-bold text-[#008000] disabled:cursor-not-allowed disabled:opacity-40"
+>
+  <MessageCircle size={15} />
+  {status === "pending" ? "Awaiting Acceptance" : "Let's Chat"}
+</button>
                   </div>
 
                   {/* STATUS MESSAGE */}

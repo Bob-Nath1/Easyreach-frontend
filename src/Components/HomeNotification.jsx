@@ -52,7 +52,7 @@ function HomeNotification() {
         setError("");
 
         const response = await fetch(
-          "http://localhost:5000/api/notifications",
+          `${import.meta.env.VITE_API_URL}/api/notifications`,
           {
             method: "GET",
             headers: {
@@ -356,7 +356,7 @@ function HomeNotification() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/notifications/${item.id}/read`,
+          `${import.meta.env.VITE_API_URL}/api/notifications/${item.id}/read`,
           {
             method: "PATCH",
             headers: {

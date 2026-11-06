@@ -136,14 +136,14 @@ function PersonalInfo() {
 
       try {
         const [userResponse, providerResponse] = await Promise.all([
-          fetch("http://localhost:5000/api/users/profile", {
+          fetch(`${import.meta.env.VITE_API_URL}/api/users/profile`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }),
 
-          fetch("http://localhost:5000/api/providers/profile", {
+          fetch(`${import.meta.env.VITE_API_URL}/api/providers/profile`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,

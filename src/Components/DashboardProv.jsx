@@ -223,7 +223,7 @@ useEffect(() => {
       }
 
       const response = await fetch(
-        "http://localhost:5000/api/requests/provider/response-time",
+        `${import.meta.env.VITE_API_URL}/api/requests/provider/response-time`,
         {
           method: "GET",
           headers: {
@@ -380,7 +380,7 @@ useEffect(() => {
       }
 
       const response = await fetch(
-        "http://localhost:5000/api/requests",
+        `${import.meta.env.VITE_API_URL}/api/requests`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -389,6 +389,10 @@ useEffect(() => {
       );
 
       const data = await response.json();
+console.log(
+  "PROVIDER REQUEST DETAILS:",
+  JSON.stringify(data.requests, null, 2)
+);
 
       if (!response.ok) {
         throw new Error(
@@ -1355,25 +1359,36 @@ onClick={handleAvailabilityToggle}
     className="relative box-border w-full rounded-[15px] border-[1.5px] border-[#008000] bg-white p-4"
   >
     {/* Seeker details */}
-    <div className="flex items-start gap-3">
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-100">
-        <User size={22} className="text-[#6B7280]" />
-      </div>
+<div className="flex items-start gap-3">
+  <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-100">
+    {request.seekerProfileImage ? (
+      <img
+        src={request.seekerProfileImage}
+        alt={request.seekerName || "Seeker"}
+        className="h-full w-full object-cover"
+        onError={(e) => {
+          e.currentTarget.style.display = "none";
+        }}
+      />
+    ) : (
+      <User size={22} className="text-[#6B7280]" />
+    )}
+  </div>
 
-      <div className="min-w-0 flex-1">
-        <h3 className="text-[16px] font-bold text-[#1F2937]">
-          Seeker #{request.seekerId}
-        </h3>
+  <div className="min-w-0 flex-1">
+    <h3 className="text-[16px] font-bold text-[#1F2937]">
+      {request.seekerName || "Unknown Seeker"}
+    </h3>
 
-        <p className="text-[12px] text-[#6B7280]">
-          {request.serviceCategory || "Service not specified"}
-        </p>
+    <p className="text-[12px] text-[#6B7280]">
+      {request.serviceCategory || "Service not specified"}
+    </p>
 
-        <p className="mt-1 break-words text-[12px] leading-5 text-[#4B5563]">
-          {request.description || "No description provided"}
-        </p>
-      </div>
-    </div>
+    <p className="mt-1 break-words text-[12px] leading-5 text-[#4B5563]">
+      {request.description || "No description provided"}
+    </p>
+  </div>
+</div>
 
     {/* Requested service date and time */}
     <div className="mt-4 rounded-lg bg-green-50 p-3">
@@ -1495,7 +1510,7 @@ value={
       ? "Loading..."
       : completedJobsError
         ? "Unavailable"
-        : completedJobs ?? 0
+        : completedJobsCount
   }
   label="Jobs Completed"
 />
@@ -1631,12 +1646,25 @@ value={
                 </div>
 
                 <div className="mt-4 space-y-3 text-sm">
-                  <div>
-                    <p className="text-xs text-gray-500">Seeker ID</p>
-                    <p className="font-medium text-gray-800">
-                      {request.seekerId ?? request.seeker_id ?? "Unavailable"}
-                    </p>
-                  </div>
+        
+<div className="flex items-center gap-3">
+  <img
+    src={request.seekerProfileImage || "/profile.jpg"}
+    alt={request.seekerName || "Seeker"}
+    onError={(e) => {
+      e.currentTarget.onerror = null;
+      e.currentTarget.src = "/profile.jpg";
+    }}
+    className="h-12 w-12 rounded-full border border-gray-200 object-cover"
+  />
+
+  <div>
+    <p className="text-xs text-gray-500">Requested by</p>
+    <p className="font-semibold text-gray-800">
+      {request.seekerName || "Unknown Seeker"}
+    </p>
+  </div>
+</div>
 
                   <div>
                     <p className="text-xs text-gray-500">Description</p>

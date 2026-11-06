@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 
@@ -9,6 +9,15 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+  const savedEmail = localStorage.getItem("rememberedEmail");
+
+  if (savedEmail) {
+    setEmail(savedEmail);
+    setRememberMe(true);
+  }
+}, []);
 
   const goBack = () => {
     navigate("/welcome");
@@ -49,8 +58,16 @@ function SignIn() {
     console.log("Login successful:", data);
 
     // Save authentication details
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    // Save authentication details
+localStorage.setItem("token", data.token);
+localStorage.setItem("user", JSON.stringify(data.user));
+
+// Remember email only when Remember Me is checked
+if (rememberMe) {
+  localStorage.setItem("rememberedEmail", email.trim());
+} else {
+  localStorage.removeItem("rememberedEmail");
+}
 
     // Go to the appropriate dashboard
     if (data.user.role === "provider") {
@@ -116,6 +133,8 @@ function SignIn() {
 
               <input
                 type="text"
+                name="username"
+                autoComplete="username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email or phone number"
@@ -143,6 +162,8 @@ function SignIn() {
 
               <input
                 type="password"
+                name="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
@@ -250,7 +271,7 @@ function SignIn() {
 
           <button
             type="button"
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/path")}
             className="text-[#1F2937] text-[12px] leading-[15px] font-semibold"
           >
             Sign up

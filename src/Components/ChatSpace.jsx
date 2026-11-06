@@ -66,7 +66,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/messages/conversations",
+       `${import.meta.env.VITE_API_URL}/api/messages/conversations`,
         {
           method: "POST",
           headers: {
@@ -116,7 +116,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/messages/${conversationId}`,
+        `${import.meta.env.VITE_API_URL}/api/messages/${conversationId}`,
         {
           method: "GET",
           headers: {
@@ -160,7 +160,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/messages/${conversationId}/read`,
+       `${import.meta.env.VITE_API_URL}/api/messages/${conversationId}/read`,
         {
           method: "PATCH",
           headers: {
@@ -198,7 +198,7 @@ const handleSend = async () => {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/api/messages/${conversationId}`,
+      `${import.meta.env.VITE_API_URL}/api/messages/${conversationId}`,
       {
         method: "POST",
         headers: {

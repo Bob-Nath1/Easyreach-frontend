@@ -40,7 +40,7 @@ const [searching, setSearching] = useState(false);
     setSearching(true);
 
     const response = await fetch(
-      "http://localhost:5000/api/location/geocode",
+    `${import.meta.env.VITE_API_URL}/api/location/geocode`,
       {
         method: "POST",
         headers: {
@@ -78,7 +78,7 @@ const handleSuggestedLocation = async (item) => {
     setSearching(true);
 
     const response = await fetch(
-      "http://localhost:5000/api/location/geocode",
+      `${import.meta.env.VITE_API_URL}/api/location/geocode`,
       {
         method: "POST",
         headers: {
@@ -133,7 +133,7 @@ const handleUseCurrentLocation = () => {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/location/reverse-geocode",
+          `${import.meta.env.VITE_API_URL}/api/location/reverse-geocode`,
           {
             method: "POST",
             headers: {

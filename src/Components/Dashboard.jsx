@@ -87,7 +87,7 @@ const [unreadNotificationCount, setUnreadNotificationCount] =
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/notifications/unread-count",
+        `${import.meta.env.VITE_API_URL}/api/notifications/unread-count`,
         {
           method: "GET",
           headers: {
@@ -227,7 +227,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/requests",
+     `${import.meta.env.VITE_API_URL}/api/notifications/unread-count`,
         {
           method: "GET",
           headers: {
@@ -303,7 +303,7 @@ useEffect(() => {
 };
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center overflow-hidden -mt-8">
+<div className="min-h-screen w-full bg-gray-100 flex justify-center">
 
       {/* =====================================================
           DEVICE FRAME
@@ -835,59 +835,9 @@ useEffect(() => {
         {/* Actions */}
 <div className="absolute left-3 right-3 top-[151px] flex h-[48px] items-center gap-2">
 
-  {/* View Profile */}
-  <button
-    type="button"
-    onClick={() =>
-      navigate("/viewprofile", {
-        state: { provider },
-      })
-    }
-    className="
-      flex
-      h-[40px]
-      min-w-0
-      flex-1
-      items-center
-      justify-center
-      rounded-[8px]
-      border-[1.5px]
-      border-[#008000]
-      bg-white
-      px-1
-      text-[10px]
-      font-bold
-      italic
-      text-[#008000]
-    "
-  >
-    View Profile
-  </button>
+ 
 
-  {/* Contact Now */}
-  <button
-    type="button"
-    onClick={() => handleContactProvider(provider)}
-    className="
-      flex
-      h-[40px]
-      min-w-0
-      flex-1
-      items-center
-      justify-center
-      rounded-[8px]
-      border-[1.5px]
-      border-[#008000]
-      bg-[#008000]
-      px-1
-      text-[10px]
-      font-bold
-      italic
-      text-white
-    "
-  >
-    Contact Now
-  </button>
+  
 
   {/* Request Service */}
   <button
@@ -979,22 +929,7 @@ useEffect(() => {
             {/* Request */}
             {/* Request */}
 <button
-  onClick={() => {
-    if (loadingRequests) {
-      return;
-    }
-
-    if (!requests.length) {
-      alert("You do not have a service request yet.");
-      return;
-    }
-
-    navigate("/seekrequest", {
-      state: {
-        requestId: requests[0].id,
-      },
-    });
-  }}
+  onClick={() => navigate("/seekrequest")}
   type="button"
   className="flex w-[49px] flex-col items-center gap-[9px]"
 >

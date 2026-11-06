@@ -44,7 +44,7 @@ const handleSaveLocation = async () => {
     setSavingLocation(true);
 
     const response = await fetch(
-      "http://localhost:5000/api/users/location",
+     `${import.meta.env.VITE_API_URL}/api/users/location`,
       {
         method: "PUT",
         headers: {

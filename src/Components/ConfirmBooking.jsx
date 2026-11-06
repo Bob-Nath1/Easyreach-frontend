@@ -17,7 +17,7 @@ import {
   Check,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Validate the supported service distance ranges
 const getValidDistanceRange = (value) => {
@@ -796,55 +796,27 @@ return (
                 {submitting ? "Sending Request..." : "Send Service Request"}
               </button>
 
-              {/* Contact */}
-              <div className="flex flex-col gap-8">
-                <p className="text-center text-[14px] text-[#6B7280]">
-                  Need to discuss details?
-                </p>
+              {/* CONTACT RESTRICTION */}
+<div className="rounded-[15px] border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+  <div className="flex items-start gap-3">
+    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-200">
+      <Info size={20} className="text-gray-600" />
+    </div>
 
-                <div className="flex flex-wrap items-center gap-3">
-                  {/* Message */}
-                  <button
-                    type="button"
-                    onClick={() => navigate("/chatspace")}
-                    className="flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-[15px] border-[1.5px] border-[#008000] bg-white px-4"
-                  >
-                    <MessageSquare
-                      size={15}
-                      className="text-[#008000]"
-                    />
+    <div>
+      <p className="text-[14px] font-bold text-[#1F2937]">
+        Contact available after acceptance
+      </p>
 
-                    <span className="truncate text-[14px] font-bold text-[#008000]">
-                      Message {providerName}
-                    </span>
-                  </button>
-
-                  {/* Call */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (provider?.phone) {
-                        window.location.href = `tel:${provider.phone}`;
-                      } else {
-                        setError(
-                          "Provider phone number is not available."
-                        );
-                      }
-                    }}
-                    className="flex h-12 items-center justify-center gap-2 rounded-[15px] border-[1.5px] border-[#008000] bg-white px-4"
-                  >
-                    <Phone
-                      size={14}
-                      className="text-[#008000]"
-                    />
-
-                    <span className="text-[14px] font-bold text-[#008000]">
-                      Call
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
+      <p className="mt-1 text-[12px] leading-5 text-[#6B7280]">
+        Once {providerName} accepts your service request, you
+        will be able to call, message, or contact the provider
+        through WhatsApp.
+      </p>
+    </div>
+  </div>
+</div>
+</div>
           </div>
 
           <div className="h-8" />

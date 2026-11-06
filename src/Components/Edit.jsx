@@ -222,7 +222,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/users/profile",
+`${import.meta.env.VITE_API_URL}/api/users/profile`,
         {
           method: "GET",
           headers: {
@@ -279,7 +279,7 @@ if (data.user.profileImage) {
 
 if (data.user.role === "provider") {
   const providerResponse = await fetch(
-    "http://localhost:5000/api/users/provider-profile",
+    `${import.meta.env.VITE_API_URL}/api/users/provider-profile`,
     {
       method: "GET",
       headers: {
@@ -416,10 +416,10 @@ console.log("File size:", file?.size);
 
     formData.append("profileImage", file);
 
-    console.log("Sending image to:", "http://localhost:5000/api/users/profile/image");
+    console.log("Sending image to:", `${import.meta.env.VITE_API_URL}/api/users/profile/image`);
 
     const response = await fetch(
-      "http://localhost:5000/api/users/profile/image",
+      `${import.meta.env.VITE_API_URL}/api/users/profile/image`,
       {
         method: "POST",
         headers: {
@@ -500,7 +500,7 @@ console.log("File size:", file?.size);
     setSaving(true);
 
     const response = await fetch(
-      "http://localhost:5000/api/users/profile",
+      `${import.meta.env.VITE_API_URL}/api/users/profile`,
       {
         method: "PUT",
         headers: {
@@ -583,7 +583,7 @@ if (userRole === "provider") {
   );
 
   const providerResponse = await fetch(
-    "http://localhost:5000/api/users/provider-profile",
+  `${import.meta.env.VITE_API_URL}/api/users/provider-profile`,
     {
       method: "PUT",
       headers: {
@@ -669,7 +669,7 @@ const handleChangePassword = async () => {
     setChangingPassword(true);
 
     const response = await fetch(
-      "http://localhost:5000/api/auth/change-password",
+      `${import.meta.env.VITE_API_URL}/api/auth/change-password`,
       {
         method: "PUT",
         headers: {

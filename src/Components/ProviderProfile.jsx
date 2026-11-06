@@ -133,7 +133,7 @@ useEffect(() => {
       }
 
       const response = await fetch(
-        "http://localhost:5000/api/users/provider-profile",
+        `${import.meta.env.VITE_API_URL}/api/users/provider-profile`,
         {
           method: "GET",
           headers: {
@@ -464,7 +464,7 @@ if (certificate) {
     });
 
     const response = await fetch(
-      "http://localhost:5000/api/users/provider-profile",
+      `${import.meta.env.VITE_API_URL}/api/users/provider-profile`,
       {
         method: "PUT",
         headers: {

@@ -1,5 +1,10 @@
-import React from "react";
- import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
  import ProtectedRoute from "./ProtectedRoute";
 import Splash from "./Components/Splash";
 import FrontPage from "./Components/Frontpage";
@@ -60,9 +65,27 @@ import Pricing from "./Components/Pricing";
 import ServiceHistory from "./Components/ServiceHistory";
 import SeekRequestDetails from "./Components/SeekRequestDetails";
 
+
+
+function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+  }, [location.pathname]);
+
+  return null;
+}
+
  function App() {
   return (
    <BrowserRouter>
+<ScrollToTop />
+
       <Routes>
         <Route path="/" element={<Splash />} />
         <Route path="/frontpage" element={<FrontPage />} />
@@ -94,7 +117,7 @@ import SeekRequestDetails from "./Components/SeekRequestDetails";
         <Route path="/enter-location" element={<EnterLocation />} />
         <Route path="/confirm-location" element={<ConfirmLocation />} />
         <Route path="/location-set" element={<LocationSet />} />        <Route path="/notification" element={<Notification />} />
-        <Route path="/profile" element={<Profile />} />
+        
         <Route
   path="/dashboard"
   element={

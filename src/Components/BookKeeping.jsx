@@ -27,7 +27,7 @@ function BookKeeping() {
   const [actionLoading, setActionLoading] = useState(false);
 const [actionMessage, setActionMessage] = useState("");
 
-  const API_URL = "http://localhost:5000";
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchBooking = async () => {
@@ -474,129 +474,9 @@ const currentStepIndex = timelineSteps.findIndex(
 
             {/* ================= ACTION BUTTONS ================= */}
             <div className="w-full flex flex-col gap-[12px]">
-              {/* Row 1 */}
-              <div className="w-full h-[120px] grid grid-cols-2 gap-[12px]">
-  <button
-    type="button"
-    className="
-      w-full
-      h-[120px]
-      bg-white
-      rounded-[15px]
-      p-4
-      flex
-      flex-col
-      items-center
-      gap-4
-      active:scale-[0.98]
-      transition
-    "
-  >
-                  <div className="w-[48px] h-[48px] rounded-full bg-[#D1FAE5] flex items-center justify-center">
-                    <ClipboardList
-                      size={23}
-                      strokeWidth={2.2}
-                      className="text-[#008000]"
-                    />
-                  </div>
+              
 
-                  <span className="w-full text-center text-[14px] leading-[17px] font-bold italic text-[#1F2937]">
-                    View Details
-                  </span>
-                </button>
-
-                {/* Message Provider */}
-                <button
-                  type="button"
-                  className="
-                    w-[184px]
-                    h-[120px]
-                    bg-white
-                    rounded-[15px]
-                    p-4
-                    flex
-                    flex-col
-                    items-center
-                    gap-4
-                    active:scale-[0.98]
-                    transition
-                  "
-                >
-                  <div className="w-[48px] h-[48px] rounded-full bg-[#D1FAE5] flex items-center justify-center">
-                    <MessageCircle
-                      size={23}
-                      strokeWidth={2.2}
-                      className="text-[#008000]"
-                    />
-                  </div>
-
-                  <span className="w-full text-center text-[14px] leading-[17px] font-bold italic text-[#1F2937]">
-  {isProvider ? "Message Seeker" : "Message Provider"}
-</span>
-                </button>
-              </div>
-
-              {/* Row 2 */}
-              <div className="w-full h-[120px] grid grid-cols-2 gap-[12px]">
-  <button
-    type="button"
-    className="
-      w-full
-      h-[120px]
-      bg-white
-      rounded-[15px]
-      p-4
-      flex
-      flex-col
-      items-center
-      gap-4
-      active:scale-[0.98]
-      transition
-    "
-  >
-                  <div className="w-[48px] h-[48px] rounded-full bg-[#D1FAE5] flex items-center justify-center">
-                    <Phone
-                      size={23}
-                      strokeWidth={2.2}
-                      className="text-[#008000]"
-                    />
-                  </div>
-
-                  <span className="w-full text-center text-[14px] leading-[17px] font-bold italic text-[#1F2937]">
-  {isProvider ? "Call Seeker" : "Call Provider"}
-</span>
-                </button>
-
-                {/* Get Directions */}
-                <button
-                  type="button"
-                  className="
-                    w-[184px]
-                    h-[120px]
-                    bg-white
-                    rounded-[15px]
-                    p-4
-                    flex
-                    flex-col
-                    items-center
-                    gap-4
-                    active:scale-[0.98]
-                    transition
-                  "
-                >
-                  <div className="w-[48px] h-[48px] rounded-full bg-[#D1FAE5] flex items-center justify-center">
-                    <Navigation
-                      size={23}
-                      strokeWidth={2.2}
-                      className="text-[#008000]"
-                    />
-                  </div>
-
-                  <span className="w-full text-center text-[14px] leading-[17px] font-bold italic text-[#1F2937]">
-                    Get Directions
-                  </span>
-                </button>
-              </div>
+            
                         
               
               {/* SERVICE STATUS ACTION */}
