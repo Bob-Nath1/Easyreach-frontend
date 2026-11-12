@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ArrowLeft,
   ChevronRight,
@@ -97,21 +97,85 @@ function SectionTitle({ children }) {
 function Settings() {
   const navigate = useNavigate();
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+const [deletePassword, setDeletePassword] = useState("");
+const [deleteError, setDeleteError] = useState("");
+const [deleting, setDeleting] = useState(false);
+
   const handleBack = () => {
     navigate(-1);
   };
 
   const handleLogout = () => {
-    // Add your logout logic here
-    navigate("/signin")
-    console.log("Logging out...");
-  };
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  localStorage.removeItem("profile");
+  localStorage.removeItem("providerProfile");
 
-  const handleDeleteAccount = () => {
-    // Add your delete account logic here
-    console.log("Delete account");
-  };
+  navigate("/signin", { replace: true });
+};
 
+const handleDeleteAccount = () => {
+  setDeletePassword("");
+  setDeleteError("");
+  setShowDeleteModal(true);
+};
+
+const confirmDeleteAccount = async () => {
+  if (!deletePassword.trim()) {
+    setDeleteError("Please enter your current password.");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    setDeleteError("Your session has expired. Please sign in again.");
+    return;
+  }
+
+  try {
+    setDeleting(true);
+    setDeleteError("");
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/users/delete-account`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          password: deletePassword,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setDeleteError(data.message || "Unable to delete your account.");
+      return;
+    }
+
+    if (!data.cloudinaryCleanupComplete) {
+      console.warn("Account deleted, but some Cloudinary files may remain.");
+    }
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("profile");
+    localStorage.removeItem("providerProfile");
+
+    navigate("/signin", { replace: true });
+  } catch (error) {
+    console.error("Account deletion error:", error);
+    setDeleteError("Network error. Please try again.");
+  } finally {
+    setDeleting(false);
+  }
+};
   return (
     <div
   className="
@@ -306,6 +370,75 @@ function Settings() {
           </p>
         </div>
       </div>
+
+      {/* =========================
+    DELETE ACCOUNT MODAL
+========================== */}
+{showDeleteModal && (
+  <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/50 px-5">
+
+    <div className="w-full max-w-[380px] rounded-[24px] bg-white p-6 shadow-xl">
+
+      <div className="mb-4 flex justify-center">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-100">
+          <TriangleAlert size={27} className="text-red-500" />
+        </div>
+      </div>
+
+      <h2 className="text-center text-[19px] font-bold text-gray-900">
+        Delete Account?
+      </h2>
+
+      <p className="mt-3 text-center text-[13px] leading-5 text-gray-500">
+        This action is permanent. Your account and associated data
+        will be deleted and cannot be recovered.
+      </p>
+
+      <div className="mt-5">
+        <label className="mb-2 block text-[13px] font-semibold text-gray-700">
+          Enter your current password
+        </label>
+
+        <input
+          type="password"
+          value={deletePassword}
+          onChange={(e) => setDeletePassword(e.target.value)}
+          placeholder="Enter your password"
+          disabled={deleting}
+          className="h-12 w-full rounded-xl border border-gray-200 px-4 text-[14px] outline-none focus:border-[#008000]"
+        />
+      </div>
+
+      {deleteError && (
+        <p className="mt-3 text-center text-[12px] text-red-500">
+          {deleteError}
+        </p>
+      )}
+
+      <div className="mt-6 flex gap-3">
+
+        <button
+          type="button"
+          disabled={deleting}
+          onClick={() => setShowDeleteModal(false)}
+          className="h-12 flex-1 rounded-xl border border-gray-200 text-[13px] font-semibold text-gray-700 disabled:opacity-50"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          disabled={deleting}
+          onClick={confirmDeleteAccount}
+          className="h-12 flex-1 rounded-xl bg-red-500 text-[13px] font-semibold text-white disabled:opacity-50"
+        >
+          {deleting ? "Deleting..." : "Delete Account"}
+        </button>
+
+      </div>
+    </div>
+  </div>
+)}
 
       {/* =========================
           BOTTOM HOME INDICATOR

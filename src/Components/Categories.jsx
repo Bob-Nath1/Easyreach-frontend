@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   ArrowLeft,
   Search,
@@ -8,205 +8,151 @@ import {
   Wrench,
   Sparkles,
   ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import occupationCatalogue from "../data/occupationCatalogue";
 
-
-const categories = [
-  {
-    name: "Art & Crafts",
-    providers: 38,
-    tag: null,
-    bg: "rgba(234, 72, 113, 0.05)",
-    iconBg: "#EA4871",
-    icon: "🎨",
-    image: "/images/art-crafts.jpg",
-  },
-  {
-    name: "AC Repair",
-    providers: 15,
-    tag: "TRENDING",
-    bg: "rgba(134, 182, 194, 0.05)",
-    iconBg: "#86B6C2",
-    icon: "❄️",
-    image: "/images/ac-repair.jpg",
-  },
-  {
-    name: "Auto & Mechanic",
-    providers: 124,
-    tag: "POPULAR",
-    bg: "rgba(0, 128, 0, 0.05)",
-    iconBg: "#008000",
-    icon: "🔧",
-    image: "/images/auto-mechanic.jpg",
-  },
-  {
-    name: "Beauty & Salon",
-    providers: 78,
-    tag: null,
-    bg: "rgba(184, 75, 134, 0.05)",
-    iconBg: "#B84B86",
-    icon: "💇",
-    image: "/images/beauty-salon.jpg",
-  },
-  {
-    name: "Catering Services",
-    providers: 77,
-    tag: "POPULAR",
-    bg: "rgba(170, 198, 110, 0.05)",
-    iconBg: "#AAC66E",
-    icon: "🍽️",
-    image: "/images/catering.jpg",
-  },
-  {
-    name: "Cleaning Services",
-    providers: 67,
-    tag: "TRENDING",
+const categoryStyles = {
+  "Home Cleaning & Domestic Services": {
     bg: "rgba(0, 158, 226, 0.05)",
     iconBg: "#009EE2",
     icon: "🧹",
-    image: "/images/cleaning.jpg",
-  },
-  {
-    name: "Electrical Services",
-    providers: 38,
-    tag: null,
-    bg: "rgba(48, 34, 49, 0.05)",
-    iconBg: "#302231",
-    icon: "⚡",
-    image: "/images/electrical.jpg",
-  },
-  {
-    name: "Event Planning",
-    providers: 86,
-    tag: null,
-    bg: "rgba(243, 190, 69, 0.05)",
-    iconBg: "#F3BE45",
-    icon: "🎉",
-    image: "/images/event-planning.jpg",
-  },
-  {
-    name: "Fitness & Wellness",
-    providers: 53,
-    tag: "POPULAR",
-    bg: "rgba(116, 171, 103, 0.05)",
-    iconBg: "#74AB67",
-    icon: "🏋️",
-    image: "/images/fitness.jpg",
-  },
-  {
-    name: "Food Delivery",
-    providers: 156,
-    tag: "POPULAR",
-    bg: "rgba(255, 215, 0, 0.05)",
-    iconBg: "#FFD700",
-    icon: "🍔",
-    image: "/images/food-delivery.jpg",
-  },
-  {
-    name: "Generator Repair",
-    providers: 40,
     tag: "TRENDING",
-    bg: "rgba(104, 103, 103, 0.05)",
-    iconBg: "#686767",
-    icon: "⚙️",
-    image: "/images/generator.jpg",
   },
-  {
-    name: "Home Repairs",
-    providers: 103,
-    tag: null,
-    bg: "rgba(176, 97, 87, 0.05)",
-    iconBg: "#B06157",
-    icon: "🏠",
-    image: "/images/home-repairs.jpg",
-  },
-  {
-    name: "IT & Tech Support",
-    providers: 45,
-    tag: null,
-    bg: "rgba(236, 153, 63, 0.05)",
-    iconBg: "#EC993F",
-    icon: "💻",
-    image: "/images/it-support.jpg",
-  },
-  {
-    name: "Legal & Consulting",
-    providers: 41,
-    tag: null,
-    bg: "rgba(59, 59, 59, 0.05)",
-    iconBg: "#3B3B3B",
-    icon: "⚖️",
-    image: "/images/legal.jpg",
-  },
-  {
-    name: "Logistics & Delivery",
-    providers: 72,
-    tag: null,
-    bg: "rgba(48, 71, 89, 0.05)",
-    iconBg: "#304759",
-    icon: "🚚",
-    image: "/images/logistics.jpg",
-  },
-  {
-    name: "Phone Repair",
-    providers: 24,
-    tag: "TRENDING",
-    bg: "rgba(204, 80, 82, 0.05)",
-    iconBg: "#CC5052",
-    icon: "📱",
-    image: "/images/phone-repair.jpg",
-  },
-  {
-    name: "Photo & Videography",
-    providers: 59,
-    tag: null,
-    bg: "rgba(86, 172, 169, 0.05)",
-    iconBg: "#56ACA9",
-    icon: "📷",
-    image: "/images/photo-video.jpg",
-  },
-  {
-    name: "Plumbing Services",
-    providers: 124,
-    tag: null,
+  "Plumbing & Water Services": {
     bg: "rgba(37, 92, 255, 0.05)",
     iconBg: "#255CFF",
     icon: "🔧",
-    image: "/images/plumbing.jpg",
+    tag: null,
   },
-  {
-    name: "Real Estate Services",
-    providers: 77,
-    tag: "POPULAR",
+  "Electrical & Power Services": {
+    bg: "rgba(48, 34, 49, 0.05)",
+    iconBg: "#302231",
+    icon: "⚡",
+    tag: null,
+  },
+  "Construction & Building Services": {
+    bg: "rgba(176, 97, 87, 0.05)",
+    iconBg: "#B06157",
+    icon: "🏗️",
+    tag: null,
+  },
+  "Painting & Wall Decoration": {
+    bg: "rgba(234, 72, 113, 0.05)",
+    iconBg: "#EA4871",
+    icon: "🎨",
+    tag: null,
+  },
+  "Carpentry, Furniture & Interior Design": {
     bg: "rgba(135, 91, 56, 0.05)",
     iconBg: "#875B38",
-    icon: "🏢",
-    image: "/images/real-estate.jpg",
-  },
-  {
-    name: "Tailoring & Fashion",
-    providers: 92,
-    tag: "TRENDING",
-    bg: "rgba(91, 188, 176, 0.05)",
-    iconBg: "#5BBCAf",
-    icon: "✂️",
-    image: "/images/tailoring.jpg",
-  },
-  {
-    name: "Tutoring & Education",
-    providers: 64,
+    icon: "🪚",
     tag: null,
+  },
+  "Automobile & Vehicle Repair": {
+    bg: "rgba(0, 128, 0, 0.05)",
+    iconBg: "#008000",
+    icon: "🚗",
+    tag: "POPULAR",
+  },
+  "Transport, Delivery & Moving": {
+    bg: "rgba(48, 71, 89, 0.05)",
+    iconBg: "#304759",
+    icon: "🚚",
+    tag: null,
+  },
+  "Beauty, Hair & Grooming": {
+    bg: "rgba(184, 75, 134, 0.05)",
+    iconBg: "#B84B86",
+    icon: "💇",
+    tag: null,
+  },
+  "Fashion, Tailoring & Clothing": {
+    bg: "rgba(91, 188, 176, 0.05)",
+    iconBg: "#5BBCAF",
+    icon: "✂️",
+    tag: "TRENDING",
+  },
+  "Healthcare & Medical Services": {
+    bg: "rgba(0, 158, 100, 0.05)",
+    iconBg: "#009E64",
+    icon: "🏥",
+    tag: null,
+  },
+  "Education, Tutoring & Training": {
     bg: "rgba(238, 134, 49, 0.05)",
     iconBg: "#EE8631",
     icon: "📚",
-    image: "/images/tutoring.jpg",
+    tag: null,
   },
-];
+  "Information Technology & Software": {
+    bg: "rgba(236, 153, 63, 0.05)",
+    iconBg: "#EC993F",
+    icon: "💻",
+    tag: null,
+  },
+  "Graphic Design & Creative Services": {
+    bg: "rgba(86, 172, 169, 0.05)",
+    iconBg: "#56ACA9",
+    icon: "📷",
+    tag: null,
+  },
+  "Catering, Cooking & Food Services": {
+    bg: "rgba(170, 198, 110, 0.05)",
+    iconBg: "#AAC66E",
+    icon: "🍽️",
+    tag: "POPULAR",
+  },
+  "Agriculture, Farming & Gardening": {
+    bg: "rgba(116, 171, 103, 0.05)",
+    iconBg: "#74AB67",
+    icon: "🌱",
+    tag: null,
+  },
+  "Security & Safety Services": {
+    bg: "rgba(104, 103, 103, 0.05)",
+    iconBg: "#686767",
+    icon: "🛡️",
+    tag: null,
+  },
+  "Property & Real Estate": {
+    bg: "rgba(135, 91, 56, 0.05)",
+    iconBg: "#875B38",
+    icon: "🏢",
+    tag: "POPULAR",
+  },
+  "Repairs, Installation & Equipment Rental": {
+    bg: "rgba(134, 182, 194, 0.05)",
+    iconBg: "#86B6C2",
+    icon: "⚙️",
+    tag: null,
+  },
+};
+
+const categories = Object.entries(occupationCatalogue).map(
+  ([name, occupations]) => ({
+    name,
+    occupations,
+    providers: 0,
+    ...(categoryStyles[name] || {
+      bg: "rgba(0, 128, 0, 0.05)",
+      iconBg: "#008000",
+      icon: "🛠️",
+      tag: null,
+    }),
+  })
+);
+
 
 function Categories() {
   const [search, setSearch] = useState("");
   const [view, setView] = useState("grid");
+
+  const [selectedCategory, setSelectedCategory] = useState(null);
+const [occupationCounts, setOccupationCounts] = useState({});
+const [loadingOccupations, setLoadingOccupations] = useState(false);
+const [occupationError, setOccupationError] = useState("");
 
   const navigate = useNavigate();
 
@@ -220,13 +166,50 @@ function Categories() {
     window.history.back();
   };
 
-  const handleCategoryClick = (category) => {
-    if (category.name === "Auto & Mechanic") {
-      navigate("/provider");
+  const handleCategoryClick = async (category) => {
+  if (selectedCategory === category.name) {
+    setSelectedCategory(null);
+    return;
+  }
+
+  setSelectedCategory(category.name);
+  setOccupationError("");
+
+  // Use cached counts if already fetched
+  if (occupationCounts[category.name]) {
+    return;
+  }
+
+  try {
+    setLoadingOccupations(true);
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/providers/occupation-counts?category=${encodeURIComponent(category.name)}`
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Unable to fetch provider counts.");
     }
-    // If you are using React Router, you can replace this with:
-    // navigate(`/category/${category.name.toLowerCase().replaceAll(" ", "-")}`);
-  };
+
+    const counts = {};
+
+    data.occupations.forEach((item) => {
+      counts[item.occupation] = Number(item.providerCount);
+    });
+
+    setOccupationCounts((prev) => ({
+      ...prev,
+      [category.name]: counts,
+    }));
+  } catch (error) {
+    console.error("Occupation count error:", error);
+    setOccupationError(error.message);
+  } finally {
+    setLoadingOccupations(false);
+  }
+};
 
   return (
    <div
@@ -361,139 +344,172 @@ function Categories() {
         {view === "grid" ? (
           <div className="grid grid-cols-2 gap-4">
 
-            {filteredCategories.map((category, index) => (
-              <button
-                key={category.name}
-                onClick={() => handleCategoryClick(category)}
-                className="
-  relative
-  h-[168px]
-  w-full
-  overflow-hidden
-  rounded-[15px]
-  text-center
-  transition-transform
-  active:scale-[0.98]
-"
-                style={{
-                  background: `linear-gradient(
-                    135deg,
-                    ${category.bg} 15%,
-                    rgba(255,255,255,0.01) 85%
-                  )`,
-                }}
+           
+{filteredCategories.map((category) => (
+  <div
+    key={category.name}
+    className={selectedCategory === category.name ? "col-span-2" : ""}
+  >
+    <button
+      type="button"
+      onClick={() => handleCategoryClick(category)}
+      className="relative h-[168px] w-full overflow-hidden rounded-[15px] text-center transition-transform active:scale-[0.98]"
+      style={{
+        background: `linear-gradient(
+          135deg,
+          ${category.bg} 15%,
+          rgba(255,255,255,0.01) 85%
+        )`,
+      }}
+    >
+      {category.tag && (
+        <span
+          className={`absolute right-[16px] top-[16px] text-[10px] font-bold italic ${
+            category.tag === "POPULAR"
+              ? "text-[#008000]"
+              : "text-[#F59E0B]"
+          }`}
+        >
+          {category.tag}
+        </span>
+      )}
+
+      <div
+        className="absolute left-1/2 top-[35px] flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full"
+        style={{ backgroundColor: category.iconBg }}
+      >
+        <span className="text-[28px]">{category.icon}</span>
+      </div>
+
+      <div className="absolute left-1/2 top-[107px] flex w-full -translate-x-1/2 flex-col items-center gap-[5px]">
+        <span className="text-[14px] font-bold italic leading-[17px] text-gray-800">
+          {category.name}
+        </span>
+
+        <div className="flex items-center gap-2">
+          <Users size={11} strokeWidth={2} className="text-gray-500" />
+          <span className="text-[12px] leading-[15px] text-gray-500">
+            {category.providers} providers
+          </span>
+        </div>
+      </div>
+
+      <div className="absolute right-3 bottom-3">
+        {selectedCategory === category.name ? (
+          <ChevronDown size={18} />
+        ) : (
+          <ChevronRight size={18} />
+        )}
+      </div>
+    </button>
+
+    {selectedCategory === category.name && (
+      <div className="mt-2 rounded-xl bg-white border border-gray-200 p-3">
+        <h4 className="font-semibold text-sm mb-3">
+          Available Occupations
+        </h4>
+
+        {loadingOccupations ? (
+          <p className="text-sm text-gray-500">Loading occupations...</p>
+        ) : occupationError ? (
+          <p className="text-sm text-red-500">{occupationError}</p>
+        ) : (
+          <div className="space-y-3">
+            {category.occupations.map((occupation) => (
+              <div
+                key={occupation}
+                className="flex items-center justify-between gap-3 text-sm"
               >
-                {/* Tag */}
-                {category.tag && (
-                  <span
-                    className={`absolute right-[16px] top-[16px] text-[10px] font-bold italic ${
-                      category.tag === "POPULAR"
-                        ? "text-[#008000]"
-                        : "text-[#F59E0B]"
-                    }`}
-                  >
-                    {category.tag}
-                  </span>
-                )}
-
-                {/* Icon Circle */}
-                <div
-                  className="absolute left-1/2 top-[35px] flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full"
-                  style={{
-                    backgroundColor: category.iconBg,
-                  }}
-                >
-                  <span className="text-[28px]">
-                    {category.icon}
-                  </span>
-                </div>
-
-                {/* Category Info */}
-                <div className="absolute left-1/2 top-[107px] flex w-full -translate-x-1/2 flex-col items-center gap-[5px]">
-
-                  <span className="text-[14px] font-bold italic leading-[17px] text-gray-800">
-                    {category.name}
-                  </span>
-
-                  <div className="flex items-center gap-2">
-                    <Users
-                      size={11}
-                      strokeWidth={2}
-                      className="text-gray-500"
-                    />
-
-                    <span className="text-[12px] leading-[15px] text-gray-500">
-                      {category.providers} providers
-                    </span>
-                  </div>
-                </div>
-              </button>
+                <span>{occupation}</span>
+                <span className="text-gray-500 whitespace-nowrap">
+                  {occupationCounts[category.name]?.[occupation] ?? 0} providers
+                </span>
+              </div>
             ))}
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+))}
 
           </div>
         ) : (
           /* ================= LIST VIEW ================= */
           <div className="flex flex-col gap-3">
-
+            
+            
+            
+            
             {filteredCategories.map((category) => (
-              <button
-                key={category.name}
-                onClick={() => handleCategoryClick(category)}
-                className="flex h-[85px] w-full items-center rounded-[15px] px-4 text-left transition-transform active:scale-[0.99]"
-                style={{
-                  background: `linear-gradient(
-                    135deg,
-                    ${category.bg} 15%,
-                    rgba(255,255,255,0.01) 85%
-                  )`,
-                }}
+  <div
+    key={category.name}
+    className={selectedCategory === category.name ? "col-span-2" : ""}
+  >
+    <button
+      type="button"
+      onClick={() => handleCategoryClick(category)}
+      className="w-full h-[168px] rounded-2xl p-4 text-left transition-all"
+      style={{ background: category.bg }}
+    >
+      <div className="flex items-center justify-between">
+        <div
+          className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
+          style={{ background: category.iconBg }}
+        >
+          {category.icon}
+        </div>
+
+        {selectedCategory === category.name ? (
+          <ChevronDown size={20} />
+        ) : (
+          <ChevronRight size={20} />
+        )}
+      </div>
+
+      <h3 className="mt-3 font-semibold text-sm">
+        {category.name}
+      </h3>
+
+      <p className="text-xs text-gray-500 mt-1">
+        {category.providers} providers
+      </p>
+    </button>
+
+    {selectedCategory === category.name && (
+      <div className="mt-2 rounded-xl bg-white border border-gray-200 p-3">
+        <h4 className="font-semibold text-sm mb-3">
+          Available Occupations
+        </h4>
+
+        {loadingOccupations ? (
+          <p className="text-sm text-gray-500">
+            Loading occupations...
+          </p>
+        ) : occupationError ? (
+          <p className="text-sm text-red-500">
+            {occupationError}
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {category.occupations.map((occupation) => (
+              <div
+                key={occupation}
+                className="flex items-center justify-between gap-3 text-sm"
               >
-                <div
-                  className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
-                  style={{
-                    backgroundColor: category.iconBg,
-                  }}
-                >
-                  <span className="text-[24px]">
-                    {category.icon}
-                  </span>
-                </div>
+                <span>{occupation}</span>
 
-                <div className="ml-4 flex flex-1 flex-col gap-1">
-                  <span className="text-[14px] font-bold italic">
-                    {category.name}
-                  </span>
-
-                  <div className="flex items-center gap-2">
-                    <Users
-                      size={11}
-                      className="text-gray-500"
-                    />
-
-                    <span className="text-[12px] text-gray-500">
-                      {category.providers} providers
-                    </span>
-                  </div>
-                </div>
-
-                {category.tag && (
-                  <span
-                    className={`mr-2 text-[10px] font-bold italic ${
-                      category.tag === "POPULAR"
-                        ? "text-[#008000]"
-                        : "text-[#F59E0B]"
-                    }`}
-                  >
-                    {category.tag}
-                  </span>
-                )}
-
-                <ChevronRight
-                  size={18}
-                  className="text-gray-400"
-                />
-              </button>
+                <span className="text-gray-500 whitespace-nowrap">
+                  {occupationCounts[category.name]?.[occupation] ?? 0} providers
+                </span>
+              </div>
             ))}
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+))}
 
           </div>
         )}

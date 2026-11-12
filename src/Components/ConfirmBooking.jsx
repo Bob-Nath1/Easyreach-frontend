@@ -75,6 +75,7 @@ const [distanceRangeKm, setDistanceRangeKm] = useState(
 const [providerPrices, setProviderPrices] = useState([]);
 const [loadingPrice, setLoadingPrice] = useState(true);
 const [priceError, setPriceError] = useState("");
+const [seekerLocation, setSeekerLocation] = useState("");
 
 const serviceName =
   provider?.service_category ||
@@ -126,6 +127,7 @@ const selectedPrice =
   const [openSection, setOpenSection] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [showBookingTerms, setShowBookingTerms] = useState(false);
 
   // ================= DATE HELPERS =================
   const getTodayLocalDate = () => {
@@ -219,32 +221,41 @@ useEffect(() => {
         throw new Error("Please log in to continue.");
       }
 
-      // Fetch the seeker's saved distance.
-    let savedDistance = distanceRangeKm;
+      // Fetch the seeker's saved location and distance.
+const profileResponse = await fetch(
+  `${API_URL}/api/users/profile`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
 
-      if (savedDistance === null) {
-        const profileResponse = await fetch(
-          `${API_URL}/api/users/profile`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+const profileData = await profileResponse.json();
 
-        const profileData = await profileResponse.json();
+if (!profileResponse.ok) {
+  throw new Error(
+    profileData.message ||
+      "Could not load your saved profile information."
+  );
+}
 
-        if (!profileResponse.ok) {
-          throw new Error(
-            profileData.message ||
-              "Could not load your saved service distance."
-          );
-        }
+if (cancelled) return;
 
-        savedDistance = getValidDistanceRange(
-          profileData.user?.searchRadius
-        );
-      }
+setSeekerLocation(
+  profileData.user?.realAddress ||
+  profileData.user?.real_address ||
+  "Location unavailable"
+);
+
+let savedDistance = distanceRangeKm;
+
+if (savedDistance === null) {
+  savedDistance = getValidDistanceRange(
+    profileData.user?.searchRadius ??
+    profileData.user?.search_radius
+  );
+}
 
       // Fetch all active offerings and their saved prices.
       const response = await fetch(
@@ -620,9 +631,8 @@ return (
 
               <div>
                 <p className="text-[15px] font-bold italic text-[#1F2937]">
-                  Your saved service location
-                </p>
-
+  {seekerLocation || "Loading your saved location..."}
+</p>
                 <p className="mt-2 text-[13px] text-[#6B7280]">
                   The provider will use your saved location when the request
                   is accepted.
@@ -630,20 +640,31 @@ return (
               </div>
 
               <button
-                type="button"
-                onClick={() =>
-                  setError(
-                    "Location editing will be handled from your profile."
-                  )
-                }
-                className="flex items-center gap-2"
-              >
-                <Navigation size={14} className="text-[#008000]" />
+  type="button"
+  onClick={() =>
+    navigate("/enter-location", {
+      state: {
+        returnTo: location.pathname,
+        returnState: {
+          provider,
+          service,
+          distanceRangeKm,
+          description,
+          serviceDate,
+          serviceTime,
+          agreed,
+        },
+      },
+    })
+  }
+  className="flex items-center gap-2"
+>
+  <Navigation size={14} className="text-[#008000]" />
 
-                <span className="text-[14px] font-bold italic text-[#008000]">
-                  Change location
-                </span>
-              </button>
+  <span className="text-[14px] font-bold italic text-[#008000]">
+    Change location
+  </span>
+</button>
             </div>
           </div>
 
@@ -665,12 +686,13 @@ return (
 
             <p className="text-[14px] text-[#1F2937]">
               I agree to the{" "}
-              <button
-                type="button"
-                className="font-bold italic text-[#008000]"
-              >
-                booking terms and conditions
-              </button>
+             <button
+  type="button"
+  onClick={() => setShowBookingTerms(true)}
+  className="font-bold italic text-[#008000]"
+>
+  booking terms and conditions
+</button>
             </p>
           </div>
 
@@ -693,6 +715,94 @@ return (
                   <ChevronDown size={16} className="text-[#6B7280]" />
                 )}
               </button>
+
+              {openSection === "cancellation" && (
+  <div className="px-4 pb-5 pt-2 text-[13px] leading-6 text-[#4B5563]">
+    <div className="space-y-4">
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          1. Cancelling a Booking
+        </h4>
+        <p>
+          Seekers may request to cancel a booking if their plans change.
+          We encourage users to notify the service provider as early
+          as possible to avoid inconvenience.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          2. Before Booking Confirmation
+        </h4>
+        <p>
+          If a provider has not yet accepted or confirmed a booking
+          request, the seeker may withdraw the request without needing
+          the provider's approval.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          3. After Booking Confirmation
+        </h4>
+        <p>
+          Once a booking has been confirmed, the seeker should contact
+          the provider directly to communicate any cancellation.
+          Both parties are encouraged to reach a mutual understanding.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          4. Provider Cancellation
+        </h4>
+        <p>
+          If a provider cannot fulfil an accepted booking, they should
+          notify the seeker as soon as possible so alternative
+          arrangements can be made.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          5. Late Cancellations and No-Shows
+        </h4>
+        <p>
+          Repeated late cancellations or failure to show up without
+          prior notice may affect the trust and reliability of users
+          on the platform. Both parties are encouraged to honour
+          confirmed arrangements.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          6. Cancellation Fees and Refunds
+        </h4>
+        <p>
+          Any cancellation fees or refund arrangements must be discussed
+          and agreed upon directly between the seeker and provider.
+          EasyReach does not collect payments, process refunds, or
+          determine cancellation charges.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          7. EasyReach's Role
+        </h4>
+        <p>
+          EasyReach provides a platform for connecting seekers and
+          service providers. Users are responsible for communicating
+          and managing cancellation arrangements directly with
+          one another.
+        </p>
+      </section>
+
+    </div>
+  </div>
+)}
 
               {openSection === "cancellation" && (
                 <div className="px-4 pb-4 text-[13px] leading-5 text-[#6B7280]">
@@ -720,6 +830,93 @@ return (
                   <ChevronDown size={16} className="text-[#6B7280]" />
                 )}
               </button>
+              
+              {openSection === "guarantee" && (
+  <div className="px-4 pb-5 pt-2 text-[13px] leading-6 text-[#4B5563]">
+    <div className="space-y-4">
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          1. Our Commitment
+        </h4>
+        <p>
+          EasyReach is committed to providing a platform where seekers
+          can discover and connect with service providers. We encourage
+          professionalism, transparency, and respectful communication.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          2. Provider Responsibilities
+        </h4>
+        <p>
+          Service providers are expected to provide accurate information
+          about their services, communicate clearly, honour confirmed
+          appointments, and make reasonable efforts to deliver the
+          services agreed upon with the seeker.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          3. Seeker Responsibilities
+        </h4>
+        <p>
+          Seekers are expected to provide accurate service requirements,
+          communicate their expectations clearly, respect agreed
+          arrangements, and treat providers professionally.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          4. Clear Pricing and Expectations
+        </h4>
+        <p>
+          Before a service begins, both parties should discuss and agree
+          on the service requirements, scope of work, pricing, and any
+          additional charges. This helps prevent misunderstandings.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          5. Service Quality and Disagreements
+        </h4>
+        <p>
+          If a seeker is dissatisfied with a service, they should first
+          communicate the issue directly to the provider and allow both
+          parties an opportunity to resolve it.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          6. Platform Responsibility
+        </h4>
+        <p>
+          EasyReach facilitates connections between seekers and providers
+          but does not directly perform, supervise, or guarantee the
+          outcome of services provided by independent providers. EasyReach
+          does not collect payments or determine refunds.
+        </p>
+      </section>
+
+      <section>
+        <h4 className="font-bold text-[#1F2937]">
+          7. Building a Trusted Community
+        </h4>
+        <p>
+          We encourage users to share honest feedback and report
+          inappropriate conduct or misleading information. This helps
+          create a more reliable and accountable community.
+        </p>
+      </section>
+
+    </div>
+  </div>
+)}
 
               {openSection === "guarantee" && (
                 <div className="px-4 pb-4 text-[13px] leading-5 text-[#6B7280]">
@@ -822,6 +1019,126 @@ return (
           <div className="h-8" />
         </div>
       </div>
+
+{showBookingTerms && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4 py-6">
+    <div className="flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+
+      {/* Header */}
+      <div className="flex items-center justify-between border-b px-5 py-4">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900">
+            Booking Terms & Conditions
+          </h2>
+          <p className="text-xs text-gray-500">
+            Please read before confirming your booking.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setShowBookingTerms(false)}
+          className="text-2xl text-gray-500 hover:text-gray-800"
+          aria-label="Close booking terms"
+        >
+          &times;
+        </button>
+      </div>
+
+      {/* Scrollable content */}
+      <div className="overflow-y-auto px-5 py-4 text-sm leading-6 text-gray-700">
+        <div className="space-y-5">
+
+          <section>
+            <h3 className="font-bold text-gray-900">1. Booking Request</h3>
+            <p>
+              By proceeding, you agree that your booking request will be sent
+              to the selected service provider. Submitting a request does not
+              automatically mean the provider has accepted it. The provider
+              must review and confirm the request.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="font-bold text-gray-900">2. Service Details</h3>
+            <p>
+              You are responsible for providing accurate information about
+              the service you need, including the description, location,
+              preferred date, and time. Communicate any changes to the
+              provider as early as possible.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="font-bold text-gray-900">3. Pricing and Payment</h3>
+            <p>
+              Service prices may be fixed, distance-based, quotation-based,
+              or free for non-commercial services. Where a quotation is
+              required, the final price must be agreed upon directly between
+              you and the provider before the service begins.
+            </p>
+            <p className="mt-2">
+              EasyReach does not collect, process, or exchange payments
+              between users. All payment arrangements are made directly
+              between the seeker and the provider.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="font-bold text-gray-900">4. Changes and Cancellations</h3>
+            <p>
+              If you need to change or cancel a booking, communicate directly
+              with the provider as soon as possible. Any rescheduling or
+              cancellation arrangements should be mutually agreed upon.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="font-bold text-gray-900">5. Responsibilities of Both Parties</h3>
+            <p>
+              Both seekers and providers are expected to communicate
+              respectfully, provide accurate information, and act responsibly
+              throughout the service arrangement.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="font-bold text-gray-900">6. Role of EasyReach</h3>
+            <p>
+              EasyReach provides a platform for connecting people seeking
+              services with service providers. EasyReach is not a party to
+              the agreement between users and does not determine their final
+              service price or payment arrangements.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="font-bold text-gray-900">7. Agreement</h3>
+            <p>
+              By checking the agreement box and proceeding with your booking,
+              you confirm that you have read, understood, and agreed to
+              these booking terms and conditions.
+            </p>
+          </section>
+
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="border-t px-5 py-4">
+        <button
+          type="button"
+          onClick={() => setShowBookingTerms(false)}
+          className="w-full rounded-xl bg-[#008000] py-3 font-bold text-white transition hover:bg-green-700"
+        >
+          I Understand
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+
 
       {/* ================= IPHONE HOME INDICATOR ================= */}
       <div className="absolute bottom-0 left-0 z-50 flex h-6 w-full items-center justify-center bg-transparent">

@@ -261,15 +261,16 @@ const handleOpenRequest = (request) => {
   navigate(`/seekrequest/${request.id}`);
 };
 
-  const handleProfile = (provider) => {
-    if (!provider?.id) return;
+  const handleProfile = (provider, request) => {
+  if (!provider?.id) return;
 
-    navigate("/viewprofile", {
-      state: {
-        provider,
-      },
-    });
-  };
+  navigate("/viewprofile", {
+    state: {
+      provider,
+      request,
+    },
+  });
+};
 
   const handleMessage = (request, provider) => {
     navigate("/chatspace", {
@@ -641,7 +642,7 @@ const handleOpenRequest = (request) => {
                   <div className="mt-5 flex gap-2">
                     <button
                       type="button"
-                      onClick={() => handleProfile(provider)}
+                     onClick={() => handleProfile(provider, request)}
                       disabled={!provider?.id}
                       className="flex h-[43px] min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-[#008000] bg-white px-2 text-[12px] font-bold text-[#008000] disabled:cursor-not-allowed disabled:opacity-50"
                     >

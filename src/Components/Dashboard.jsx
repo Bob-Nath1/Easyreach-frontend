@@ -19,6 +19,8 @@ const navigate = useNavigate();
 
   const [activeCategory, setActiveCategory] = useState("All");
 
+  const [searchRadius, setSearchRadius] = useState(2);
+
   const [search, setSearch] = useState("");
 const [showSuggestions, setShowSuggestions] = useState(false);
 const [selectedOccupation, setSelectedOccupation] = useState("");
@@ -38,7 +40,7 @@ const handleOccupationSearch = async (occupation) => {
 
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/users/nearby-providers?occupation=${encodeURIComponent(occupation)}`,
+      `${import.meta.env.VITE_API_URL}/api/users/nearby-providers?occupation=${encodeURIComponent(occupation)}&radius=${searchRadius}`,
       {
         method: "GET",
         headers: {
@@ -184,7 +186,7 @@ useEffect(() => {
 
     try {
 const response = await fetch(
-  `${import.meta.env.VITE_API_URL}/api/users/nearby-providers`,
+  `${import.meta.env.VITE_API_URL}/api/users/nearby-providers?radius=${searchRadius}`,
         {
           method: "GET",
           headers: {
@@ -213,8 +215,8 @@ const response = await fetch(
     }
   };
 
-  fetchNearbyProviders();
-}, []);
+   fetchNearbyProviders();
+}, [searchRadius]);
 
 useEffect(() => {
   const fetchServiceRequests = async () => {
@@ -681,6 +683,33 @@ useEffect(() => {
                   AVAILABLE NEAR YOU
               ================================================== */}
               <div className="flex w-full flex-col gap-2">
+
+                <div className="flex items-center justify-between">
+  <h3 className="text-xs font-bold text-[#1F2937]">
+    Search Radius
+  </h3>
+
+  <span className="text-xs font-bold text-[#008000]">
+    Within {searchRadius} km
+  </span>
+</div>
+
+<div className="flex gap-2 overflow-x-auto pb-1">
+  {[1, 2, 5, 10, 15, 20].map((km) => (
+    <button
+      key={km}
+      type="button"
+      onClick={() => setSearchRadius(km)}
+      className={`shrink-0 rounded-full border px-4 py-2 text-xs font-bold transition ${
+        searchRadius === km
+          ? "border-[#008000] bg-[#008000] text-white"
+          : "border-[#E5E7EB] bg-white text-[#6B7280]"
+      }`}
+    >
+      {km} km
+    </button>
+  ))}
+</div>
 
                 <h2 className="text-[16px] font-bold text-[#1F2937]">
                   Available Near You

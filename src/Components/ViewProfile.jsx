@@ -31,6 +31,11 @@ function ViewProfile() {
   const providerId =
     provider?.id ||
     searchParams.get("provider");
+const request = location.state?.request || null;
+const requestStatus = String(request?.status || "").toLowerCase();
+
+const canContactProvider = ["accepted", "in_progress"].includes(requestStatus);
+
 
   const [providerProfile, setProviderProfile] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -87,9 +92,12 @@ function ViewProfile() {
     "Service Provider";
 
   const displayImage =
-    displayProvider?.profileImage ||
-    displayProvider?.profile_image ||
-    null;
+  displayProvider?.profileImage ||
+  displayProvider?.profile_image ||
+  displayProvider?.profilePicture ||
+  displayProvider?.profile_picture ||
+  displayProvider?.avatar ||
+  null;
 
   const displayAddress =
     displayProvider?.realAddress ||
@@ -165,6 +173,7 @@ function ViewProfile() {
   };
 
   const handleCall = () => {
+    if (!canContactProvider) return;
     const phone =
       displayProvider?.phone ||
       displayProvider?.phoneNumber;
@@ -178,6 +187,7 @@ function ViewProfile() {
   };
 
   const handleWhatsApp = () => {
+    if (!canContactProvider) return;
     const phone =
       displayProvider?.phone ||
       displayProvider?.phoneNumber;
@@ -359,33 +369,37 @@ function ViewProfile() {
               </p>
 
               {/* Distance */}
-              <div className="mt-4 flex items-center gap-2">
-                <MapPin
-                  size={15}
-                  className="text-green-700"
-                />
+             <div className="mt-4 flex items-center gap-2">
+  <MapPin size={18} className="text-green-700" />
 
-                <span className="text-[14px] italic font-bold text-green-700">
-                  {provider?.distance_meters !== undefined
-                    ? Number(provider.distance_meters) < 1000
-                      ? `${Math.round(
-                          Number(provider.distance_meters)
-                        )}m away`
-                      : `${(
-                          Number(provider.distance_meters) / 1000
-                        ).toFixed(1)} km away`
-                    : "Distance unavailable"}
-                </span>
-              </div>
+  <span className="text-[14px] italic font-bold text-green-700">
+    {(() => {
+      const distance =
+        displayProvider?.distance_meters ??
+        provider?.distance_meters;
+
+      if (
+        distance === undefined ||
+        distance === null ||
+        !Number.isFinite(Number(distance))
+      ) {
+        return "Distance unavailable";
+      }
+
+      const meters = Number(distance);
+
+      return meters < 1000
+        ? `${Math.round(meters)}m away`
+        : `${(meters / 1000).toFixed(1)} km away`;
+    })()}
+  </span>
+</div>
+                    
 
               {/* Availability */}
-              <div className="mt-4 flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-3">
-                <span className="h-2 w-2 rounded-full bg-green-700" />
+              
 
-                <span className="text-[14px] italic font-bold text-green-700">
-                  Available
-                </span>
-              </div>
+            
             </div>
 
             <div className="mt-6 h-2 bg-gray-50" />
@@ -455,6 +469,8 @@ function ViewProfile() {
             <div className="flex flex-wrap items-center justify-center gap-3 px-4 py-5">
 
               <button
+              disabled={!canContactProvider}
+aria-disabled={!canContactProvider}
                 type="button"
                 onClick={handleWhatsApp}
                 className="
@@ -466,7 +482,7 @@ function ViewProfile() {
                   gap-2
                   rounded-[15px]
                   bg-[#00C48C]
-                  text-white
+                  text-white disabled:cursor-not-allowed disabled:opacity-40
                 "
               >
                 <MessageCircle size={18} />
@@ -477,6 +493,8 @@ function ViewProfile() {
               </button>
 
               <button
+               disabled={!canContactProvider}
+  aria-disabled={!canContactProvider}
                 type="button"
                 onClick={handleCall}
                 className="
@@ -488,7 +506,7 @@ function ViewProfile() {
                   gap-2
                   rounded-[15px]
                   bg-[#008000]
-                  text-white
+                  text-white disabled:cursor-not-allowed disabled:opacity-40
                 "
               >
                 <Phone size={18} />
@@ -499,6 +517,9 @@ function ViewProfile() {
               </button>
 
               <button
+                disabled={!canContactProvider}
+  aria-disabled={!canContactProvider}
+
                 type="button"
                 onClick={() =>
                   navigate("/message", {
@@ -518,7 +539,7 @@ function ViewProfile() {
                   border
                   border-[#008000]
                   bg-white
-                  text-[#008000]
+                  text-[#008000]  disabled:cursor-not-allowed disabled:opacity-40
                 "
               >
                 <MessageCircle size={18} />
@@ -567,119 +588,8 @@ function ViewProfile() {
               )}
             </section>
 
-            {/* ================= WORKING HOURS ================= */}
-            <div className="px-6 pb-5">
-              <div className="rounded-[15px] bg-gray-50 p-4">
-
-                <h2 className="mb-6 text-[14px] font-bold text-gray-800">
-                  Working Hours
-                </h2>
-
-                <div className="flex flex-col gap-5">
-                  {Object.keys(workingHours).length > 0 ? (
-                    Object.entries(workingHours).map(
-                      ([day, hours]) => (
-                        <div
-                          key={day}
-                          className="flex items-center justify-between gap-4"
-                        >
-                          <span className="text-[14px] capitalize text-gray-500">
-                            {day}
-                          </span>
-
-                          <span className="text-right text-[14px] text-gray-800">
-                            {hours}
-                          </span>
-                        </div>
-                      )
-                    )
-                  ) : (
-                    <p className="text-[14px] text-gray-500">
-                      Working hours not provided.
-                    </p>
-                  )}
-                </div>
-
-              </div>
-            </div>
-
-            <div className="h-2 bg-gray-50" />
-
-            {/* ================= SERVICES ================= */}
-            <section className="px-6 py-5">
-
-              <h2 className="mb-4 text-[18px] font-bold text-gray-800">
-                Services & Pricing
-              </h2>
-
-              {services.length === 0 ? (
-                <div className="rounded-[15px] bg-gray-50 p-5">
-                  <p className="text-[14px] text-gray-500">
-                    This provider has not added any services or pricing yet.
-                  </p>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-4">
-
-                  {services.map((service, index) => (
-                    <div
-                      key={`${service.name}-${index}`}
-                      className="
-                        flex
-                        min-h-[84px]
-                        items-center
-                        justify-between
-                        gap-4
-                        rounded-[15px]
-                        bg-gray-50
-                        p-4
-                      "
-                    >
-                      <div className="min-w-0">
-                        <p className="text-[15px] font-bold text-gray-800">
-                          {service.name}
-                        </p>
-
-                        {service.description && (
-                          <p className="mt-1 text-[13px] leading-5 text-gray-500">
-                            {service.description}
-                          </p>
-                        )}
-
-                        <p className="mt-2 text-[16px] font-bold italic text-green-700">
-                          ₦
-                          {Number(service.price || 0).toLocaleString()}
-                        </p>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleRequestService(service)
-                        }
-                        className="
-                          flex
-                          shrink-0
-                          items-center
-                          gap-1
-                          text-[12px]
-                          font-bold
-                          italic
-                          text-green-700
-                        "
-                      >
-                        <span>Request</span>
-                        <ChevronRight size={13} />
-                      </button>
-                    </div>
-                  ))}
-
-                </div>
-              )}
-            </section>
-
-            <div className="h-2 bg-gray-50" />
-
+           
+           
             {/* ================= WORK GALLERY ================= */}
             <section className="px-6 py-5">
 

@@ -10,10 +10,12 @@ import {
   CheckCircle2,
   ChevronDown,
   UserRound,
+  Building2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import occupationCatalogue from "../data/occupationCatalogue";
+import nearbyPlacesCatalogue from "../data/nearbyPlacesCatalogue";
 
 
 const isValidPassword = (password) => {
@@ -28,6 +30,19 @@ const isValidPassword = (password) => {
 function SignUpPro() {
 
   const navigate = useNavigate();
+  const [registrationType, setRegistrationType] = useState("individual");
+
+  const [businessData, setBusinessData] = useState({
+  businessName: "",
+  email: "",
+  phone: "",
+  password: "",
+  confirmPassword: "",
+  category: "",
+  establishmentType: "",
+  description: "",
+  address: "",
+});
 
   const goToPath = () => {
     navigate("/path");
@@ -62,6 +77,12 @@ const filteredOccupations = occupations.filter((occupation) =>
   )
 );
 
+const businessCategories = Object.keys(nearbyPlacesCatalogue);
+
+const establishmentTypes = businessData.category
+  ? nearbyPlacesCatalogue[businessData.category] || []
+  : [];
+
 const isCustomOccupation = selectedOccupation === "Other";
 
 const handleChange = (e) => {
@@ -71,6 +92,82 @@ const handleChange = (e) => {
     ...prev,
     [name]: value,
   }));
+};
+
+const handleBusinessChange = (e) => {
+  const { name, value } = e.target;
+
+  setBusinessData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+
+const handleBusinessSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!accepted) {
+    alert("Please agree to the Terms of Service and Privacy Policy.");
+    return;
+  }
+
+  if (businessData.password !== businessData.confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  if (!isValidPassword(businessData.password)) {
+    alert(
+      "Password must contain at least 8 characters, " +
+      "one uppercase letter, one number, and one special character."
+    );
+    return;
+  }
+
+  try {
+  setLoading(true);
+
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/api/auth/signup`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+     body: JSON.stringify({
+  role: "provider",
+  accountType: "business",
+  businessName: businessData.businessName,
+  email: businessData.email,
+  phone: businessData.phone,
+  password: businessData.password,
+  confirmPassword: businessData.confirmPassword,
+  category: businessData.category,
+  establishmentType: businessData.establishmentType,
+  description: businessData.description,
+  address: businessData.address,
+}),    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Business registration failed.");
+  }
+
+  alert(data.message);
+
+ navigate("/otp", {
+  state: {
+    email: businessData.email,
+    role: "provider",
+  },
+});
+} catch (error) {
+  alert(error.message || "Unable to register business.");
+} finally {
+  setLoading(false);
+}
 };
 
  const handleSubmit = async (e) => {
@@ -136,6 +233,7 @@ if (formData.password !== formData.confirmPassword) {
           password: formData.password,
           confirmPassword: formData.confirmPassword,
           serviceCategory,
+          accountType: "individual",
           occupation: finalOccupation,
           role: "provider",
         }),
@@ -214,31 +312,58 @@ if (formData.password !== formData.confirmPassword) {
         {/* ================= WHITE CONTENT ================= */}
         <div className="absolute left-0 bottom-0 w-full h-[812px] bg-white rounded-t-[45px]">
 
-          {/* Signing up as banner */}
-          <div className="absolute top-4 left-6 right-6 h-[59px] bg-[#F0FDF4] border-[1.6px] border-[#059669] rounded-md flex items-center px-[18px]">
+         {/* Registration Type Selection */}
+<div className="absolute top-4 left-6 right-6 grid grid-cols-2 gap-3">
 
-            <div className="w-[33px] h-[32px] rounded-lg bg-[#059669] flex items-center justify-center">
-              <UserRound size={19} color="white" />
-            </div>
+  {/* Individual Provider */}
+  <button
+    type="button"
+    onClick={() => setRegistrationType("individual")}
+    className={`h-[75px] rounded-lg border-2 p-3 flex flex-col items-center justify-center gap-1 transition ${
+      registrationType === "individual"
+        ? "border-[#059669] bg-[#F0FDF4]"
+        : "border-gray-200 bg-white"
+    }`}
+  >
+    <UserRound
+      size={22}
+      className={
+        registrationType === "individual"
+          ? "text-[#059669]"
+          : "text-gray-400"
+      }
+    />
 
-            <div className="ml-2">
-              <p className="text-[#008000] text-[12px] font-bold leading-[15px]">
-                SIGNING UP AS
-              </p>
+    <span className="text-[11px] font-bold text-gray-700">
+      Individual Provider
+    </span>
+  </button>
 
-              <p className="text-[#1F2937] text-[14px] font-bold leading-[17px]">
-                Service Provider
-              </p>
-            </div>
+  {/* Business / Organisation */}
+  <button
+    type="button"
+    onClick={() => setRegistrationType("business")}
+    className={`h-[75px] rounded-lg border-2 p-3 flex flex-col items-center justify-center gap-1 transition ${
+      registrationType === "business"
+        ? "border-[#059669] bg-[#F0FDF4]"
+        : "border-gray-200 bg-white"
+    }`}
+  >
+    <Building2
+      size={22}
+      className={
+        registrationType === "business"
+          ? "text-[#059669]"
+          : "text-gray-400"
+      }
+    />
 
-            <button
-              type="button"
-              className="ml-auto text-[#059669] text-[13px] italic font-bold"
-            >
-              Change
-            </button>
-          </div>
+    <span className="text-[11px] font-bold text-gray-700">
+      Business / Organisation
+    </span>
+  </button>
 
+</div>
           {/* ================= FORM ================= */}
          <div
   className="
@@ -255,10 +380,11 @@ if (formData.password !== formData.confirmPassword) {
   "
 >
 
-            <form
-  onSubmit={handleSubmit}
-  className="flex flex-col gap-6"
->
+ {registrationType === "individual" ? (
+  <form
+    onSubmit={handleSubmit}
+    className="flex flex-col gap-6"
+  >
 
               {/* Full Name */}
               <div>
@@ -628,20 +754,7 @@ if (formData.password !== formData.confirmPassword) {
   {loading ? "Creating account..." : "Continue"}
 </button>
 
-              {/* Sign up with */}
-              <div className="pt-2">
-
-                <div className="flex items-center justify-center gap-4">
-                  <div className="w-[60px] h-px bg-gray-300" />
-
-                  <span className="text-[#1F2937] text-[14px] font-semibold">
-                    Sign up with
-                  </span>
-
-                  <div className="w-[60px] h-px bg-gray-300" />
-                </div>
-             </div>
-
+             
               {/* Already have account */}
               <div className="text-right pb-6">
 
@@ -657,13 +770,306 @@ if (formData.password !== formData.confirmPassword) {
 
               </div>
 
-            </form>
+             </form>
+) : (
+
+
+  <form
+    onSubmit={handleBusinessSubmit}
+    className="flex flex-col gap-5"
+  >
+    <h2 className="text-[16px] font-bold text-[#008000]">
+      Business / Organisation Registration
+    </h2>
+
+    {/* Business Category */}
+    <div>
+      <label className="mb-2 block text-[14px] font-bold text-[#008000]">
+        Business Category
+      </label>
+
+      <select
+        name="category"
+        value={businessData.category}
+        onChange={(e) => {
+          setBusinessData((prev) => ({
+            ...prev,
+            category: e.target.value,
+            establishmentType: "",
+          }));
+        }}
+        required
+        className="h-[40px] w-full border-b border-[#9CA3AF] bg-white text-[12px] font-semibold text-gray-700 outline-none"
+      >
+        <option value="">Select business category</option>
+        {businessCategories.map((category) => (
+          <option key={category} value={category}>
+            {category}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {/* Establishment Type */}
+    <div>
+      <label className="mb-2 block text-[14px] font-bold text-[#008000]">
+        Establishment Type
+      </label>
+
+      <select
+        name="establishmentType"
+        value={businessData.establishmentType}
+        onChange={handleBusinessChange}
+        disabled={!businessData.category}
+        required
+        className="h-[40px] w-full border-b border-[#9CA3AF] bg-white text-[12px] font-semibold text-gray-700 outline-none disabled:bg-gray-50"
+      >
+        <option value="">Select establishment type</option>
+        {establishmentTypes.map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {/* Business Name */}
+    <div>
+      <label className="mb-2 block text-[14px] font-bold text-[#008000]">
+        Business / Organisation Name
+      </label>
+
+      <div className="relative border-b border-[#9CA3AF] h-[40px]">
+        <Building2
+          size={19}
+          className="absolute left-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
+        />
+        <input
+          type="text"
+          name="businessName"
+          value={businessData.businessName}
+          onChange={handleBusinessChange}
+          placeholder="Enter your business name"
+          required
+          className="w-full h-full pl-8 pr-2 text-[12px] font-semibold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
+        />
+      </div>
+    </div>
+
+    {/* Business Email */}
+    <div>
+      <label className="mb-2 block text-[14px] font-bold text-[#008000]">
+        Business Email Address
+      </label>
+
+      <div className="relative border-b border-[#9CA3AF] h-[40px]">
+        <Mail
+          size={19}
+          className="absolute left-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
+        />
+        <input
+          type="email"
+          name="email"
+          value={businessData.email}
+          onChange={handleBusinessChange}
+          placeholder="business@example.com"
+          required
+          className="w-full h-full pl-8 pr-2 text-[12px] font-semibold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
+        />
+      </div>
+    </div>
+
+    {/* Business Phone */}
+    <div>
+      <label className="mb-2 block text-[14px] font-bold text-[#008000]">
+        Business Phone Number
+      </label>
+
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 w-[60px]">
+          <span className="text-[20px]">🇳🇬</span>
+          <span className="text-[#1F2937] text-[12px] font-bold">
+            +234
+          </span>
+        </div>
+
+        <div className="relative flex-1 border-b border-[#9CA3AF] h-[40px]">
+          <Phone
+            size={17}
+            className="absolute left-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
+          />
+          <input
+            type="tel"
+            name="phone"
+            value={businessData.phone}
+            onChange={handleBusinessChange}
+            placeholder="705 085 2180"
+            required
+            className="w-full h-full pl-8 pr-2 text-[12px] font-semibold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* Business Address */}
+    <div>
+      <label className="mb-2 block text-[14px] font-bold text-[#008000]">
+        Business / Organisation Address
+      </label>
+
+      <input
+        type="text"
+        name="address"
+        value={businessData.address}
+        onChange={handleBusinessChange}
+        placeholder="Enter your business physical address"
+        required
+        className="h-[40px] w-full border-b border-[#9CA3AF] px-2 text-[12px] font-semibold text-gray-700 placeholder:text-[#9CA3AF] outline-none"
+      />
+    </div>
+
+    {/* Business Description */}
+    <div>
+      <label className="mb-2 block text-[14px] font-bold text-[#008000]">
+        Business Description
+      </label>
+
+      <textarea
+        name="description"
+        value={businessData.description}
+        onChange={handleBusinessChange}
+        placeholder="Tell people about your business or organisation..."
+        rows={4}
+        maxLength={1000}
+        required
+        className="w-full rounded-md border border-[#D1D5DB] p-3 text-[12px] font-semibold text-gray-700 placeholder:text-[#9CA3AF] outline-none focus:border-[#059669] resize-none"
+      />
+
+      <p className="mt-1 text-right text-[10px] text-gray-400">
+        {businessData.description.length}/1000 characters
+      </p>
+    </div>
+
+    {/* Business Password */}
+    <div>
+      <label className="mb-2 block text-[14px] font-bold text-[#008000]">
+        Password
+      </label>
+
+      <div className="relative border-b border-[#9CA3AF] h-[40px]">
+        <Lock
+          size={18}
+          className="absolute left-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
+        />
+
+        <input
+          type={showPassword ? "text" : "password"}
+          name="password"
+          value={businessData.password}
+          onChange={handleBusinessChange}
+          placeholder="Create a password"
+          required
+          className="w-full h-full pl-8 pr-10 text-[12px] font-semibold text-gray-700 outline-none"
+        />
+
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
+        >
+          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      </div>
+    </div>
+
+    {/* Confirm Business Password */}
+    <div>
+      <label className="mb-2 block text-[14px] font-bold text-[#008000]">
+        Confirm Password
+      </label>
+
+      <div className="relative border-b border-[#9CA3AF] h-[40px]">
+        <Lock
+          size={18}
+          className="absolute left-1 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
+        />
+
+        <input
+          type="password"
+          name="confirmPassword"
+          value={businessData.confirmPassword}
+          onChange={handleBusinessChange}
+          placeholder="Confirm your password"
+          required
+          className="w-full h-full pl-8 pr-2 text-[12px] font-semibold text-gray-700 outline-none"
+        />
+      </div>
+    </div>
+
+    {/* Password Requirements */}
+    <div className="bg-[#F9FAFB] border border-[#E5E7EB] rounded-md p-4">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-[#374151] text-[13px] font-bold">
+          Password must contain
+        </span>
+        <ChevronDown size={16} className="text-[#9CA3AF]" />
+      </div>
+
+      <div className="space-y-1">
+        <PasswordRequirement text="At least 8 characters" />
+        <PasswordRequirement text="One uppercase letter" />
+        <PasswordRequirement text="One number" />
+        <PasswordRequirement text="One special character" />
+      </div>
+    </div>
+
+    {/* Business Terms and Privacy Policy */}
+    <div className="flex items-start gap-2">
+      <button
+        type="button"
+        onClick={() => setAccepted(!accepted)}
+        className={`w-[15px] h-[15px] flex-shrink-0 border border-[#1F2937] flex items-center justify-center ${
+          accepted ? "bg-[#008000]" : "bg-white"
+        }`}
+      >
+        {accepted && (
+          <CheckCircle2 size={12} className="text-white" />
+        )}
+      </button>
+
+      <p className="text-[12px] leading-[15px] text-[#444444] font-medium">
+        I agree to the{" "}
+        <button
+          type="button"
+          className="text-[#008000] font-semibold"
+        >
+          Terms of Service
+        </button>{" "}
+        and{" "}
+        <button
+          type="button"
+          className="text-[#008000] font-semibold"
+        >
+          Privacy Policy
+        </button>
+      </p>
+    </div>
+
+    {/* Continue Registration */}
+    <button
+      type="submit"
+      disabled={loading}
+      className="w-full h-[52px] bg-[#008000] hover:bg-[#006b00] transition-colors rounded-full flex items-center justify-center text-white text-[14px] font-semibold disabled:opacity-60"
+    >
+      Continue Registration
+    </button>
+
+  </form>
+
+)}
           </div>
 
-          {/* ================= HOME INDICATOR ================= */}
-          <div className="absolute bottom-0 left-0 w-full h-[24px] bg-white flex items-center justify-center">
-            <div className="w-[108px] h-[4px] bg-[#1F2937] rounded-full" />
-          </div>
+       
 
         </div>
       </div>
@@ -685,6 +1091,8 @@ function PasswordRequirement({ text }) {
         {text}
       </span>
     </div>
+
+    
   );
 }
 

@@ -71,15 +71,29 @@ body: JSON.stringify({
       );
     }
 
-    navigate(
-      user.role === "seeker" ? "/location-set" : "/profile",
-      {
-        state: {
-          location: selectedLocation,
-          radius,
-        },
-      }
-    );
+   const returnTo = locationState.state?.returnTo;
+const returnState = locationState.state?.returnState;
+
+if (returnTo) {
+  navigate(returnTo, {
+    replace: true,
+    state: {
+      ...returnState,
+      updatedLocation: selectedLocation,
+    },
+  });
+} else {
+  navigate(
+    user.role === "seeker" ? "/location-set" : "/profile",
+    {
+      state: {
+        location: selectedLocation,
+        radius,
+      },
+    }
+  );
+}
+
   } catch (error) {
     console.error("Save location error:", error);
     alert(error.message || "Unable to save your location.");
@@ -88,9 +102,14 @@ body: JSON.stringify({
   }
 };
 
-  const handleChangeLocation = () => {
-navigate("/enter-location");
-  };
+ const handleChangeLocation = () => {
+  navigate("/enter-location", {
+    state: {
+      returnTo: locationState.state?.returnTo,
+      returnState: locationState.state?.returnState,
+    },
+  });
+};
 
   return (
     <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center overflow-hidden">
