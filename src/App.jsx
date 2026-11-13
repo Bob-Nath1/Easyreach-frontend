@@ -97,15 +97,9 @@ function ScrollToTop() {
 <Route
   path="/profile"
   element={
-    (() => {
-      const user = JSON.parse(
-        localStorage.getItem("user") || "{}"
-      );
-
-      return user.role === "provider"
-        ? <ProviderProfile />
-        : <Profile />;
-    })()
+    <ProtectedRoute allowedRole="provider">
+      <ProviderProfile />
+    </ProtectedRoute>
   }
 />
 

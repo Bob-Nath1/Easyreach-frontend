@@ -131,6 +131,13 @@ const handleUseCurrentLocation = () => {
     async (position) => {
       const { latitude, longitude } = position.coords;
 
+      console.log("DEVICE LOCATION:", {
+  latitude,
+  longitude,
+  accuracy: position.coords.accuracy,
+  accuracyInMeters: `${Math.round(position.coords.accuracy)} metres`,
+});
+
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/location/reverse-geocode`,
@@ -147,7 +154,7 @@ const handleUseCurrentLocation = () => {
         );
 
         const data = await response.json();
-
+        
         if (!response.ok || !data.location) {
           throw new Error(
             data.message || "Unable to identify your current address."
