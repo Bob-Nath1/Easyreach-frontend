@@ -23,10 +23,10 @@ function FrontPage() {
   <img
     src="/EasyReach.png"
     alt="EasyReach"
-    className="w-[27px] h-[32px] md:w-[39px] md:h-[42px] lg:w-[49px] lg:h-[72px] object-contain"
+    className="w-[27px] h-[32px] md:w-[39px] md:h-[42px] lg:w-[49px] lg:h-[62px] object-contain"
   />
 
-  <span className="text-lg font-bold text-[#1F2937] md:text-2xl lg:text-3xl">
+  <span className="text-lg font-bold text-[#1F2937] md:text-2xl lg:text-2xl">
     EasyReach
   </span>
 
@@ -57,15 +57,15 @@ function FrontPage() {
 
       {/* Heading */}
       <h1 className="absolute left-1/2
-  -translate-x-1/2 mt-23 font-medium text-sm md:text-xl lg:text-2xl md:mt-25 lg:mt-30 2xl:font-normal 2xl:text-3xl leading-[29px] font-bold text-[#1F2937]">
+  -translate-x-1/2 mt-23 font-medium text-sm md:text-xl lg:text-xl md:mt-25 lg:mt-30 2xl:font-normal 2xl:text-3xl leading-[29px] font-bold text-[#1F2937]">
         Find Services Near You
       </h1>
 
 
       {/* Description */}
      <p className="absolute left-1/2
-  -translate-x-1/2 mt-30 font-normal text-center w-[90%] text-sm leading-[18px] md:text-base md:mt-35 lg:mt-40
-     font-medium text-[#1F2937] lg:text-xl"> Discover skilled professionals <br className="sm:hidden" /> closest to your location in seconds. </p>
+  -translate-x-1/2 mt-30 font-normal text-center w-[90%] text-sm leading-[18px] md:text-base md:mt-35 lg:mt-38
+     font-medium text-[#1F2937] lg:text-lg"> Discover skilled professionals <br className="sm:hidden" /> closest to your location in seconds. </p>
 
 
       {/* Main Image */}
@@ -83,7 +83,7 @@ function FrontPage() {
       {/* Next Button */}
           <button
         onClick={goToChat}
-        className="absolute top-[754px] left-1/2 -translate-x-1/2 w-[280px] h-[52px] md:mt-34 lg:mt-74  flex items-center  justify-center bg-[#008000] rounded-full"
+        className="absolute top-[724px] left-1/2 -translate-x-1/2 w-[280px] h-[52px] md:mt-14 lg:mt-44  flex items-center  justify-center bg-[#008000] rounded-full"
       >
         <span className="text-sm lg:text-lg leading-[28px] font-semibold text-white">
           Next
@@ -91,14 +91,6 @@ function FrontPage() {
       </button>
 
 
-
-      {/* Bottom Navigation / iPhone Handle */}
-      <div className="absolute left-1/2
-    -translate-x-1/2 bottom-0 w-full h-[24px] flex items-center justify-center">
-
-        <div className="w-[108px] h-[4px] bg-[#1D1B20] rounded-[12px]"></div>
-
-      </div>
 
     </div>
   );
