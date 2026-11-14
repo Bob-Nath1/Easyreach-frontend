@@ -11,9 +11,7 @@ function FrontPage() {
   return (
     <div className="relative w-full sm:max-w-[640px] 
     md:max-w-[768px]
-    lg:max-w-[1024px] xl:max-w-[1280px] 2xl:max-w-[1536px] h-[926px]
-    
-    md:h-[1026px] lg:h-[1226px] mx-auto bg-white rounded-[35px] overflow-hidden">
+    lg:max-w-[1024px] xl:max-w-[1280px] 2xl:max-w-[1536px] min-h-screen md:min-h-[926px] mx-auto bg-white rounded-[35px] overflow-hidden">
 
       {/* Top Navigation */}
 
@@ -83,7 +81,7 @@ function FrontPage() {
       {/* Next Button */}
           <button
         onClick={goToChat}
-        className="absolute top-[px] left-1/2 -translate-x-1/2 w-[280px] h-[52px] md:mt-14 lg:mt-44  flex items-center  justify-center bg-[#008000] rounded-full"
+        className="absolute top-[624px] left-1/2 -translate-x-1/2 w-[280px] h-[52px] md:mt-14 lg:mt-54  flex items-center  justify-center bg-[#008000] rounded-full"
       >
         <span className="text-sm lg:text-lg leading-[28px] font-semibold text-white">
           Next
