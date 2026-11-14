@@ -1024,7 +1024,7 @@ if (formData.password !== formData.confirmPassword) {
     </div>
 
     {/* Business Terms and Privacy Policy */}
-    <div className="flex items-start gap-2">
+    <div className="flex items-start gap-2 mb-17">
       <button
         type="button"
         onClick={() => setAccepted(!accepted)}

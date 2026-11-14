@@ -64,7 +64,7 @@ function Welcome() {
         onClick={() => navigate(-1)}
         className=" absolute left-6 top-[70px] w-6 h-6 flex items-center justify-center text-[#1F2937] text-2xl"
       >
-        ←
+         ‹
       </button>
 
 
@@ -126,59 +126,10 @@ function Welcome() {
         ========================= */}
         <div className="absolute top-[441px] left-1/2 -translate-x-1/2 w-[210px] flex flex-col items-center gap-6">
 
-          {/* Sign in with */}
-          <div className="w-[210px] h-[21px] flex items-center gap-1">
-
-            <div className="w-[60px] h-px bg-white"></div>
-
-            <span className="w-[82px] text-center text-white font-semibold text-[14px] leading-[21px] lg:text-lg lg:w-[120px] xl:text-lg xl:w-[120px] 2xl:text-lg 2xl:w-[120px]">
-              Sign in with
-            </span>
-
-            <div className="w-[60px] h-px bg-white"></div>
-
-          </div>
+          
 
 
-          {/* Social icons */}
-          <div className="flex items-center gap-4">
-
-            {/* Facebook */}
-            <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-            <img
-            src="/Facebook.png"
-            alt="EasyReach"
-            className="w-[27px] h-[32px] object-contain"
-          />
-
-            </button>
-
-
-            {/* Google */}
-            <button
-            onClick={() => navigate("/google")} className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
- <img
-            src="/Google.png"
-            alt="EasyReach"
-            className="w-[27px] h-[32px] object-contain"
-          />
-
-            </button>
-
-
-            {/* Apple */}
-            <button
-          onClick={() => navigate("/apple")}
-            className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-              <img
-            src="/Apple.png"
-            alt="Apple"
-            className="w-[27px] h-[32px] object-contain"
-          />
-
-            </button>
-
-          </div>
+        
 
 
           {/* Don't have an account */}
@@ -188,12 +139,12 @@ function Welcome() {
               Don’t have an account?
             </span>
 
-            <button
-              onClick={() => navigate("/signup")}
-              className="text-white text-[12px] leading-[15px] font-semibold lg:text-xl  xl:text-lg 2xl:text-xl"
-            >
-              Sign up
-            </button>
+         <button
+  onClick={() => navigate("/signup")}
+  className="whitespace-nowrap text-white text-[12px] leading-[15px] font-semibold lg:text-xl xl:text-lg 2xl:text-xl"
+>
+  Sign up
+</button>
 
           </div>
 
@@ -202,12 +153,7 @@ function Welcome() {
       </div>
 
 
-      {/* =========================
-          IPHONE HOME INDICATOR
-      ========================= */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-6 flex items-center justify-center">
-  <div className="w-[108px] h-1 bg-[#FFFDFD] rounded-xl"></div>
-</div>
+    
 
     </div>
   );

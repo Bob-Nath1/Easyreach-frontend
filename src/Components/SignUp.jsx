@@ -481,7 +481,7 @@ if (formData.password !== formData.confirmPassword) {
             {/* =========================
                 TERMS
             ========================== */}
-            <div className="flex items-start gap-2 mt-5">
+            <div className="flex items-start gap-2 mt-5 mb-17">
               <button
                 type="button"
                 onClick={() =>

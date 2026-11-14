@@ -212,7 +212,7 @@ if (
       {/* =========================
           HEADER
       ========================== */}
-      <div className="absolute top-[70px] left-0 w-full h-[30px]">
+      <div className="absolute top-[40px] lg:top-[70px] left-0 w-full h-[30px]">
 
         <button
   type="button"
@@ -233,7 +233,7 @@ if (
       ========================== */}
 
       {/* Icon */}
-      <div className="absolute top-[180px] left-1/2 -translate-x-1/2 w-[90px] h-[90px] rounded-full bg-gradient-to-br from-[#00C48C] to-[#008000] flex items-center justify-center">
+      <div className="absolute top-[130px] lg:top-[180px] left-1/2 -translate-x-1/2 w-[90px] h-[90px] rounded-full bg-gradient-to-br from-[#00C48C] to-[#008000] flex items-center justify-center">
 
         <div className="w-[48px] h-[48px] rounded-[12px] border-[3px] border-white flex items-center justify-center">
 
@@ -244,24 +244,24 @@ if (
       </div>
 
       {/* Title */}
-      <h2 className="absolute top-[337px] left-1/2 -translate-x-1/2 w-full text-center text-[24px] leading-[29px] font-bold text-[#1F2937]">
+      <h2 className="absolute top-[300px] lg:top-[337px] left-1/2 -translate-x-1/2 w-full text-center text-[24px] leading-[29px] font-bold text-[#1F2937]">
         Enter Verification Code
       </h2>
 
       {/* Description */}
-      <p className="absolute top-[379px] left-1/2 -translate-x-1/2 text-[16px] leading-[19px] text-[#6B7280]">
+      <p className="absolute top-[340px]  lg:top-[379px] left-1/2 -translate-x-1/2 text-[13px] lg:text-[16px] text-[#6B7280]">
         We sent a 6-digit code to
       </p>
 
       {/* Phone */}
-      <p className="absolute top-[410px] left-4 right-4 text-center text-[16px] leading-[22px] font-bold text-[#10B981] break-all">
+      <p className="absolute top-[380px] lg:top-[410px] left-4 right-4 text-center text-[16px] leading-[22px] font-bold text-[#10B981] break-all">
   {email || "Email address unavailable"}
 </p>
 
 <button
   type="button"
   onClick={goBack}
-  className="absolute top-[453px] left-1/2 -translate-x-1/2 text-[14px] leading-[17px] font-bold text-[#10B981]"
+  className="absolute top-[420px] lg:top-[453px] left-1/2 -translate-x-1/2 text-[14px] leading-[17px] font-bold text-[#10B981]"
 >
   Edit email
 </button>
@@ -269,7 +269,7 @@ if (
       {/* =========================
           OTP INPUTS
       ========================== */}
-      <div className="absolute top-[488px] left-6 right-6 flex items-center gap-2">
+      <div className="absolute top-[480px] lg:top-[488px] left-6 right-6 flex items-center gap-2">
 
         {otp.map((digit, index) => (
           <input
@@ -309,7 +309,7 @@ if (
       {/* =========================
           RESEND
       ========================== */}
-      <div className="absolute top-[580px] left-1/2 -translate-x-1/2 flex items-center gap-1">
+      <div className="absolute top-[550px] lg:top-[580px] left-1/2 -translate-x-1/2 flex items-center gap-1">
 
         <span className="text-[14px] leading-[17px] text-[#6B7280]">
           Resend code in
@@ -339,7 +339,8 @@ if (
   onClick={handleVerify}
   className="
     absolute
-    top-[800px]
+    top-[650px]
+    lg:top-[800px]
     left-1/2
     -translate-x-1/2
     w-[calc(100%-48px)]
@@ -367,7 +368,7 @@ if (
       {/* =========================
           SUPPORT
       ========================== */}
-      <div className="absolute top-[865px] left-1/2 -translate-x-1/2 flex items-center gap-[5px] whitespace-nowrap">
+      <div className="absolute top-[725px] lg:top-[865px] left-1/2 -translate-x-1/2 flex items-center gap-[5px] whitespace-nowrap">
 
         <span className="text-[14px] leading-[17px] text-[#6B7280]">
           Didn't receive code?
@@ -381,14 +382,6 @@ if (
         </button>
 
       </div>
-
-      {/* =========================
-          BOTTOM HOME INDICATOR
-      ========================== */}
-      <div className="absolute bottom-0 left-0 w-full h-[24px] bg-white flex items-center justify-center">
-        <div className="w-[108px] h-[4px] bg-[#1F2937] rounded-full" />
-      </div>
-
     </div>
   );
 }
