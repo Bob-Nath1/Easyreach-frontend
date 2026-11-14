@@ -83,7 +83,7 @@ function FrontPage() {
       {/* Next Button */}
           <button
         onClick={goToChat}
-        className="absolute top-[724px] left-1/2 -translate-x-1/2 w-[280px] h-[52px] md:mt-14 lg:mt-44  flex items-center  justify-center bg-[#008000] rounded-full"
+        className="absolute top-[px] left-1/2 -translate-x-1/2 w-[280px] h-[52px] md:mt-14 lg:mt-44  flex items-center  justify-center bg-[#008000] rounded-full"
       >
         <span className="text-sm lg:text-lg leading-[28px] font-semibold text-white">
           Next
