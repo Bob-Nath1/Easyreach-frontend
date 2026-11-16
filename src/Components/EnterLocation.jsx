@@ -220,7 +220,7 @@ const handleConfirm = () => {
 };
 
   return (
-    <div className="min-h-screen w-full overflow-hidden bg-white flex items-center justify-center">
+<div className="min-h-screen w-full bg-white flex justify-center items-start">
 
       {/* =====================================================
           RESPONSIVE DEVICE FRAME
@@ -252,7 +252,7 @@ const handleConfirm = () => {
 
         {/* ================= HEADER ================= */}
 
-        <div className="absolute left-[24px] top-[70px] flex h-[49px] w-[257px] items-start gap-6">
+        <div className="absolute left-[24px] top-[40px] flex h-[49px] w-[257px] items-start gap-6">
 
           <button
             type="button"
@@ -611,13 +611,6 @@ const handleConfirm = () => {
 </button>
 
 
-          {/* Home Indicator */}
-
-          <div className="absolute bottom-0 left-0 h-6 w-full">
-
-            <div className="absolute left-1/2 top-1/2 h-1 w-[108px] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-[#1F2937]" />
-
-          </div>
 
         </div>
 

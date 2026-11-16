@@ -79,7 +79,7 @@ const handleAllowLocation = () => {
       {/* =========================
           LOCATION ICON
       ========================== */}
-      <div className="absolute top-[125px] left-1/2 -translate-x-1/2 w-[167px] h-[167px]">
+      <div className="absolute top-[75px] left-1/2 -translate-x-1/2 w-[167px] h-[167px]">
 
         {/* Outer light green circle */}
         <div className="absolute inset-0 rounded-full bg-[rgba(0,128,0,0.05)]" />
@@ -108,7 +108,7 @@ const handleAllowLocation = () => {
       {/* =========================
           TITLE
       ========================== */}
-      <h1 className="absolute top-[315px] left-1/2 -translate-x-1/2 w-[188px] text-center text-[24px] leading-[29px] font-bold text-[#1F2937]">
+      <h1 className="absolute top-[255px] left-1/2 -translate-x-1/2 w-[188px] text-center text-[24px] leading-[29px] font-bold text-[#1F2937]">
         Enable Location
       </h1>
 
@@ -118,7 +118,7 @@ const handleAllowLocation = () => {
       ========================== */}
      <p className="
   absolute
-  top-[360px]
+  top-[300px]
   left-1/2
   -translate-x-1/2
   w-[calc(100%-48px)]
@@ -144,7 +144,7 @@ const handleAllowLocation = () => {
   <div
   className="
     absolute
-    top-[443px]
+    top-[400px]
     left-1/2
     -translate-x-1/2
     w-[calc(100%-48px)]
@@ -185,7 +185,7 @@ const handleAllowLocation = () => {
 <div
   className="
     absolute
-    top-[535px]
+    top-[500px]
     left-1/2
     -translate-x-1/2
     w-[272px]
@@ -256,7 +256,7 @@ const handleAllowLocation = () => {
       ========================== */}
       <div className="
   absolute
-  top-[719px]
+  top-[690px]
   left-1/2
   -translate-x-1/2
   w-[calc(100%-48px)]
@@ -364,14 +364,6 @@ const handleAllowLocation = () => {
       </button>
 
 
-      {/* =========================
-          BOTTOM HOME INDICATOR
-      ========================== */}
-      <div className="absolute bottom-0 left-0 w-full h-[24px] bg-white flex items-center justify-center">
-
-        <div className="w-[108px] h-[4px] bg-[#1F2937] rounded-full" />
-
-      </div>
 
     </div>
   );

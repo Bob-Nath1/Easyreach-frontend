@@ -196,11 +196,8 @@ if (
     lg:w-[1024px]
     xl:w-[1280px]
     2xl:w-[1536px]
-    h-[926px]
-    md:h-[1026px]
-    lg:h-[1200px]
-    xl:h-[1200px]
-    2xl:h-[1200px]
+    h-[720px]
+    lg:h-[885px]
     bg-white
     rounded-[35px]
     overflow-hidden
@@ -223,7 +220,7 @@ if (
   <ArrowLeft size={24} strokeWidth={2} />
 </button>
 
-<h1 className="absolute left-1/2 -translate-x-1/2 text-[20px] leading-[24px] font-bold text-[#1F2937]">
+<h1 className="absolute left-1/2 -translate-x-1/2 text-[20px] leading-[24px] font-bold text-[#1F2937] lg:">
   Verify Phone
 </h1>      
 </div>
@@ -340,7 +337,7 @@ if (
   className="
     absolute
     top-[600px]
-    lg:top-[800px]
+    lg:top-[650px]
     left-1/2
     -translate-x-1/2
     w-[calc(100%-48px)]
@@ -368,7 +365,7 @@ if (
       {/* =========================
           SUPPORT
       ========================== */}
-      <div className="absolute top-[700px] lg:top-[865px] left-1/2 -translate-x-1/2 flex items-center gap-[5px] whitespace-nowrap">
+      <div className="absolute top-[700px] lg:top-[715px] left-1/2 -translate-x-1/2 flex items-center gap-[5px] whitespace-nowrap">
 
         <span className="text-[14px] leading-[17px] text-[#6B7280]">
           Didn't receive code?
