@@ -453,10 +453,7 @@ const handleRequestAction = async (requestId, action) => {
 
             {/* Notification */}
             <div className="relative">
-              <Bell
-                size={24}
-                className="text-[#6B7280]"
-              />
+              
 
               {requests.length > 0 && (
                 <span className="absolute -right-2 -top-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#008000] px-1 text-[10px] font-bold text-white">
@@ -467,8 +464,8 @@ const handleRequestAction = async (requestId, action) => {
           </div>
 
           {/* ================= TABS ================= */}
-          <div className="px-6 pb-4 pt-4">
-            <div className="flex items-end justify-between">
+          <div className="pb-4 pt-4">
+<div className="flex items-end justify-start gap-1">
               {tabs.map((tab) => {
                 const isActive = activeTab === tab.name;
 
@@ -481,7 +478,7 @@ const handleRequestAction = async (requestId, action) => {
                     }
                     className="flex flex-col items-center gap-2"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center px-1 gap-1">
                       <span
                         className={`text-sm font-semibold ${
                           isActive
@@ -494,7 +491,7 @@ const handleRequestAction = async (requestId, action) => {
 
                       {tab.count !== null && (
                         <span
-                          className={`flex h-[18px] min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-bold text-white ${
+                          className={`flex h-[16px] min-w-[16px] shrink-0 items-center justify-center rounded-full px-[2px] text-[9px] font-bold text-white ${
                             tab.name === "New"
                               ? "bg-[#F59E0B]"
                               : "bg-[#008000]"
@@ -505,21 +502,11 @@ const handleRequestAction = async (requestId, action) => {
                       )}
                     </div>
 
-                    <div
-                      className={`h-[2px] ${
-                        isActive
-                          ? "bg-[#008000]"
-                          : "bg-transparent"
-                      } ${
-                        tab.name === "All"
-                          ? "w-[73px]"
-                          : tab.name === "New"
-                          ? "w-[86px]"
-                          : tab.name === "Responded"
-                          ? "w-[100px]"
-                          : "w-[89px]"
-                      }`}
-                    />
+<div
+  className={`h-[2px] w-full ${
+    isActive ? "bg-[#008000]" : "bg-transparent"
+  }`}
+/>
                   </button>
                 );
               })}

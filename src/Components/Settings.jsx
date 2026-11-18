@@ -253,19 +253,7 @@ const confirmDeleteAccount = async () => {
               onClick={() => navigate("/enter-location")}
             />
 
-            <SettingsItem
-              icon={CreditCard}
-              label="Payment Methods"
-              onClick={() => navigate("/payment-methods")}
-            />
-
-            <SettingsItem
-              icon={Bell}
-              label="Notifications"
-              onClick={() => navigate("/notifa")}
-            />
-
-            <SettingsItem
+             <SettingsItem
               icon={ShieldCheck}
               label="Privacy & Security"
               onClick={() => navigate("/privacy-security")}
@@ -285,12 +273,6 @@ const confirmDeleteAccount = async () => {
               onClick={() => console.log("Language")}
             />
 
-            <SettingsItem
-              icon={Banknote}
-              label="Currency"
-              value="₦ NGN"
-              onClick={() => console.log("Currency")}
-            />
 
             <SettingsItem
               icon={Ruler}
@@ -299,12 +281,7 @@ const confirmDeleteAccount = async () => {
               onClick={() => console.log("Distance Units")}
             />
 
-            <SettingsItem
-              icon={Sun}
-              label="Theme"
-              value="Light"
-              onClick={() => navigate("/theme")}
-            />
+           
           </div>
 
           {/* =========================
@@ -366,7 +343,7 @@ const confirmDeleteAccount = async () => {
               VERSION
           ========================== */}
           <p className="text-[12px] leading-[15px] text-[#94A3B8]">
-            EasyReach v1.2.5 • © 2025
+            EasyReach v1.2.5 • © 2026
           </p>
         </div>
       </div>

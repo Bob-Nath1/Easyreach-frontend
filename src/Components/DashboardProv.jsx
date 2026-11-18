@@ -979,7 +979,7 @@ const formatResponseTime = (seconds) => {
   className="
     relative
     mx-auto
-   h-[926px]
+   h-[726px]
     w-full
     sm:w-[640px]
     md:w-[768px]
@@ -1250,7 +1250,7 @@ onClick={handleAvailabilityToggle}
   </span>
 
   <span className="mt-1 text-[10px] text-white/90">
-    Click to view details
+    
   </span>
 </button>
 
@@ -1563,8 +1563,7 @@ value={
         </div>
 
 
-        {/* Bottom spacing */}
-        <div className="h-8" />
+
 
       </div>
 
@@ -1730,7 +1729,7 @@ value={
  <div
     className="
       absolute
-      bottom-[28px]
+      bottom-[-10px]
       left-0
       flex
       h-[70px]

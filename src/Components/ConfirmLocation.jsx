@@ -112,7 +112,7 @@ if (returnTo) {
 };
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 flex items-center justify-center overflow-hidden">
+  <div className="min-h-screen w-full bg-gray-100 flex justify-center items-start overflow-hidden">
 
       {/* =====================================================
           DEVICE FRAME
@@ -127,11 +127,7 @@ if (returnTo) {
     lg:w-[1024px]
     xl:w-[1280px]
     2xl:w-[1536px]
-    h-[926px]
-    md:h-[1026px]
-    lg:h-[1200px]
-    xl:h-[1200px]
-    2xl:h-[1200px]
+    h-[890px]
     overflow-hidden
     rounded-[35px]
     bg-white
@@ -402,26 +398,7 @@ if (returnTo) {
   Change Location
 </button>
 
-          {/* =================================================
-              HOME INDICATOR
-          ================================================== */}
-          <div className="absolute bottom-0 left-0 h-[24px] w-full">
-
-            <div
-              className="
-                absolute
-                left-1/2
-                top-1/2
-                h-[4px]
-                w-[108px]
-                -translate-x-1/2
-                -translate-y-1/2
-                rounded-[12px]
-                bg-[#1F2937]
-              "
-            />
-
-          </div>
+         
 
         </div>
 

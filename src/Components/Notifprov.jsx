@@ -328,7 +328,7 @@ const handleOpenNewMessages = async () => {
         className="
           relative
           mx-auto
-          h-[926px]
+          h-[680px]
           w-full
           sm:w-[640px]
           md:w-[768px]
@@ -549,13 +549,6 @@ const handleOpenNewMessages = async () => {
 
         </div>
 
-        {/* ================= HOME INDICATOR ================= */}
-        <div className="absolute bottom-0 left-0 z-50 flex h-6 w-full items-center justify-center bg-white">
-
-          <div className="h-1 w-[108px] rounded-xl bg-[#1F2937]" />
-
-        </div>
-
       </div>
     </div>
   );
@@ -608,7 +601,7 @@ function Toggle({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`relative h-[28px] w-[48px] rounded-full transition-all duration-300 ${
+      className={`relative shrink-0 h-[28px] w-[48px] rounded-full transition-all duration-300 ${
         enabled
           ? "bg-[#008000]"
           : "bg-[#D1D5DB]"

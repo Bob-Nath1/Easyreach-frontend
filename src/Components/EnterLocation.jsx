@@ -470,7 +470,7 @@ const handleConfirm = () => {
                 className="mt-0.5 shrink-0 text-[#3B82F6]"
               />
 
-              <p className="w-[280px] text-[14px] font-normal leading-5 text-[#1E40AF]">
+              <p className="w-[210px] text-sm sm:text-base sm:w-[490px] md: font-normal leading- text-[#1E40AF]">
                 Type your location above to see it on the map. You can adjust
                 the pin to your exact location.
               </p>

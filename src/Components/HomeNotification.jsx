@@ -28,9 +28,6 @@ function HomeNotification() {
   const filters = [
     "All",
     "Messages",
-    "Bookings",
-    "Offers",
-    "Requests",
   ];
 
   // =========================================================

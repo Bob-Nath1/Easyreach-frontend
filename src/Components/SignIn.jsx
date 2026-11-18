@@ -246,18 +246,7 @@ if (rememberMe) {
   "
 >
 
-          {/* Sign in with */}
-         <div className="flex w-[210px] items-center gap-[4px]">
-
-            <div className="w-[60px] border-t border-[#9CA3AF]"></div>
-
-            <span className="w-[79px] text-center text-[#1F2937] text-[14px] leading-[17px] font-semibold">
-              Sign in with
-            </span>
-
-            <div className="w-[60px] border-t border-[#9CA3AF]"></div>
-
-          </div>
+          
 
         </div>
 

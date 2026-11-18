@@ -343,26 +343,6 @@ localStorage.setItem("user", JSON.stringify(updatedAccount));
                 </span>
               </button>
 
-              {/* Location */}
-              <button
-              onClick={() => navigate("/notificset")}
-                type="button"
-                className="
-                  flex
-                  h-11
-                  w-11
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-white/40
-                "
-              >
-                  <img
-                src="/noti.png"
-                alt="notification"
-                className="h-4 w-4 object-cover"
-              />
-              </button>
             </div>
 
 
@@ -514,8 +494,9 @@ localStorage.setItem("user", JSON.stringify(updatedAccount));
                   rounded-[15px]
                   border-[1.5px]
                   border-white
+                  whitespace-nowrap
                   px-[15px]
-                  text-[14px]
+                  text-sm
                   font-bold
                   text-white
                 "
@@ -761,90 +742,11 @@ px-4
               </span>
             </button>
 
-            {/* REQUEST */}
-            <button
-            onClick={() => navigate("/seekrequest")}
-              type="button"
-              className="flex h-[46px] w-[49px] flex-col items-center gap-2"
-            >
-              <ClipboardList
-                size={24}
-                className="text-[#9CA3AF]"
-              />
 
-              <span className="text-[11px] font-bold text-[#9CA3AF]">
-                Request
-              </span>
-            </button>
-
-            {/* MESSAGES */}
-            <button
-            onClick={() => navigate("/message")}
-              type="button"
-              className="relative flex h-[46px] w-[56px] flex-col items-center gap-2"
-            >
-              <div className="relative">
-                <MessageCircle
-                  size={24}
-                  className="text-[#9CA3AF]"
-                />
-
-                <span
-                  className="
-                    absolute
-                    -right-2
-                    -top-2
-                    flex
-                    h-[16px]
-                    w-[16px]
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-[#EF4444]
-                    text-[10px]
-                    font-bold
-                    text-white
-                  "
-                >
-                  2
-                </span>
-              </div>
-
-              <span className="text-[11px] font-bold text-[#9CA3AF]">
-                Messages
-              </span>
-            </button>
-
-            {/* PROFILE */}
-            <button
-              type="button"
-              className="flex h-[46px] w-[35px] flex-col items-center gap-2"
-            >
-              <User
-                size={24}
-                fill="#008000"
-                className="text-[#008000]"
-              />
-
-              <span className="text-[11px] font-bold text-[#008000]">
-                Profile
-              </span>
-            </button>
           </div>
 
-          {/* iPhone Home Indicator */}
-          <div
-            className="
-              absolute
-              bottom-2
-              left-1/2
-              h-[4px]
-              w-[108px]
-              -translate-x-1/2
-              rounded-xl
-              bg-[#1F2937]
-            "
-          />
+          
+       
         </div>
       </div>
     </div>

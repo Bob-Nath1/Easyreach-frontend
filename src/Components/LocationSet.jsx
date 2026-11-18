@@ -105,7 +105,7 @@ function LocationSet() {
             absolute
             left-1/2
             -translate-x-1/2
-            top-[320px]
+            top-[100px]
             flex
             w-[calc(100%-48px)]
             max-w-[380px]
@@ -130,7 +130,7 @@ function LocationSet() {
             absolute
             left-1/2
             -translate-x-1/2
-            top-[440px]
+            top-[240px]
             flex
             h-[118px]
             w-[calc(100%-48px)]
@@ -210,7 +210,7 @@ function LocationSet() {
             className="
               absolute
               left-1/2
-              top-0
+              bottom-110
               flex
               h-[52px]
               w-[calc(100%-48px)]
@@ -241,7 +241,7 @@ function LocationSet() {
             className="
               absolute
               left-1/2
-              top-[68px]
+              bottom-[388px]
               h-[28px]
               w-[calc(100%-48px)]
               max-w-[380px]
@@ -256,24 +256,7 @@ function LocationSet() {
             Change Location
           </button>
 
-          {/* Home Indicator */}
-
-          <div className="absolute bottom-0 left-0 h-[24px] w-full">
-            <div
-              className="
-                absolute
-                left-1/2
-                top-1/2
-                h-[4px]
-                w-[108px]
-                -translate-x-1/2
-                -translate-y-1/2
-                rounded-[12px]
-                bg-[#1F2937]
-              "
-            />
-          </div>
-
+          
         </div>
 
       </div>
