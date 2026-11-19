@@ -67,15 +67,24 @@ import SeekRequestDetails from "./Components/SeekRequestDetails";
 
 
 
+
 function ScrollToTop() {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "instant",
-    });
+    if (location.pathname === "/chatspace") {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        left: 0,
+        behavior: "instant",
+      });
+    } else {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+      });
+    }
   }, [location.pathname]);
 
   return null;

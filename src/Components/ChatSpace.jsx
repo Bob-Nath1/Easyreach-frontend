@@ -16,9 +16,6 @@ function ChatSpace() {
 const location = useLocation();
 const navigate = useNavigate();
 
-useEffect(() => {
-  window.scrollTo(0, 0);
-}, []);
 
 const provider =
   location.state?.provider ||
@@ -218,16 +215,22 @@ useEffect(() => {
   markMessagesAsRead();
 }, [conversationId]);
 
-// Automatically scroll to the latest message
+
 useEffect(() => {
-  if (loadingMessages) return;
+  if (loadingMessages || loadingConversation) return;
 
-  const chatContainer = chatContainerRef.current;
+  const scrollToBottom = () => {
+    const chatContainer = chatContainerRef.current;
 
-  if (chatContainer) {
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }
-}, [messages, loadingMessages]);
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  };
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(scrollToBottom);
+  });
+}, [loadingMessages, loadingConversation, messages]);
 
 const handleSend = async () => {
   if (!message.trim() || !conversationId) return;
@@ -627,9 +630,11 @@ if (Number(item.sender_id) === Number(provider?.id)) {
         </div>
 
         {/* iPhone home indicator */}
-        <div className="flex h-6 items-center justify-center">
-          <div className="h-1 w-[108px] rounded-full bg-gray-800" />
-        </div>
+<div
+  className="flex h-6 items-center justify-center"
+>
+  <div className="h-1 w-[108px] rounded-full bg-gray-800" />
+</div>
       </div>
     </div>
   );
