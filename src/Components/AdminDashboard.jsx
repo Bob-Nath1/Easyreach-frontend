@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -19,13 +19,44 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight as ChevronRightIcon,
+  RefreshCw,
 } from "lucide-react";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 function AdminDashboard() {
   const navigate = useNavigate();
 
   const [activePage, setActivePage] = useState("Overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [overview, setOverview] = useState({
+    totalUsers: 0,
+    totalSeekers: 0,
+    totalProviders: 0,
+    totalRequests: 0,
+    completedJobs: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const [userRecords, setUserRecords] = useState([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [usersError, setUsersError] = useState("");
+  const [actionLoadingId, setActionLoadingId] = useState(null);
+  const [userFilter, setUserFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    limit: 10,
+    totalRecords: 0,
+    totalPages: 0,
+  });
 
   const navigation = [
     { name: "Overview", icon: LayoutDashboard },
@@ -37,44 +68,199 @@ function AdminDashboard() {
     { name: "Settings", icon: Settings },
   ];
 
-  const stats = [
-    {
-      title: "Total Users",
-      value: "0",
-      description: "Registered users",
-      icon: Users,
-    },
-    {
-      title: "Total Providers",
-      value: "0",
-      description: "Registered providers",
-      icon: UserCheck,
-    },
-    {
-      title: "Total Seekers",
-      value: "0",
-      description: "Registered seekers",
-      icon: UserCheck,
-    },
-    {
-      title: "Service Requests",
-      value: "0",
-      description: "All requests",
-      icon: ClipboardList,
-    },
-    {
-      title: "Completed Jobs",
-      value: "0",
-      description: "Successfully completed",
-      icon: CheckCircle,
-    },
-  ];
+  const fetchOverview = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        navigate("/signin", { replace: true });
+        return;
+      }
+
+      setLoading(true);
+      setError("");
+
+      const response = await fetch(`${API_URL}/api/admin/overview`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.status === 401 || response.status === 403) {
+        setError(data.message || "You are not authorized to view this dashboard.");
+        return;
+      }
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Unable to load dashboard statistics.");
+      }
+
+      setOverview(data.overview);
+    } catch (err) {
+      console.error("Admin overview error:", err);
+      setError(err.message || "Unable to load dashboard statistics.");
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchOverview();
+  }, [fetchOverview]);
+
+  const fetchUsers = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        navigate("/signin", { replace: true });
+        return;
+      }
+
+      setUsersLoading(true);
+      setUsersError("");
+
+      const params = new URLSearchParams({
+        role: userFilter,
+        page: String(currentPage),
+        limit: "10",
+      });
+
+      if (searchTerm.trim()) {
+        params.set("search", searchTerm.trim());
+      }
+
+      const response = await fetch(
+        `${API_URL}/api/admin/users?${params.toString()}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Unable to load users.");
+      }
+
+      setUserRecords(data.users || []);
+      setPagination(data.pagination);
+    } catch (err) {
+      console.error("Admin users error:", err);
+      setUsersError(err.message || "Unable to load users.");
+    } finally {
+      setUsersLoading(false);
+    }
+  }, [userFilter, currentPage, searchTerm, navigate]);
+
+  const handleAccountStatusChange = async (userId, newStatus) => {
+  const statusLabels = {
+    active: "reactivate",
+    suspended: "suspend",
+    deactivated: "deactivate",
+  };
+
+  const action = statusLabels[newStatus];
+
+  const confirmed = window.confirm(
+    `Are you sure you want to ${action} this account?`
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const token = localStorage.getItem("token");
+
+    setActionLoadingId(userId);
+    setUsersError("");
+
+    const response = await fetch(
+      `${API_URL}/api/admin/users/${userId}/status`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Unable to update account status.");
+    }
+
+    await fetchUsers();
+  } catch (err) {
+    console.error("Account status update error:", err);
+    setUsersError(err.message || "Unable to update account status.");
+  } finally {
+    setActionLoadingId(null);
+  }
+};
+
+  useEffect(() => {
+    if (activePage === "User Records") {
+      fetchUsers();
+    }
+  }, [activePage, fetchUsers]);
+
+  const openUserRecords = (role) => {
+    setUserFilter(role);
+    setCurrentPage(1);
+    setSearchTerm("");
+    setActivePage("User Records");
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/signin", { replace: true });
   };
+
+  const stats = [
+    {
+      title: "Total Users",
+      value: overview.totalUsers,
+      description: "Registered users",
+      icon: Users,
+      role: "all",
+    },
+    {
+      title: "Total Providers",
+      value: overview.totalProviders,
+      description: "Registered providers",
+      icon: UserCheck,
+      role: "provider",
+    },
+    {
+      title: "Total Seekers",
+      value: overview.totalSeekers,
+      description: "Registered seekers",
+      icon: UserCheck,
+      role: "seeker",
+    },
+    {
+      title: "Service Requests",
+      value: overview.totalRequests,
+      description: "All requests",
+      icon: ClipboardList,
+      role: null,
+    },
+    {
+      title: "Completed Jobs",
+      value: overview.completedJobs,
+      description: "Successfully completed",
+      icon: CheckCircle,
+      role: null,
+    },
+  ];
 
   const renderOverview = () => (
     <>
@@ -87,14 +273,30 @@ function AdminDashboard() {
         </p>
       </div>
 
+      {error && (
+        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
+          const isClickable = Boolean(stat.role);
 
           return (
-            <div
+            <button
               key={stat.title}
-              className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm"
+              type="button"
+              disabled={!isClickable}
+              onClick={() => {
+                if (isClickable) openUserRecords(stat.role);
+              }}
+              className={`rounded-xl border border-gray-100 bg-white p-5 text-left shadow-sm transition ${
+                isClickable
+                  ? "cursor-pointer hover:-translate-y-1 hover:border-green-200 hover:shadow-md"
+                  : "cursor-default"
+              }`}
             >
               <div className="flex items-center justify-between">
                 <div className="rounded-lg bg-green-50 p-3">
@@ -103,18 +305,22 @@ function AdminDashboard() {
                 <TrendingUp size={18} className="text-gray-400" />
               </div>
 
-              <p className="mt-5 text-sm text-gray-500">
-                {stat.title}
-              </p>
+              <p className="mt-5 text-sm text-gray-500">{stat.title}</p>
 
               <h2 className="mt-1 text-2xl font-bold text-gray-900">
-                {stat.value}
+                {loading ? "..." : stat.value}
               </h2>
 
               <p className="mt-1 text-xs text-gray-400">
                 {stat.description}
               </p>
-            </div>
+
+              {isClickable && (
+                <p className="mt-3 text-xs font-semibold text-[#008000]">
+                  View records →
+                </p>
+              )}
+            </button>
           );
         })}
       </div>
@@ -155,20 +361,293 @@ function AdminDashboard() {
     </>
   );
 
+  const renderUserRecords = () => (
+    <>
+      <div className="mb-6">
+        <button
+          onClick={() => setActivePage("Overview")}
+          className="mb-5 flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#008000]"
+        >
+          <ArrowLeft size={18} />
+          Back to Overview
+        </button>
+
+        <h1 className="text-2xl font-bold text-gray-900">
+          {userFilter === "all"
+            ? "All Registered Users"
+            : userFilter === "provider"
+            ? "Registered Providers"
+            : "Registered Seekers"}
+        </h1>
+
+        <p className="mt-1 text-sm text-gray-500">
+          {pagination.totalRecords} registered account(s) found.
+        </p>
+      </div>
+
+      <div className="mb-6 flex flex-col gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative w-full sm:max-w-md">
+          <Search
+            size={18}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          />
+          <input
+            type="search"
+            value={searchTerm}
+            onChange={(event) => {
+              setSearchTerm(event.target.value);
+              setCurrentPage(1);
+            }}
+            placeholder="Search name, email or phone..."
+            className="w-full rounded-lg border border-gray-200 py-3 pl-10 pr-4 text-sm outline-none focus:border-[#008000] focus:ring-2 focus:ring-green-100"
+          />
+        </div>
+
+        <select
+          value={userFilter}
+          onChange={(event) => {
+            setUserFilter(event.target.value);
+            setCurrentPage(1);
+          }}
+          className="rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#008000]"
+        >
+          <option value="all">All Users</option>
+          <option value="seeker">Seekers</option>
+          <option value="provider">Providers</option>
+        </select>
+
+        <button
+          onClick={fetchUsers}
+          disabled={usersLoading}
+          className="flex items-center justify-center gap-2 rounded-lg bg-green-50 px-4 py-3 text-sm font-medium text-[#008000] hover:bg-green-100 disabled:opacity-50"
+        >
+          <RefreshCw size={16} className={usersLoading ? "animate-spin" : ""} />
+          Refresh
+        </button>
+      </div>
+
+      {usersError && (
+        <div className="mb-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {usersError}
+        </div>
+      )}
+
+      <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[1100px] text-left">
+            <thead className="bg-gray-50">
+              <tr className="text-xs uppercase tracking-wide text-gray-500">
+                <th className="px-5 py-4 font-semibold">User</th>
+                <th className="px-5 py-4 font-semibold">Contact</th>
+                <th className="px-5 py-4 font-semibold">Role</th>
+                <th className="px-5 py-4 font-semibold">Location</th>
+                <th className="px-5 py-4 font-semibold">Verification</th>
+                <th className="px-5 py-4 font-semibold">Account Status</th>
+<th className="px-5 py-4 font-semibold">Actions</th>
+                <th className="px-5 py-4 font-semibold">Joined</th>
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-gray-100">
+              {usersLoading ? (
+                <tr>
+                  <td colSpan="8" className="px-5 py-12 text-center text-sm text-gray-500">
+                    Loading registered users...
+                  </td>
+                </tr>
+              ) : userRecords.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="px-5 py-12 text-center text-sm text-gray-500">
+                    No users found.
+                  </td>
+                </tr>
+              ) : (
+                userRecords.map((user) => (
+                  <tr key={user.id} className="hover:bg-gray-50">
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        {user.profileImage ? (
+                          <img
+                            src={user.profileImage}
+                            alt=""
+                            className="h-10 w-10 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 font-semibold text-[#008000]">
+                            {user.fullName?.charAt(0)?.toUpperCase() || "U"}
+                          </div>
+                        )}
+
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800">
+                            {user.fullName}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            ID: {user.id}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <p className="text-sm text-gray-700">{user.email}</p>
+                      <p className="mt-1 text-xs text-gray-400">{user.phone}</p>
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <span className={`rounded-full px-3 py-1 text-xs font-medium ${
+                        user.role === "provider"
+                          ? "bg-blue-50 text-blue-700"
+                          : "bg-green-50 text-green-700"
+                      }`}>
+                        {user.role}
+                      </span>
+                    </td>
+
+                    <td className="px-5 py-4 text-sm text-gray-600">
+                      {user.city || "Not provided"}
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <span className={`rounded-full px-3 py-1 text-xs font-medium ${
+                        user.isVerified
+                          ? "bg-green-50 text-green-700"
+                          : "bg-yellow-50 text-yellow-700"
+                      }`}>
+                        {user.isVerified ? "Verified" : "Unverified"}
+                      </span>
+                    </td>
+
+                    <td className="px-5 py-4">
+  <span
+    className={`rounded-full px-3 py-1 text-xs font-medium ${
+      user.status === "active"
+        ? "bg-green-50 text-green-700"
+        : user.status === "suspended"
+        ? "bg-yellow-50 text-yellow-700"
+        : "bg-red-50 text-red-700"
+    }`}
+  >
+    {user.status || "active"}
+  </span>
+</td>
+
+<td className="px-5 py-4">
+  <div className="flex items-center gap-2">
+    {user.status === "active" || !user.status ? (
+      <>
+        <button
+          type="button"
+          disabled={actionLoadingId === user.id}
+          onClick={() =>
+            handleAccountStatusChange(user.id, "suspended")
+          }
+          className="rounded-lg bg-yellow-50 px-3 py-2 text-xs font-medium text-yellow-700 hover:bg-yellow-100 disabled:opacity-50"
+        >
+          Suspend
+        </button>
+
+        <button
+          type="button"
+          disabled={actionLoadingId === user.id}
+          onClick={() =>
+            handleAccountStatusChange(user.id, "deactivated")
+          }
+          className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-700 hover:bg-red-100 disabled:opacity-50"
+        >
+          Deactivate
+        </button>
+      </>
+    ) : (
+      <>
+        {user.status === "suspended" && (
+          <button
+            type="button"
+            disabled={actionLoadingId === user.id}
+            onClick={() =>
+              handleAccountStatusChange(user.id, "deactivated")
+            }
+            className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-700 hover:bg-red-100 disabled:opacity-50"
+          >
+            Deactivate
+          </button>
+        )}
+
+        <button
+          type="button"
+          disabled={actionLoadingId === user.id}
+          onClick={() =>
+            handleAccountStatusChange(user.id, "active")
+          }
+          className="rounded-lg bg-green-50 px-3 py-2 text-xs font-medium text-green-700 hover:bg-green-100 disabled:opacity-50"
+        >
+          Reactivate
+        </button>
+      </>
+    )}
+
+    {actionLoadingId === user.id && (
+      <span className="text-xs text-gray-400">Updating...</span>
+    )}
+  </div>
+</td>
+
+                    <td className="px-5 py-4 text-sm text-gray-600">
+                      {user.createdAt
+                        ? new Date(user.createdAt).toLocaleDateString()
+                        : "—"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex flex-col gap-3 border-t border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-gray-500">
+            Showing {userRecords.length} of {pagination.totalRecords} users
+          </p>
+
+          <div className="flex items-center gap-3">
+            <button
+              disabled={currentPage <= 1 || usersLoading}
+              onClick={() => setCurrentPage((page) => page - 1)}
+              className="flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <ChevronLeft size={16} />
+              Previous
+            </button>
+
+            <span className="text-sm text-gray-600">
+              Page {pagination.currentPage || 1} of {pagination.totalPages || 1}
+            </span>
+
+            <button
+              disabled={currentPage >= pagination.totalPages || usersLoading}
+              onClick={() => setCurrentPage((page) => page + 1)}
+              className="flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Next
+              <ChevronRightIcon size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+
   const renderContent = () => {
-    if (activePage === "Overview") {
-      return renderOverview();
-    }
+    if (activePage === "Overview") return renderOverview();
+    if (activePage === "User Records") return renderUserRecords();
+
+   
 
     return (
       <div className="rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
-        <h1 className="text-2xl font-bold text-gray-900">
-          {activePage}
-        </h1>
-
+        <h1 className="text-2xl font-bold text-gray-900">{activePage}</h1>
         <p className="mt-2 text-sm text-gray-500">
-          The {activePage.toLowerCase()} management section will be
-          connected to the backend in the next steps.
+          The {activePage.toLowerCase()} management section will be connected to the backend in the next steps.
         </p>
       </div>
     );
@@ -176,8 +655,6 @@ function AdminDashboard() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-
-      {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/40 lg:hidden"
@@ -185,17 +662,13 @@ function AdminDashboard() {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-gray-100 bg-white transition-transform duration-300 lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex h-20 items-center justify-between border-b border-gray-100 px-6">
-          <h1 className="text-2xl font-bold text-[#008000]">
-            EasyReach
-          </h1>
-
+          <h1 className="text-2xl font-bold text-[#008000]">EasyReach</h1>
           <button
             onClick={() => setSidebarOpen(false)}
             className="text-gray-500 lg:hidden"
@@ -213,13 +686,22 @@ function AdminDashboard() {
           <nav className="space-y-2">
             {navigation.map((item) => {
               const Icon = item.icon;
-              const isActive = activePage === item.name;
+              const isActive =
+                activePage === item.name ||
+                (activePage === "User Records" &&
+                  ["Users", "Providers"].includes(item.name));
 
               return (
                 <button
                   key={item.name}
                   onClick={() => {
-                    setActivePage(item.name);
+                    if (item.name === "Users") {
+                      openUserRecords("all");
+                    } else if (item.name === "Providers") {
+                      openUserRecords("provider");
+                    } else {
+                      setActivePage(item.name);
+                    }
                     setSidebarOpen(false);
                   }}
                   className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition ${
@@ -250,10 +732,7 @@ function AdminDashboard() {
         </div>
       </aside>
 
-      {/* Main content */}
       <div className="min-w-0 flex-1 lg:ml-64">
-
-        {/* Top navigation */}
         <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-gray-100 bg-white px-4 sm:px-8">
           <div className="flex items-center gap-3">
             <button
@@ -265,9 +744,7 @@ function AdminDashboard() {
             </button>
 
             <div>
-              <p className="text-sm font-semibold text-gray-900">
-                Admin Panel
-              </p>
+              <p className="text-sm font-semibold text-gray-900">Admin Panel</p>
               <p className="hidden text-xs text-gray-400 sm:block">
                 Manage your EasyReach platform
               </p>
@@ -297,7 +774,7 @@ function AdminDashboard() {
 
               <div className="hidden sm:block">
                 <p className="text-sm font-semibold text-gray-800">
-                  Administrator
+                  Bob Nath
                 </p>
                 <p className="text-xs text-gray-400">Admin</p>
               </div>
@@ -305,11 +782,7 @@ function AdminDashboard() {
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="p-4 sm:p-8">
-          {renderContent()}
-        </main>
-
+        <main className="p-4 sm:p-8">{renderContent()}</main>
       </div>
     </div>
   );
