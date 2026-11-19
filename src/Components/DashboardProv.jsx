@@ -241,8 +241,11 @@ useEffect(() => {
       }
 
      if (!cancelled) {
-  setResponseTime(Number(data.averageSeconds));
-  setTotalResponses(Number(data.totalResponses) || 0);
+ setResponseTime(
+  data.responseTimeSeconds === null
+    ? null
+    : Number(data.responseTimeSeconds)
+);
 }
     } catch (error) {
       if (!cancelled) {
