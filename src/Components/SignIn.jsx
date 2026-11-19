@@ -70,11 +70,13 @@ if (rememberMe) {
 }
 
     // Go to the appropriate dashboard
-    if (data.user.role === "provider") {
-      navigate("/dashboardprov");
-    } else {
-      navigate("/dashboard");
-    }
+if (data.user.role === "admin") {
+  navigate("/admin-dashboard");
+} else if (data.user.role === "provider") {
+  navigate("/dashboardprov");
+} else {
+  navigate("/dashboard");
+}
   } catch (error) {
     console.error("Login error:", error);
     alert("Unable to connect to the server. Please try again.");

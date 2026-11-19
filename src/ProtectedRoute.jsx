@@ -116,18 +116,20 @@ function ProtectedRoute({ children, allowedRole }) {
     return <Navigate to="/signin" replace />;
   }
 
-  if (!authorized) {
-    return (
-      <Navigate
-        to={
-          userRole === "provider"
-            ? "/dashboardprov"
-            : "/dashboard"
-        }
-        replace
-      />
-    );
-  }
+if (!authorized) {
+  return (
+    <Navigate
+      to={
+        userRole === "admin"
+          ? "/admin-dashboard"
+          : userRole === "provider"
+          ? "/dashboardprov"
+          : "/dashboard"
+      }
+      replace
+    />
+  );
+}
 
   return children;
 }

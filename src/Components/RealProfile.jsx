@@ -725,22 +725,22 @@ justify-around
 bg-white
 px-4
             "
-          >
-            {/* HOME */}
-            <button
-              type="button"
-              className="flex h-[46px] w-[32px] flex-col items-center gap-2"
-            >
-              <Home
-                size={24}
-                fill="#008000"
-                className="text-[#008000]"
-              />
+          >{/* HOME */}
+<button
+  type="button"
+  onClick={() => navigate("/dashboardprov")}
+  className="flex h-[46px] w-[32px] flex-col items-center gap-2"
+>
+  <Home
+    size={24}
+    fill="#008000"
+    className="text-[#008000]"
+  />
 
-              <span className="text-[11px] font-bold text-[#008000]">
-                Home
-              </span>
-            </button>
+  <span className="text-[11px] font-bold text-[#008000]">
+    Home
+  </span>
+</button>
 
 
           </div>

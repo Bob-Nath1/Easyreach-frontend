@@ -571,29 +571,7 @@ if (Number(item.sender_id) === Number(provider?.id)) {
       <div className="shrink-0 bg-white">
         {/* Quick actions */}
         <div className="flex gap-2 overflow-x-auto px-6 pt-3 pb-2 scrollbar-hide">
-          <button
-            type="button"
-            className="flex h-8 shrink-0 items-center gap-2 rounded-full bg-[#E5E7EB] px-3.5 text-[13px] font-bold italic text-gray-800"
-          >
-            <MapPin size={16} />
-            Share Location
-          </button>
 
-          <button
-            type="button"
-            className="flex h-8 shrink-0 items-center gap-2 rounded-full bg-[#E5E7EB] px-3.5 text-[13px] font-bold italic text-gray-800"
-          >
-            <FileText size={16} />
-            Request Quote
-          </button>
-
-          <button
-            type="button"
-            className="flex h-8 shrink-0 items-center gap-2 rounded-full bg-[#E5E7EB] px-3.5 text-[12px] font-bold italic text-gray-800"
-          >
-            <CalendarDays size={16} />
-            Schedule
-          </button>
         </div>
 
         {/* Message input */}

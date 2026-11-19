@@ -8,6 +8,7 @@ import {
  import ProtectedRoute from "./ProtectedRoute";
 import Splash from "./Components/Splash";
 import FrontPage from "./Components/Frontpage";
+import AdminDashboard from "./Components/AdminDashboard";
 import Welcome from "./Components/Welcome";
 import Chat from "./Components/Chat";
 import Boarding from "./Components/Boarding";
@@ -163,6 +164,16 @@ function ScrollToTop() {
     </ProtectedRoute>
   }
 />
+
+<Route
+  path="/admin-dashboard"
+  element={
+    <ProtectedRoute allowedRole="admin">
+      <AdminDashboard />
+    </ProtectedRoute>
+  }
+/>
+
         <Route path="notifprov" element={<Notifprov />} />
         <Route path="servicereq" element={<ServiceReq />} />
         <Route path="respondreq" element={<RespondReq />} />
