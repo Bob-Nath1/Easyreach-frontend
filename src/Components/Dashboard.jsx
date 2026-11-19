@@ -781,7 +781,7 @@ useEffect(() => {
         key={provider.id}
         className="
           relative
-          h-[218px]
+         h-[232px] 
           w-full
           shrink-0
           rounded-[15px]
@@ -817,18 +817,19 @@ useEffect(() => {
 
               <div className="flex items-center gap-1">
 
-                <Star
-                  size={9}
-                  fill="#FBBF24"
-                  stroke="#FBBF24"
-                />
+  <Star
+    size={10}
+    fill="#FBBF24"
+    stroke="#FBBF24"
+  />
 
-                <span className="text-[10px] text-[#6B7280]">
-                  No reviews yet
-                </span>
+  <span className="text-[10px] text-[#6B7280]">
+    {Number(provider.total_reviews) > 0
+      ? `${Number(provider.average_rating).toFixed(1)} (${provider.total_reviews} reviews)`
+      : "No reviews yet"}
+  </span>
 
-              </div>
-
+</div>
             </div>
 
           </div>
@@ -861,8 +862,31 @@ useEffect(() => {
           {provider.city || provider.real_address || "Location available"}
         </p>
 
+        {/* Provider Performance */}
+<div className="absolute left-4 right-4 top-[139px] flex items-center gap-4">
+
+  <span className="text-[10px] text-[#6B7280]">
+    <strong className="text-[#1F2937]">
+      {Number(provider.completed_jobs || 0)}
+    </strong>{" "}
+    Jobs completed
+  </span>
+
+  <span className="text-[10px] text-[#6B7280]">
+    <strong className="text-[#1F2937]">
+      {provider.response_time_seconds != null
+        ? Number(provider.response_time_seconds) < 3600
+          ? `${Math.round(Number(provider.response_time_seconds) / 60)} min`
+          : `${(Number(provider.response_time_seconds) / 3600).toFixed(1)} hrs`
+        : "N/A"}
+    </strong>{" "}
+    Response time
+  </span>
+
+</div>
+
         {/* Actions */}
-<div className="absolute left-3 right-3 top-[151px] flex h-[48px] items-center gap-2">
+<div className="absolute left-3 right-3 top-[164px] flex h-[48px] items-center gap-2">
 
  
 

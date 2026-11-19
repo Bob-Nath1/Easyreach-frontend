@@ -101,12 +101,13 @@ useEffect(() => {
   createOrGetConversation();
 }, [provider, request, existingConversationId]);
 
-useEffect(() => {
-  const fetchMessages = async () => {
-    if (!conversationId) {
-      return;
-    }
 
+useEffect(() => {
+  if (!conversationId) return;
+
+  let cancelled = false;
+
+  const fetchMessages = async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -135,16 +136,47 @@ useEffect(() => {
         return;
       }
 
-      setMessages(data.messages || []);
+      if (!cancelled) {
+        setMessages((previousMessages) => {
+          const incomingMessages = data.messages || [];
+
+          // Avoid replacing messages with an older response.
+          const existingIds = new Set(
+            previousMessages.map((item) => String(item.id))
+          );
+
+          const newMessages = incomingMessages.filter(
+            (item) => !existingIds.has(String(item.id))
+          );
+
+          return [...previousMessages, ...newMessages].sort(
+            (a, b) =>
+              new Date(a.created_at || a.createdAt).getTime() -
+              new Date(b.created_at || b.createdAt).getTime()
+          );
+        });
+      }
     } catch (error) {
       console.error("Messages fetch error:", error);
     } finally {
-      setLoadingMessages(false);
+      if (!cancelled) {
+        setLoadingMessages(false);
+      }
     }
   };
 
+  // Fetch immediately when the conversation opens.
   fetchMessages();
+
+  // Automatically check for new messages every 3 seconds.
+  const interval = setInterval(fetchMessages, 3000);
+
+  return () => {
+    cancelled = true;
+    clearInterval(interval);
+  };
 }, [conversationId]);
+
 
 useEffect(() => {
   const markMessagesAsRead = async () => {

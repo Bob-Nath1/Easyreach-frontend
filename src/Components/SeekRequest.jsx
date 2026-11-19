@@ -186,6 +186,67 @@ function SeekRequest() {
     };
   }, []);
 
+
+// ============================================
+// AUTOMATICALLY CHECK FOR REQUEST STATUS UPDATES
+// ============================================
+useEffect(() => {
+  let cancelled = false;
+
+  const refreshRequestStatuses = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    try {
+      const response = await fetch(`${API_URL}/api/requests`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) return;
+
+      const data = await response.json();
+
+      if (!cancelled) {
+        const updatedRequests = (data.requests || [])
+          .slice()
+          .sort((a, b) => {
+            const dateA = new Date(
+              a.createdAt || a.created_at || 0
+            ).getTime();
+
+            const dateB = new Date(
+              b.createdAt || b.created_at || 0
+            ).getTime();
+
+            return dateB - dateA;
+          });
+
+        setRequests(updatedRequests);
+      }
+    } catch (error) {
+      console.error("Request status refresh error:", error);
+    }
+  };
+
+  // Check immediately, then every 5 seconds.
+  refreshRequestStatuses();
+
+  const interval = setInterval(
+    refreshRequestStatuses,
+    5000
+  );
+
+  return () => {
+    cancelled = true;
+    clearInterval(interval);
+  };
+}, []);
+
+
   // ============================================
   // STATUS HELPERS
   // ============================================
