@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef,useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -47,6 +47,8 @@ const [loadingConversation, setLoadingConversation] = useState(true);
 
 const [messages, setMessages] = useState([]);
 const [loadingMessages, setLoadingMessages] = useState(true);
+
+const chatContainerRef = useRef(null);
 
 useEffect(() => {
 
@@ -216,6 +218,17 @@ useEffect(() => {
   markMessagesAsRead();
 }, [conversationId]);
 
+// Automatically scroll to the latest message
+useEffect(() => {
+  if (loadingMessages) return;
+
+  const chatContainer = chatContainerRef.current;
+
+  if (chatContainer) {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+}, [messages, loadingMessages]);
+
 const handleSend = async () => {
   if (!message.trim() || !conversationId) return;
 
@@ -350,7 +363,10 @@ const handleSend = async () => {
       </div>
 
       {/* ================= CHAT AREA ================= */}
-      <div className="flex-1 overflow-y-auto bg-[#F3F4F6] px-6 pb-8">
+      <div
+  ref={chatContainerRef}
+  className="flex-1 overflow-y-auto bg-[#F3F4F6] px-6 pb-8"
+>
         {/* TODAY */}
         <div className="flex justify-center pt-8">
           <span className="rounded-full bg-[#E5E7EA] px-4 py-1.5 text-[12px] font-bold italic text-gray-500">
