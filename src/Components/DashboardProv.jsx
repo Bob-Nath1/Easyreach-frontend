@@ -69,66 +69,6 @@ const [loadingRating, setLoadingRating] = useState(true);
 
 const [currentDate, setCurrentDate] = useState(new Date());
 
-useEffect(() => {
-  let cancelled = false;
-
-  const fetchCompletedJobs = async () => {
-    try {
-      setLoadingCompletedJobs(true);
-      setCompletedJobsError("");
-
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        throw new Error(
-          "Please log in to view completed jobs."
-        );
-      }
-
-      const response = await fetch(
-        `${API_URL}/api/requests/provider/completed-jobs`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || "Unable to load completed jobs."
-        );
-      }
-
-      if (!cancelled) {
-        setCompletedJobs(
-          Number.isFinite(Number(data.completedJobs))
-            ? Number(data.completedJobs)
-            : 0
-        );
-      }
-    } catch (error) {
-      if (!cancelled) {
-        setCompletedJobsError(
-          error.message || "Unable to load completed jobs."
-        );
-      }
-    } finally {
-      if (!cancelled) {
-        setLoadingCompletedJobs(false);
-      }
-    }
-  };
-
-  fetchCompletedJobs();
-
-  return () => {
-    cancelled = true;
-  };
-}, []);
 
 
 useEffect(() => {
