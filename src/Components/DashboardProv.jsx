@@ -1474,17 +1474,15 @@ onClick={handleAvailabilityToggle}
 
 <Performance
   icon={<Clock size={24} />}
-
-value={
-  loadingResponseTime
-    ? "Loading..."
-    : responseTimeError
-      ? "Unavailable"
-      : totalResponses === 0
-        ? "No data"
-        : formatResponseTime(responseTime)
-}
-
+  value={
+    loadingResponseTime
+      ? "Loading..."
+      : responseTimeError
+        ? "Unavailable"
+        : responseTime === null
+          ? "No data"
+          : formatResponseTime(responseTime)
+  }
 />
 
         
