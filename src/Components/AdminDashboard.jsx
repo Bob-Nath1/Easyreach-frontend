@@ -61,6 +61,9 @@ function AdminDashboard() {
 const [serviceRequests, setServiceRequests] = useState([]);
 const [requestsLoading, setRequestsLoading] = useState(false);
 const [requestsError, setRequestsError] = useState("");
+const [recentActivities, setRecentActivities] = useState([]);
+const [activitiesLoading, setActivitiesLoading] = useState(false);
+const [activitiesError, setActivitiesError] = useState("");
 const [requestType, setRequestType] = useState("all");
 const [requestPage, setRequestPage] = useState(1);
 
@@ -122,6 +125,52 @@ const [requestPagination, setRequestPagination] = useState({
   useEffect(() => {
     fetchOverview();
   }, [fetchOverview]);
+
+  useEffect(() => {
+  if (activePage === "Overview") {
+    fetchRecentActivities();
+  }
+}, [activePage, fetchRecentActivities]);
+
+  const fetchRecentActivities = useCallback(async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/signin", { replace: true });
+      return;
+    }
+
+    setActivitiesLoading(true);
+    setActivitiesError("");
+
+    const response = await fetch(
+      `${API_URL}/api/admin/recent-activities`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.message || "Unable to load recent activities."
+      );
+    }
+
+    setRecentActivities(data.activities || []);
+  } catch (err) {
+    console.error("Recent activities error:", err);
+    setActivitiesError(
+      err.message || "Unable to load recent activities."
+    );
+  } finally {
+    setActivitiesLoading(false);
+  }
+}, [navigate]);
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -352,14 +401,75 @@ useEffect(() => {
 
   const renderOverview = () => (
     <>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Dashboard Overview
-        </h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Welcome to your EasyReach administration panel.
+     <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+  <div className="flex items-center justify-between">
+    <div>
+      <h2 className="text-lg font-semibold text-gray-900">
+        Recent Activity
+      </h2>
+      <p className="mt-1 text-sm text-gray-500">
+        Latest activities across your platform.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      onClick={fetchRecentActivities}
+      disabled={activitiesLoading}
+      className="rounded-lg bg-green-50 p-2 text-[#008000] hover:bg-green-100 disabled:opacity-50"
+      aria-label="Refresh activities"
+    >
+      <RefreshCw
+        size={17}
+        className={activitiesLoading ? "animate-spin" : ""}
+      />
+    </button>
+  </div>
+
+  <div className="mt-5">
+    {activitiesError ? (
+      <p className="py-8 text-center text-sm text-red-600">
+        {activitiesError}
+      </p>
+    ) : activitiesLoading && recentActivities.length === 0 ? (
+      <p className="py-8 text-center text-sm text-gray-500">
+        Loading recent activities...
+      </p>
+    ) : recentActivities.length === 0 ? (
+      <div className="flex min-h-[150px] flex-col items-center justify-center text-center">
+        <Clock size={32} className="text-gray-300" />
+        <p className="mt-3 text-sm text-gray-500">
+          No activity to display yet.
         </p>
       </div>
+    ) : (
+      <div className="space-y-4">
+        {recentActivities.slice(0, 5).map((activity) => (
+          <div
+            key={activity.id}
+            className="flex gap-3 border-b border-gray-100 pb-4 last:border-0 last:pb-0"
+          >
+            <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-50">
+              <CheckCircle size={18} className="text-[#008000]" />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-gray-800">
+                {activity.description}
+              </p>
+
+              <p className="mt-1 text-xs text-gray-400">
+                {activity.createdAt
+                  ? new Date(activity.createdAt).toLocaleString()
+                  : "Time unavailable"}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
 
       {error && (
         <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
