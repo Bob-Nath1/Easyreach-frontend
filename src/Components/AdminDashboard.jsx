@@ -170,16 +170,8 @@ const [requestPagination, setRequestPagination] = useState({
     }
   }, [userFilter, currentPage, searchTerm, navigate]);
 
-useEffect(() => {
-  if (
-    activePage === "Service Requests" ||
-    activePage === "Completed Jobs"
-  ) {
-    fetchServiceRequests();
-  }
-}, [activePage, fetchServiceRequests]);
 
-  const fetchServiceRequests = useCallback(async () => {
+const fetchServiceRequests = useCallback(async () => {
   try {
     const token = localStorage.getItem("token");
 
@@ -235,6 +227,17 @@ useEffect(() => {
   }
 }, [requestType, requestPage, navigate]);
 
+
+useEffect(() => {
+  if (
+    activePage === "Service Requests" ||
+    activePage === "Completed Jobs"
+  ) {
+    fetchServiceRequests();
+  }
+}, [activePage, fetchServiceRequests]);
+
+  
   const handleAccountStatusChange = async (userId, newStatus) => {
   const statusLabels = {
     active: "reactivate",
