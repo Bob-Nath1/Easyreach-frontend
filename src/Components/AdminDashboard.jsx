@@ -64,6 +64,14 @@ const [requestsError, setRequestsError] = useState("");
 const [recentActivities, setRecentActivities] = useState([]);
 const [activitiesLoading, setActivitiesLoading] = useState(false);
 const [activitiesError, setActivitiesError] = useState("");
+// Admin notifications
+const [notifications, setNotifications] = useState([]);
+const [unreadCount, setUnreadCount] = useState(0);
+const [notificationsLoading, setNotificationsLoading] = useState(false);
+const [notificationsError, setNotificationsError] = useState("");
+const [notificationOpen, setNotificationOpen] = useState(false);
+const [markingNotificationId, setMarkingNotificationId] = useState(null);
+const [markingAllRead, setMarkingAllRead] = useState(false);
 const [requestType, setRequestType] = useState("all");
 const [requestPage, setRequestPage] = useState(1);
 
@@ -126,12 +134,6 @@ const [requestPagination, setRequestPagination] = useState({
     fetchOverview();
   }, [fetchOverview]);
 
-  useEffect(() => {
-  if (activePage === "Overview") {
-    fetchRecentActivities();
-  }
-}, [activePage, fetchRecentActivities]);
-
   const fetchRecentActivities = useCallback(async () => {
   try {
     const token = localStorage.getItem("token");
@@ -171,6 +173,12 @@ const [requestPagination, setRequestPagination] = useState({
     setActivitiesLoading(false);
   }
 }, [navigate]);
+
+  useEffect(() => {
+  if (activePage === "Overview") {
+    fetchRecentActivities();
+  }
+}, [activePage, fetchRecentActivities]);
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -218,6 +226,129 @@ const [requestPagination, setRequestPagination] = useState({
       setUsersLoading(false);
     }
   }, [userFilter, currentPage, searchTerm, navigate]);
+
+  const fetchAdminNotifications = useCallback(async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/signin", { replace: true });
+      return;
+    }
+
+    setNotificationsLoading(true);
+    setNotificationsError("");
+
+    const [countResponse, listResponse] = await Promise.all([
+      fetch(`${API_URL}/api/admin/notifications/unread-count`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      fetch(`${API_URL}/api/admin/notifications`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    ]);
+
+    const countData = await countResponse.json();
+    const listData = await listResponse.json();
+
+    if (
+      countResponse.status === 401 ||
+      countResponse.status === 403 ||
+      listResponse.status === 401 ||
+      listResponse.status === 403
+    ) {
+      throw new Error("Your admin session has expired. Please sign in again.");
+    }
+
+    if (!countResponse.ok || !countData.success) {
+      throw new Error(countData.message || "Unable to load unread count.");
+    }
+
+    if (!listResponse.ok || !listData.success) {
+      throw new Error(listData.message || "Unable to load notifications.");
+    }
+
+    setUnreadCount(Number(countData.count || 0));
+    setNotifications(listData.notifications || []);
+  } catch (err) {
+    console.error("Admin notifications error:", err);
+    setNotificationsError(err.message || "Unable to load notifications.");
+  } finally {
+    setNotificationsLoading(false);
+  }
+}, [navigate]);
+
+useEffect(() => {
+  fetchAdminNotifications();
+
+  const interval = setInterval(() => {
+    fetchAdminNotifications();
+  }, 30000);
+
+  return () => clearInterval(interval);
+}, [fetchAdminNotifications]);
+
+
+const handleMarkNotificationAsRead = async (notificationId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+      `${API_URL}/api/admin/notifications/${notificationId}/read`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Unable to mark notification as read.");
+    }
+
+    await fetchAdminNotifications();
+  } catch (error) {
+    console.error("Mark notification as read error:", error);
+    setNotificationsError(error.message);
+  }
+};
+
+const handleMarkAllNotificationsAsRead = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    setMarkingAllRead(true);
+
+    const response = await fetch(
+      `${API_URL}/api/admin/notifications/mark-all-read`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Unable to mark all as read.");
+    }
+
+    await fetchAdminNotifications();
+  } catch (error) {
+    console.error("Mark all notifications as read error:", error);
+    setNotificationsError(error.message);
+  } finally {
+    setMarkingAllRead(false);
+  }
+};
 
 
 const fetchServiceRequests = useCallback(async () => {
@@ -527,40 +658,6 @@ useEffect(() => {
             </button>
           );
         })}
-      </div>
-
-      <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900">
-            Recent Activity
-          </h2>
-          <p className="mt-1 text-sm text-gray-500">
-            Platform activity will appear here.
-          </p>
-
-          <div className="flex min-h-[180px] flex-col items-center justify-center text-center">
-            <Clock size={32} className="text-gray-300" />
-            <p className="mt-3 text-sm text-gray-500">
-              No activity to display yet.
-            </p>
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900">
-            Platform Updates
-          </h2>
-          <p className="mt-1 text-sm text-gray-500">
-            Important notifications and updates.
-          </p>
-
-          <div className="flex min-h-[180px] flex-col items-center justify-center text-center">
-            <AlertCircle size={32} className="text-gray-300" />
-            <p className="mt-3 text-sm text-gray-500">
-              No new updates.
-            </p>
-          </div>
-        </div>
       </div>
     </>
   );
@@ -1167,20 +1264,106 @@ useEffect(() => {
           </div>
 
           <div className="flex items-center gap-3 sm:gap-5">
-            <button
-              className="rounded-full p-2 text-gray-500 hover:bg-gray-100"
-              aria-label="Search"
-            >
-              <Search size={20} />
-            </button>
+           
 
-            <button
-              className="relative rounded-full p-2 text-gray-500 hover:bg-gray-100"
-              aria-label="Notifications"
+            <div className="relative">
+  <button
+    onClick={() => setNotificationOpen((prev) => !prev)}
+    className="relative rounded-full p-2 text-gray-500 hover:bg-gray-100"
+    aria-label="Notifications"
+    aria-expanded={notificationOpen}
+  >
+    <Bell size={20} />
+
+    {unreadCount > 0 && (
+      <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+        {unreadCount > 99 ? "99+" : unreadCount}
+      </span>
+    )}
+  </button>
+
+  {notificationOpen && (
+    <div className="absolute right-0 top-full z-50 mt-3 w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl">
+      <div className="flex items-center justify-between border-b border-gray-100 p-4">
+        <div>
+          <h3 className="font-semibold text-gray-900">Notifications</h3>
+          <p className="text-xs text-gray-500">
+            {unreadCount} unread notification{unreadCount === 1 ? "" : "s"}
+          </p>
+        </div>
+
+        <button
+          onClick={handleMarkAllNotificationsAsRead}
+          disabled={unreadCount === 0 || markingAllRead}
+          className="text-xs font-medium text-green-700 hover:text-green-800 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {markingAllRead ? "Marking..." : "Mark all as read"}
+        </button>
+      </div>
+
+      <div className="max-h-96 overflow-y-auto">
+        {notificationsLoading && notifications.length === 0 ? (
+          <p className="p-6 text-center text-sm text-gray-500">
+            Loading notifications...
+          </p>
+        ) : notificationsError ? (
+          <p className="p-6 text-center text-sm text-red-500">
+            {notificationsError}
+          </p>
+        ) : notifications.length === 0 ? (
+          <p className="p-6 text-center text-sm text-gray-500">
+            You have no notifications yet.
+          </p>
+        ) : (
+          notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className={`border-b border-gray-100 p-4 ${
+                notification.isRead ? "bg-white" : "bg-green-50"
+              }`}
             >
-              <Bell size={20} />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
-            </button>
+              <div className="flex items-start gap-3">
+                {!notification.isRead && (
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-green-600" />
+                )}
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm text-gray-800">
+                    {notification.description}
+                  </p>
+
+                  <p className="mt-1 text-xs text-gray-400">
+                    {new Date(notification.createdAt).toLocaleString()}
+                  </p>
+
+                  {!notification.isRead && (
+                    <button
+                      onClick={() =>
+                        handleMarkNotificationAsRead(notification.id)
+                      }
+                      className="mt-2 text-xs font-semibold text-green-700 hover:underline"
+                    >
+                      Mark as read
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="border-t border-gray-100 p-3 text-center">
+        <button
+          onClick={fetchAdminNotifications}
+          className="text-xs font-medium text-gray-600 hover:text-green-700"
+        >
+          Refresh notifications
+        </button>
+      </div>
+    </div>
+  )}
+</div>
 
             <div className="flex items-center gap-2 border-l border-gray-100 pl-3 sm:pl-5">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 font-bold text-[#008000]">
