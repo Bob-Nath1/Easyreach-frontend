@@ -48,7 +48,7 @@ const navigate = useNavigate();
           className="
             absolute
             left-6
-            top-[70px]
+            top-[40px]
             w-6
             h-6
             flex
@@ -64,7 +64,7 @@ const navigate = useNavigate();
         </button>
 
         {/* ================= HEADER ================= */}
-        <div className="absolute top-[94px] left-0 w-full text-center">
+        <div className="absolute top-[54px] left-0 w-full text-center">
           <h1 className="text-[24px] leading-[29px] font-bold text-gray-800">
             Choose Your Path
           </h1>
@@ -75,14 +75,14 @@ const navigate = useNavigate();
         </div>
 
         {/* ================= MAIN CONTENT ================= */}
-       <div className="absolute top-[180px] left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[380px] space-y-6 pb-10">
+       <div className="absolute top-[150px] left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[380px] space-y-6 pb-10">
 
           {/* ================= SERVICE SEEKER ================= */}
           <button
            onClick={() => handleRoleSelect("seeker")}
             className="
               w-full
-              h-[396px]
+              h-[336px]
               bg-white
               border-[3px]
               border-gray-200
@@ -138,7 +138,7 @@ const navigate = useNavigate();
   onClick={() => handleRoleSelect("provider")}
             className="
               w-full
-              h-[396px]
+              h-[336px]
               bg-white
               border-[3px]
               border-gray-200
