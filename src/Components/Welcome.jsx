@@ -7,19 +7,7 @@ function Welcome() {
   return (
     <div className="relative w-full sm:w-[640px] md:w-[768px] lg:w-[1024px] lg:h-[1200px] xl:w-[1280px] xl:h-[1200px] 2xl:w-[1536px] 2xl:h-[1200px] 2xl:mt-84 h-[926px] mx-auto bg-white rounded-[35px] overflow-hidden">
 
-      {/* =========================
-          STATUS BAR
-      ========================= */}
-      <div className="absolute top-0 left-0 w-full md:w-[768px] h-[62px] flex items-center justify-between px-4">
-
-       
-
-        {/* Phone status icons */}
-        <div className="w-[121px] h-[22px] flex items-center justify-end gap-[7px] pt-[1px]">
-         
-
-        </div>
-      </div>
+      
 
 
       {/* =========================
@@ -62,7 +50,7 @@ function Welcome() {
       ========================= */}
       <button
         onClick={() => navigate(-1)}
-        className=" absolute left-6 top-[70px] w-6 h-6 flex items-center justify-center text-[#1F2937] text-2xl"
+        className=" absolute left-6 top-[90px] w-6 h-6 flex items-center justify-center text-[#1F2937] text-2xl"
       >
          ‹
       </button>

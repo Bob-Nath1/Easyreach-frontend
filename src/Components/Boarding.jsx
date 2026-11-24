@@ -17,7 +17,7 @@ function Boarding() {
         {/* Back Button */}
         <button
            onClick={goToWelcome}
-          className="absolute left-[24px] top-0 w-[24px] h-[24px] flex items-center justify-center"
+          className="absolute left-[24px] top-10 w-[24px] h-[24px] flex items-center justify-center"
         >
           <span className="text-[28px] leading-none text-[#1F2937] ">
             ‹
