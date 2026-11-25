@@ -122,36 +122,6 @@ function EntryRoute() {
   return <Navigate to="/dashboard" replace />;
 }
 
-function EntryRoute() {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    return <Splash />;
-  }
-
-  let user;
-
-  try {
-    user = JSON.parse(localStorage.getItem("user"));
-  } catch {
-    user = null;
-  }
-
-  if (!user || !user.role) {
-    return <Navigate to="/signin" replace />;
-  }
-
-  if (user.role === "admin") {
-    return <Navigate to="/admin-dashboard" replace />;
-  }
-
-  if (user.role === "provider") {
-    return <Navigate to="/dashboardprov" replace />;
-  }
-
-  return <Navigate to="/dashboard" replace />;
-}
-
  function App() {
   return (
    <BrowserRouter>
