@@ -61,10 +61,11 @@ function SignUp() {
     setLoading(true);
 
     if (!isValidPassword(formData.password)) {
-  alert(
-    "Password must contain at least 8 characters, " +
-    "one uppercase letter, one number, and one special character."
-  );
+ alert(
+  "Password must contain at least 8 characters, " +
+  "one uppercase letter, one lowercase letter, " +
+  "one number, and one special character."
+);
   return;
 }
 
@@ -435,7 +436,7 @@ if (formData.password !== formData.confirmPassword) {
               {/* CONFIRM PASSWORD */}
               <div>
                 <label className="block text-[#008000] text-[14px] font-bold mb-2">
-                  Password
+                  Confirm Password
                 </label>
 
                 <div className="relative border-b border-[#9CA3AF] h-[35px] flex items-center">
@@ -453,7 +454,7 @@ if (formData.password !== formData.confirmPassword) {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    placeholder="Enter your password"
+                    placeholder="Confirm password"
                     className="
                       w-full
                       pl-8
