@@ -22,6 +22,7 @@ const isValidPassword = (password) => {
   return (
     password.length >= 8 &&
     /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
     /[0-9]/.test(password) &&
     /[^A-Za-z0-9\s]/.test(password)
   );
@@ -118,9 +119,10 @@ const handleBusinessSubmit = async (e) => {
 
   if (!isValidPassword(businessData.password)) {
     alert(
-      "Password must contain at least 8 characters, " +
-      "one uppercase letter, one number, and one special character."
-    );
+  "Password must contain at least 8 characters, " +
+  "one uppercase letter, one lowercase letter, " +
+  "one number, and one special character."
+);
     return;
   }
 
@@ -207,10 +209,11 @@ if (finalOccupation.length > 100) {
     setLoading(true);
 
     if (!isValidPassword(formData.password)) {
-  alert(
-    "Password must contain at least 8 characters, " +
-    "one uppercase letter, one number, and one special character."
-  );
+ alert(
+  "Password must contain at least 8 characters, " +
+  "one uppercase letter, one lowercase letter, " +
+  "one number, and one special character."
+);
   return;
 }
 
@@ -667,17 +670,31 @@ if (formData.password !== formData.confirmPassword) {
                 </div>
 
                 <div className="space-y-1">
+  <PasswordRequirement
+    text="At least 8 characters"
+    met={formData.password.length >= 8}
+  />
 
-                  <PasswordRequirement text="At least 8 characters" />
+  <PasswordRequirement
+    text="One uppercase letter"
+    met={/[A-Z]/.test(formData.password)}
+  />
 
-                  <PasswordRequirement text="One uppercase letter" />
+  <PasswordRequirement
+    text="One lowercase letter"
+    met={/[a-z]/.test(formData.password)}
+  />
 
-                  <PasswordRequirement text="One number" />
+  <PasswordRequirement
+    text="One number"
+    met={/[0-9]/.test(formData.password)}
+  />
 
-                  <PasswordRequirement text="One special character" />
-
-                </div>
-              </div>
+  <PasswordRequirement
+    text="One special character"
+    met={/[^A-Za-z0-9\s]/.test(formData.password)}
+  />
+</div>              </div>
 
               {/* Confirm Password */}
               <div>
@@ -1016,11 +1033,31 @@ if (formData.password !== formData.confirmPassword) {
       </div>
 
       <div className="space-y-1">
-        <PasswordRequirement text="At least 8 characters" />
-        <PasswordRequirement text="One uppercase letter" />
-        <PasswordRequirement text="One number" />
-        <PasswordRequirement text="One special character" />
-      </div>
+  <PasswordRequirement
+    text="At least 8 characters"
+    met={formData.password.length >= 8}
+  />
+
+  <PasswordRequirement
+    text="One uppercase letter"
+    met={/[A-Z]/.test(formData.password)}
+  />
+
+  <PasswordRequirement
+    text="One lowercase letter"
+    met={/[a-z]/.test(formData.password)}
+  />
+
+  <PasswordRequirement
+    text="One number"
+    met={/[0-9]/.test(formData.password)}
+  />
+
+  <PasswordRequirement
+    text="One special character"
+    met={/[^A-Za-z0-9\s]/.test(formData.password)}
+  />
+</div>
     </div>
 
     {/* Business Terms and Privacy Policy */}
@@ -1079,20 +1116,28 @@ if (formData.password !== formData.confirmPassword) {
 
 
 /* Password requirement component */
-function PasswordRequirement({ text }) {
+function PasswordRequirement({ text, met }) {
   return (
     <div className="flex items-center gap-2">
       <CheckCircle2
         size={14}
-        className="text-[#6B7280]"
+        className={
+          met
+            ? "text-green-600"
+            : "text-[#6B7280]"
+        }
       />
 
-      <span className="text-[12px] text-[#6B7280]">
+      <span
+        className={
+          met
+            ? "text-[12px] text-green-600 font-medium"
+            : "text-[12px] text-[#6B7280]"
+        }
+      >
         {text}
       </span>
     </div>
-
-    
   );
 }
 
