@@ -21,7 +21,7 @@ function Welcome() {
     -translate-x-1/2
     -translate-y-1/2
     -mt-78
-    w-[225px]
+    w-[825px]
     h-[63px]
     flex
     items-center
@@ -31,17 +31,48 @@ function Welcome() {
     2xl:gap-2
   "
 >
-  <div className="relative w-[42px] h-[50px] xl:-mt-3">
+  <div className="relative w-[42px] h-[50px] -mt-1 ">
     <img
       src="/EasyReach.png"
       alt="EasyReach"
-      className="w-[40px] h-[37px] xl:w-[53px] xl:h-[53px] 2xl:w-[53px] 2xl:h-[55px] mt-2 object-contain"
+      className="w-[40px] h-[37px] xl:w-[53px] xl:h-[53px] 2xl:w-[53px] 2xl:h-[55px] mt-[-70px] object-contain"
     />
   </div>
 
-  <span className="font-bold text-[23px] leading-[45px] text-[#1F2937] whitespace-nowrap lg:text-3xl xl:text-4xl 2xl:text-4xl">
+  <span className="font-bold text-[23px] leading-[45px] text-[#1F2937] whitespace-nowrap lg:text-3xl xl:text-4xl 2xl:text-4xl mt-[-150px]">
     Easy<span className="text-[#008000]">Reach</span>
   </span>
+
+<div className="
+  absolute
+  top-[20px]
+  left-1/2
+  -translate-x-1/2
+  w-full
+  flex
+  flex-col
+  items-center
+">
+
+  {/* LOGO AND BRAND NAME */}
+  <div className="flex items-center justify-center gap-1">
+</div>
+
+  {/* HEADING UNDER LOGO */}
+  <h1 className= " whitespace-nowrap text-xs
+    font-bold text-[#1F2937] text-center  mt-[-40px]">
+    Every Service You Need,
+    <span className="text-[#008000]"> Within Reach.</span>
+  </h1>
+
+  {/* DESCRIPTION UNDER HEADING */}
+  <p className="text-sm 
+    text-gray-500 leading-relaxed text-center mt-4 max-w-[300px] md:max-w-[500px]">
+   Connect with skilled professionals and get things done, effortlessly.
+  </p>
+
+</div>
+  
 </div>
 
 
@@ -50,7 +81,7 @@ function Welcome() {
       ========================= */}
       <button
         onClick={() => navigate(-1)}
-        className=" absolute left-6 top-[90px] w-6 h-6 flex items-center justify-center text-[#1F2937] text-2xl"
+        className=" absolute left-6 top-[40px] w-6 h-6 flex items-center justify-center text-[#1F2937] text-2xl"
       >
          ‹
       </button>

@@ -17,6 +17,7 @@ const isValidPassword = (password) => {
   return (
     password.length >= 8 &&
     /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
     /[0-9]/.test(password) &&
     /[^A-Za-z0-9\s]/.test(password)
   );
@@ -404,22 +405,31 @@ if (formData.password !== formData.confirmPassword) {
                 </div>
 
                 <div className="space-y-1">
-                  <PasswordRequirement
-                    text="At least 8 characters"
-                  />
+  <PasswordRequirement
+    text="At least 8 characters"
+    met={formData.password.length >= 8}
+  />
 
-                  <PasswordRequirement
-                    text="One uppercase letter"
-                  />
+  <PasswordRequirement
+    text="One uppercase letter"
+    met={/[A-Z]/.test(formData.password)}
+  />
 
-                  <PasswordRequirement
-                    text="One number"
-                  />
+  <PasswordRequirement
+  text="One lowercase letter"
+  met={/[a-z]/.test(formData.password)}
+/>
 
-                  <PasswordRequirement
-                    text="One special character"
-                  />
-                </div>
+  <PasswordRequirement
+    text="One number"
+    met={/[0-9]/.test(formData.password)}
+  />
+
+  <PasswordRequirement
+    text="One special character"
+    met={/[^A-Za-z0-9\s]/.test(formData.password)}
+  />
+</div>
               </div>
 
               {/* CONFIRM PASSWORD */}
@@ -573,21 +583,27 @@ if (formData.password !== formData.confirmPassword) {
    PASSWORD REQUIREMENT
 ========================= */
 
-function PasswordRequirement({ text }) {
+function PasswordRequirement({ text, met }) {
   return (
     <div className="flex items-center gap-2">
-      <div className="w-[14px] h-[14px] rounded-full border border-[#6B7280] flex items-center justify-center">
-        <Check
-          size={9}
-          className="text-[#6B7280]"
-        />
+      <div
+        className={`w-[14px] h-[14px] rounded-full border flex items-center justify-center transition-all duration-300 ${
+          met
+            ? "bg-green-600 border-green-600"
+            : "bg-transparent border-[#6B7280]"
+        }`}
+      >
+        {met && <Check size={10} className="text-white" />}
       </div>
 
-      <span className="text-[12px] text-[#6B7280]">
+      <span
+        className={`text-[12px] transition-colors duration-300 ${
+          met ? "text-green-600 font-medium" : "text-[#6B7280]"
+        }`}
+      >
         {text}
       </span>
     </div>
   );
 }
-
 export default SignUp;

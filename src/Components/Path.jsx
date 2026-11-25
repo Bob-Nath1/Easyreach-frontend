@@ -75,13 +75,13 @@ const navigate = useNavigate();
         </div>
 
         {/* ================= MAIN CONTENT ================= */}
-       <div className="absolute top-[150px] left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[380px] space-y-6 pb-10">
+       <div className="absolute top-[150px] left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[380px] md:max-w-[700px] lg:max-w-[900px] lg:max-w-[1200px] space-y-6 pb-10">
 
           {/* ================= SERVICE SEEKER ================= */}
           <button
            onClick={() => handleRoleSelect("seeker")}
             className="
-              w-full
+              w-full 
               h-[336px]
               bg-white
               border-[3px]
